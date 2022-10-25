@@ -4,6 +4,7 @@ import Post from "./Post";
 
 const PostListComponent = styled.div`
   width: 926px;
+  border-left: 1px solid #d9d9d9;
   .pagination {
     width: 100%;
     margin-top: 2rem;

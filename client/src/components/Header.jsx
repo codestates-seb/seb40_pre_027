@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from './Button';
-import { GoSearch } from 'react-icons/go';
-import Logo from '../img/Logo.png';
+import React from "react";
+import styled from "styled-components";
+import Button from "./Button";
+import { GoSearch } from "react-icons/go";
+import Logo from "../img/Logo.png";
 
-const HeaderComponent = styled.header`
+const HeaderComponent = styled.div`
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -94,7 +94,12 @@ function Header() {
             </div>
           </form>
           <Button
-            data={{ background: '#e1ecf4', color: '#315877', hovercolor: '#B3D3EA', activecolor: '#B3D3EA' }}
+            data={{
+              background: "#e1ecf4",
+              color: "#315877",
+              hovercolor: "#B3D3EA",
+              activecolor: "#B3D3EA",
+            }}
             onClick={loginHandler}
           >
             Log in

@@ -3,15 +3,15 @@ import styled from "styled-components";
 import { FaGlobeAsia } from "react-icons/fa";
 
 const NavBar = styled.div`
-  width: 250px;
+  width: 200px;
   height: 50vh;
-  border: 1px solid black;
+  margin-top: 2rem;
 `;
 
 const HomeButton = styled.div`
   width: 100%;
   height: 50px;
-  font-size: 1.7rem;
+  font-size: 1rem;
   color: black;
   line-height: 2.9rem;
   cursor: pointer;
@@ -28,7 +28,7 @@ const Public = styled.div`
   display: flex;
   width: 100%;
   height: 50px;
-  font-size: 1.7rem;
+  font-size: 1rem;
   color: black;
   line-height: 3rem;
   cursor: pointer;
@@ -44,7 +44,7 @@ const Public = styled.div`
 const PublicContent = styled.ul`
   display: block;
   color: black;
-  font-size: 1.4rem;
+  font-size: 0.85rem;
 `;
 
 const Questions = styled.li`
