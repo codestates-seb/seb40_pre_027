@@ -1,14 +1,45 @@
 import "./App.css";
-import Nav from "./conponents/home/Nav";
-import TagsBox from "./conponents/home/TagsBox";
-import BasicExample from "./conponents/Button";
+import { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const SigninPage = lazy(() => import("./pages/SigninPage"));
+const WritePage = lazy(() => import("./pages/WritePage"));
 
 function App() {
   return (
     <div className="App">
-      <BasicExample></BasicExample>
-      <Nav></Nav>
-      <TagsBox></TagsBox>
+      <Routes>
+        <Route
+          path="/"
+          element={<Suspense fallback={<>...</>}>{<HomePage />}</Suspense>}
+        ></Route>
+
+        <Route
+          path="/questions"
+          element={<Suspense fallback={<>...</>}>{<HomePage />}</Suspense>}
+        ></Route>
+
+        <Route
+          path="/login"
+          element={
+            <Suspense fallback={<>...</>}>
+              <LoginPage />
+            </Suspense>
+          }
+        ></Route>
+
+        <Route
+          path="/sign"
+          element={<Suspense fallback={<>...</>}>{<SigninPage />}</Suspense>}
+        ></Route>
+
+        <Route
+          path="/write"
+          element={<Suspense fallback={<>...</>}>{<WritePage />}</Suspense>}
+        ></Route>
+      </Routes>
     </div>
   );
 }

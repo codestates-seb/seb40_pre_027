@@ -1,15 +1,26 @@
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
+import styled from 'styled-components';
+import React from 'react';
 
-function BasicExample() {
-  return (
-    <ButtonGroup aria-label="Basic example">
-      <Button variant="primary">Left</Button>
-      <Button variant="secondary">Middle</Button>
-      <Button variant="secondary">Right</Button>
-      <Button variant="secondary">Right1</Button>
-    </ButtonGroup>
-  );
+const ButtonComponent = styled.button`
+  background-color: ${(props) => (props.data ? props.data.background : '#0088ef')};
+  color: ${(props) => (props.data ? props.data.color : 'white')};
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  border: 0.5px solid #0074cc;
+  margin: 0 5px;
+
+  &:hover {
+    background: ${(props) => (props.data ? props.data.hovercolor : '#0074cc')};
+  }
+  &:active {
+    background: ${(props) => (props.data ? props.data.activecolor : '#0074cc')};
+  }
+`;
+
+function Button(props) {
+  return <ButtonComponent data={props.data}>{props.children}</ButtonComponent>;
 }
 
-export default BasicExample;
+export default Button;
