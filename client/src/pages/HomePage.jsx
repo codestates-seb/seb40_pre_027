@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../conponents/Button";
+import Header from "../conponents/Header";
 import PostList from "../conponents/home/PostList";
 
 const HompageComponent = styled.div`
@@ -38,7 +38,7 @@ const HompageComponent = styled.div`
 function HomePage() {
   return (
     <HompageComponent>
-      <header>Header</header>
+      <Header></Header>
       <section>
         <nav>nav</nav>
         <article>
