@@ -39,7 +39,7 @@ const WatchedTxt = styled.div`
   padding-left: 10px;
 `;
 const WatchBut = styled.button`
-  width: 100px;
+  width: 130px;
   height: 40px;
   border: 1px solid #81a6c7;
   background-color: #e2ecf4;
@@ -62,7 +62,7 @@ const IgnoredTxt = styled.div`
   padding-left: 10px;
 `;
 const IgnoreBut = styled.button`
-  width: 100px;
+  width: 130px;
   height: 40px;
   border: 1px solid #81a6c7;
   background-color: #e2ecf4;
