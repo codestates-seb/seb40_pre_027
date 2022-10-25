@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-/* import smallLogo from '../images/smallLogo.png'
- */
+import smallLogo from '../img/smallLogo.png'
+
 function Footer() {
   const FooterComponent = styled.div`
     .smallLogo{
@@ -38,8 +38,8 @@ function Footer() {
   `
   return (
     <FooterComponent>      
-{/*       <img className='smallLogo' alt='stack-small-logo' src={smallLogo}></img>
- */}      <StackComponent>
+      <img className='smallLogo' alt='stack-small-logo' src={smallLogo}></img>
+      <StackComponent>
       <h2>STACK OVERFLOW</h2>
       <div>Questions</div>
       <div>Help</div>

@@ -5,6 +5,8 @@ import PostList from "../components/home/PostList";
 import Nav from "../components/home/Nav";
 import Footer from "../components/Footer";
 import TagsBox from "../components/home/TagsBox";
+import TopMenu from '../components/home/TopMenu';
+
 
 const HompageComponent = styled.div`
   width: 100vw;
@@ -41,7 +43,7 @@ function HomePage() {
       <section>
         <Nav />
         <article>
-          <div className="top-menu">top-menu</div>
+          <TopMenu />
           <PostList />
         </article>
         <aside>
