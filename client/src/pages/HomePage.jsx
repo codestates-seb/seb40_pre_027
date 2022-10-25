@@ -1,7 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import Header from "../conponents/Header";
-import PostList from "../conponents/home/PostList";
+import React from 'react';
+import styled from 'styled-components';
+import Header from '../components/Header';
+import PostList from '../components/home/PostList';
+import Nav from '../components/home/Nav';
+import Footer from '../components/Footer';
+import TagsBox from '../components/home/TagsBox';
 
 const HompageComponent = styled.div`
   width: 100vw;
@@ -40,15 +43,16 @@ function HomePage() {
     <HompageComponent>
       <Header></Header>
       <section>
-        <nav>nav</nav>
+        <Nav />
         <article>
           <div className="top-menu">top-menu</div>
           <PostList />
         </article>
-        <aside>aside</aside>
+        <aside>
+          <TagsBox />
+        </aside>
       </section>
-
-      <footer>footer</footer>
+      <Footer />
     </HompageComponent>
   );
 }
