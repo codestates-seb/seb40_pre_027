@@ -64,6 +64,8 @@ const PostComponent = styled.div`
 `;
 
 function Post() {
+  const imgurl = "https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg"
+
   const tags = ["excel", "encoding", "power-automate"];
   return (
     <PostComponent>
@@ -84,7 +86,7 @@ function Post() {
             ))}
           </div>
           <div className="info-user">
-            <img src="https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg" />
+            <img src={imgurl} alt='user-img'/>
             <span className="user-name">{`PieCharmer`}</span>
             <span className="user-answers">{15}</span>
             <span>{`asked 58 sec ago`}</span>
