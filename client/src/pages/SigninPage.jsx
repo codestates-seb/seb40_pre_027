@@ -8,18 +8,25 @@ import {
   FcLightAtTheEndOfTunnel,
 } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import Header from "../components/Header";
+
 const Signpage = styled.main`
   width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
   background-color: rgb(241, 242, 243);
+  .divcontent {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
 `;
 const Sign = styled.div`
   width: 1000px;
-  height: auto;
-  margin: 0 auto;
+  height: 100%;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,25 +38,21 @@ const SignTxt = styled.div`
   & :nth-child(1) {
     font-size: 2rem;
     margin-bottom: 10px;
-    cursor: pointer;
   }
   & h2 {
     font-size: 1rem;
     margin: 40px 18px 19px 18px;
     font-weight: 400;
-    cursor: pointer;
   }
   & :nth-child(6) {
     font-size: 0.7rem;
     color: #acacac;
     margin: 25px 15px 0px 18px;
-    cursor: pointer;
   }
   & :nth-child(7) {
     font-size: 0.7rem;
     color: #8ab9de;
     margin: 5px 5px 0px 18px;
-    cursor: pointer;
   }
 `;
 const SignIn = styled.div`
@@ -163,63 +166,66 @@ const SignHelp = styled.h3`
 function SigninPage() {
   return (
     <Signpage>
-      <Sign>
-        <SignTxt>
-          <h1>Join the Stack Overflow community</h1>
-          <h2>
-            <FcQuestions size={35} /> Get unstuck -ask a question
-          </h2>
-          <h2>
-            <FcInternal size={35} />
-            Unlock new privileges like voting and commenting
-          </h2>
-          <h2>
-            <FcExpand size={35} />
-            Save your favorite tags, filters, and jobs
-          </h2>
-          <h2>
-            <FcLightAtTheEndOfTunnel size={35} />
-            Earn reputation and badges
-          </h2>
-          <h4>
-            Collaborate and share knowledge with a private group for FREE.
-          </h4>
-          <h4>Get Stack Overflow for Teams free for up to 50 users.</h4>
-        </SignTxt>
-        <SignIn>
-          <SignGoogle>
-            <FcGoogle size={30} />
-            &nbsp;&nbsp;Sign up with Google
-          </SignGoogle>
-          <SignGithub>
-            <FaGithub size={30} />
-            &nbsp;&nbsp;Sign up with Github
-          </SignGithub>
-          <SignMe>
-            {/*회원가입 창*/}
-            <Display>
-              <h2>Display name</h2>
-              <input></input>
-            </Display>
-            <Email>
-              <h2>Email</h2>
-              <input></input>
-            </Email>
-            <Password>
-              <h2>Password</h2>
-              <input></input>
-            </Password>
-            <Signwarn>
-              Passwords must contain at least eight characters, including at
-              least and 1 number
-            </Signwarn>
-            <SignUp>Sign up</SignUp>
-          </SignMe>
-          <SignHelp>
-            Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;<h3>Log in</h3>
-          </SignHelp>
-        </SignIn>
-      </Sign>
+      <Header></Header>
+      <div className="divcontent">
+        <Sign>
+          <SignTxt>
+            <h1>Join the Stack Overflow community</h1>
+            <h2>
+              <FcQuestions size={35} /> Get unstuck -ask a question
+            </h2>
+            <h2>
+              <FcInternal size={35} />
+              Unlock new privileges like voting and commenting
+            </h2>
+            <h2>
+              <FcExpand size={35} />
+              Save your favorite tags, filters, and jobs
+            </h2>
+            <h2>
+              <FcLightAtTheEndOfTunnel size={35} />
+              Earn reputation and badges
+            </h2>
+            <h4>
+              Collaborate and share knowledge with a private group for FREE.
+            </h4>
+            <h4>Get Stack Overflow for Teams free for up to 50 users.</h4>
+          </SignTxt>
+          <SignIn>
+            <SignGoogle>
+              <FcGoogle size={30} />
+              &nbsp;&nbsp;Sign up with Google
+            </SignGoogle>
+            <SignGithub>
+              <FaGithub size={30} />
+              &nbsp;&nbsp;Sign up with Github
+            </SignGithub>
+            <SignMe>
+              {/*회원가입 창*/}
+              <Display>
+                <h2>Display name</h2>
+                <input></input>
+              </Display>
+              <Email>
+                <h2>Email</h2>
+                <input></input>
+              </Email>
+              <Password>
+                <h2>Password</h2>
+                <input></input>
+              </Password>
+              <Signwarn>
+                Passwords must contain at least eight characters, including at
+                least and 1 number
+              </Signwarn>
+              <SignUp>Sign up</SignUp>
+            </SignMe>
+            <SignHelp>
+              Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;<h3>Log in</h3>
+            </SignHelp>
+          </SignIn>
+        </Sign>
+      </div>
     </Signpage>
   );
 }
