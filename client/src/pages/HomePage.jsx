@@ -8,7 +8,7 @@ import TagsBox from "../components/home/TagsBox";
 import TopMenu from '../components/home/TopMenu';
 
 
-const HompageComponent = styled.div`
+const HomepageComponent = styled.div`
   width: 100vw;
   header {
     height: 50px;
@@ -36,7 +36,7 @@ const HompageComponent = styled.div`
 
 function HomePage() {
   return (
-    <HompageComponent>
+    <HomepageComponent>
       <header>
         <Header />
       </header>
@@ -51,7 +51,7 @@ function HomePage() {
         </aside>
       </section>
       <Footer />
-    </HompageComponent>
+    </HomepageComponent>
   );
 }
 
