@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../Button";
 
-function TopMenu() {
-  const TopMenuComponent = styled.div`
+const TopMenuComponent = styled.div`
     border-left: 1px solid #d9d9d9;
     width: 100%;
     h1 {
@@ -65,6 +64,9 @@ function TopMenu() {
       color: #3e3e3e;
     }
   `;
+  
+function TopMenu() {
+  
   return (
     <TopMenuComponent>
       <H1Component>
