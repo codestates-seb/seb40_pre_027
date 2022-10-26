@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Tag from "../Tag";
 
 const PostComponent = styled.div`
   width: 100%;
@@ -61,16 +62,6 @@ const PostComponent = styled.div`
     }
   }
 `;
-const TagComponent = styled.div`
-  padding: 9px;
-  background-color: #e3ecf3;
-  margin-right: 12px;
-  display: flex;
-  align-items: center;
-  height: 28px;
-  border-radius: 8px;
-  color: rgb(57, 115, 157);
-`;
 
 function Post() {
   const imgurl = "https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg"
@@ -91,7 +82,7 @@ function Post() {
         <div className="info-side article-status">
           <div className="tags">
             {tags.map((v, i) => (
-              <TagComponent key={i}>{v}</TagComponent>
+              <Tag key={i}>{v}</Tag>
             ))}
           </div>
           <div className="info-user">
