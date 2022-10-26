@@ -1,17 +1,25 @@
 package com.codestates.stackoverflow.member.entity;
 
+import com.codestates.stackoverflow.aduit.Auditable;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class Member {
+public class Member extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,20 +33,14 @@ public class Member {
 
     @Column(nullable = false, length = 200)
     private String password;
-    @CreatedDate
-    @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
 
-    @Column(name = "LAST_MODIFIED_AT")
-    private LocalDateTime accessedAt;
-
-    // security 적용 후 수정
-    @Column(nullable = false, length = 5)
-    private boolean isAuth;
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
 
     public static enum MemberStatus {
@@ -53,4 +55,11 @@ public class Member {
             this.status = status;
         }
     }
+
+    public enum MemberRole {
+        ROLE_USER,
+        ROLE_ADMIN
+    }
+
+
 }

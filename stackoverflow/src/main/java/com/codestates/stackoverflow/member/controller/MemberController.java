@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/test/users")
 @Slf4j
 @Validated
 public class MemberController {
@@ -31,7 +31,7 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<MemberDto.Response> postRegister (
+    public ResponseEntity<MemberDto.Response> signup (
             @RequestBody @Valid MemberDto.RegisterPost requestBody) {
 
         Member member = memberMapper.memberRegisterPostDtoToMember(requestBody);
@@ -45,30 +45,30 @@ public class MemberController {
     }
 
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseEntity<MemberDto.Response> postLogin (@RequestBody @Valid MemberDto.LoginPost requestBody) {
-        Member member = memberMapper.memberLoginPostDtoToMember(requestBody);
-
-        Member loadMember = memberService.loadMember(member);
-
-
-        return ResponseEntity.ok(memberMapper.memberToMemberResponseDto(loadMember));
-    }
-
-    // 로그아웃
-    @PostMapping("/logout/{member-id}")
-    public ResponseEntity postLogout(@PathVariable("member-id") long memberId) {
-        MemberDto.Response response =
-                memberMapper.memberToMemberResponseDto(memberService.logoutMember(memberId));
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-
-    @DeleteMapping("/my-page/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
-        memberService.deleteMember(memberId);
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
+//    // 로그인
+//    @PostMapping("/login")
+//    public ResponseEntity<MemberDto.Response> postLogin (@RequestBody @Valid MemberDto.LoginPost requestBody) {
+//        Member member = memberMapper.memberLoginPostDtoToMember(requestBody);
+//
+//        Member loadMember = memberService.loadMember(member);
+//
+//
+//        return ResponseEntity.ok(memberMapper.memberToMemberResponseDto(loadMember));
+//    }
+//
+//    // 로그아웃
+//    @PostMapping("/logout/{member-id}")
+//    public ResponseEntity postLogout(@PathVariable("member-id") long memberId) {
+//        MemberDto.Response response =
+//                memberMapper.memberToMemberResponseDto(memberService.logoutMember(memberId));
+//        return new ResponseEntity(response, HttpStatus.OK);
+//    }
+//
+//
+//    @DeleteMapping("/my-page/{member-id}")
+//    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
+//        memberService.deleteMember(memberId);
+//
+//        return new ResponseEntity(HttpStatus.NO_CONTENT);
+//    }
 }
