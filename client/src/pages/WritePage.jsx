@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Header from '../components/Header';
-import InputBox from '../components/write/InputBox';
 import Footer from '../components/Footer';
-import InputGuide from '../components/write/InputGuide';
 import backgroundsvg from '../img/background.svg';
 import Modal from '../components/Modal';
+import InputArea from '../components/write/InputArea';
+import data from '../components/write/data';
 
 const WritePageComponent = styled.div`
   header {
@@ -73,9 +73,17 @@ const WritePageComponent = styled.div`
 `;
 
 function WritePage() {
+  const initialData = { title: '', introduce: '', expand: '', tags: [] };
   const [step, setStep] = useState('Title');
-  const stepHandler = (title) => setStep(title);
-
+  const [inputData, setInputData] = useState(initialData);
+  // const [title, setTitle] = useState('');
+  // const [introduce, setIntroduce] = useState('');
+  // const [expand, setExpand] = useState('');
+  // const [tags, setTags] = useState([]);
+  const stepHandler = (title) => {
+    console.log(title);
+    setStep(title);
+  };
   return (
     <WritePageComponent>
       <Modal />
@@ -108,81 +116,17 @@ function WritePage() {
               <li>Review your question and post it to the site.</li>
             </ul>
           </div>
-          <div className={step === 'Title' ? 'step input-area' : 'input-area'}>
-            <InputBox
-              title={'Title'}
-              disc={`Be specific and imagine you're asking a question to another
-              person.`}
-              placeholder={
-                'e.g Is there an R function for finding the index of an element in a vector?'
-              }
+          {data.inputData.map((v, i) => (
+            <InputArea
+              step={step}
+              data={v}
+              key={i}
               stepHandler={stepHandler}
+              value={inputData}
+              setValue={setInputData}
             />
-            <InputGuide
-              title={'title'}
-              disabled={step === 'Title' ? false : true}
-            />
-          </div>
+          ))}
 
-          <div
-            className={
-              step === 'What are the details of your problem?'
-                ? 'step input-area'
-                : 'input-area'
-            }
-          >
-            <InputBox
-              title={'What are the details of your problem?'}
-              disc={`Describe what you tried, what you expected to happen, and what
-            actually resulted. Minimum 20 characters.`}
-              editor={true}
-              stepHandler={stepHandler}
-            />
-            <InputGuide
-              title={'introduce'}
-              disabled={
-                step === 'What are the details of your problem?' ? false : true
-              }
-            />
-          </div>
-          <div
-            className={
-              step === 'What did you try and what were you expecting?'
-                ? 'step input-area'
-                : 'input-area'
-            }
-          >
-            <InputBox
-              title={'What did you try and what were you expecting?'}
-              disc={`Introduce the prolem and expand on what you put in the title.
-            Minimum 20 characters.`}
-              editor={true}
-              stepHandler={stepHandler}
-            />
-            <InputGuide
-              title="expand"
-              disabled={
-                step === 'What did you try and what were you expecting?'
-                  ? false
-                  : true
-              }
-            />
-          </div>
-          <div className={step === 'Tags' ? 'step input-area' : 'input-area'}>
-            <InputBox
-              title={'Tags'}
-              disc={`Add up to 5tags to describe what your question is about. Start
-            typing to see suggestions.`}
-              placeholder={
-                'e.g Is there an R function for finding the index of an element in a vector?'
-              }
-              stepHandler={stepHandler}
-            />
-            <InputGuide
-              title="tags"
-              disabled={step === 'Tags' ? false : true}
-            />
-          </div>
           <Button>Review your question</Button>
         </div>
       </article>

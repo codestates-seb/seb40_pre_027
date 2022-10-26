@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
-import styled from "styled-components";
-import Button from "../Button";
-import { Editor } from "@toast-ui/react-editor";
+import React, { useState, useRef } from 'react';
+import styled from 'styled-components';
+import Button from '../Button';
+import { Editor } from '@toast-ui/react-editor';
 
 const InputBoxComponent = styled.div`
   width: 1050px;
@@ -36,23 +36,34 @@ const InputBoxComponent = styled.div`
   }
 `;
 
-function InputBox({ title, disc, placeholder, editor, stepHandler }) {
+function InputBox({
+  title,
+  name,
+  disc,
+  placeholder,
+  editor,
+  stepHandler,
+  setValue,
+  value,
+}) {
   const editorRef = useRef();
-  const [input, setInput] = useState("");
-  const onChange = (value) => {
-    console.log(value);
-    setInput(value);
+  const onChange = (changeData) => {
+    console.log(value, title);
+    setValue({ ...value, title: changeData });
   };
-  const editorOnChange = () =>
-    setInput(editorRef.current.getInstance().getHTML());
+  const editorOnChange = () => {
+    console.log(value, title);
+    // const newValue = (value[title] = editorRef.current.getInstance().getHTML());
+    // setValue(newValue);
+  };
   return (
-    <InputBoxComponent input={input}>
-      <h3>{title}</h3>
+    <InputBoxComponent input={value[title]}>
+      <h3>{name}</h3>
       <div className="disc">{disc}</div>
       {editor ? (
         <div
-          onClick={() => stepHandler(title)}
-          className={input.length <= 5 ? "disabled" : ""}
+          onClick={() => stepHandler(name)}
+          className={value[title].length <= 5 ? 'disabled' : ''}
         >
           <Editor
             initialValue=" "
@@ -61,7 +72,7 @@ function InputBox({ title, disc, placeholder, editor, stepHandler }) {
             initialEditType="markdown"
             onChange={editorOnChange}
             useCommandShortcut={true}
-            className={input.length <= 20 ? "disabled" : ""}
+            className={value[title].length <= 20 ? 'disabled' : ''}
             ref={editorRef}
           />
         </div>
@@ -69,8 +80,8 @@ function InputBox({ title, disc, placeholder, editor, stepHandler }) {
         <input
           type="text"
           placeholder={placeholder}
-          className={input.length <= 5 ? "disabled" : ""}
-          onClick={() => stepHandler(title)}
+          className={value[title].length <= 5 ? 'disabled' : ''}
+          onClick={() => stepHandler(name)}
           onChange={(e) => onChange(e.target.value)}
         />
       )}
