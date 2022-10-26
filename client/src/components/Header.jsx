@@ -76,7 +76,7 @@ function Header() {
   const loginHandler = () => {};
   const signupHandler = () => {};
   return (
-    <>
+    <>``
       <Topbar />
       <HeaderComponent>
         <div className="header-container">
