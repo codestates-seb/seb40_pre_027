@@ -1,7 +1,10 @@
 import React from "react";
+import Modal from "../components/Modal";
 
 function WritePage() {
-  return <div>WritePage</div>;
+  return <div>WritePage
+    <Modal />
+  </div>;
 }
 
 export default WritePage;

@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Header from "../components/Header"
 import smallLogo from "../img/smallLogo.png"
-import { GoogleLoginButton } from "react-social-login-buttons";
-import { GithubLoginButton } from "react-social-login-buttons";
 
 function LoginPage() {
   const LoginPageComponent = styled.div`
@@ -82,23 +80,6 @@ return (
       <Header />
       <LoginPageComponent>
         <img className='smallLogo' alt='stack-small-logo' src={smallLogo}></img>
-        <GoogleLoginButton  
-          style={{
-            width: "288px",
-            height: "36px",
-            marginTop: "4px", 
-            marginBottom: "4px", 
-            padding: "10px"
-          }}/>
-        <GithubLoginButton 
-        style={{
-          width: "288px",
-          height: "36px",
-          marginTop: "4px", 
-          marginBottom: "4px", 
-          padding: "10px"
-        }}
-        />
         <LoginBox>
           <div className='email'>Email</div>
           <input className='inputBox'></input>
