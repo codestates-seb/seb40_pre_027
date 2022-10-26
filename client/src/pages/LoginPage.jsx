@@ -16,15 +16,16 @@ const LoginPageComponent = styled.div`
 .account {
   margin-top: 20px;
   margin-bottom: 50px;
+  font-size: 13px;
 }
 .signUp {
   color: #0074cc;
 }
 
 background-color: #f1f2f3;
-height: 100%;
+height: 100vh;
 width: 100%;
-padding: 100px;
+margin-top: -50px;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -33,7 +34,8 @@ justify-content: center;
 
 const LoginBox = styled.div`
 .email {
-  font-size: 19px;
+  font-size: 15px;
+  font-weight: bold;
 }
 .pw {
   display: flex;
@@ -41,10 +43,11 @@ const LoginBox = styled.div`
   justify-content: space-between;
 }
 .password {
-  font-size: 19px;
+  font-size: 15px;
+  font-weight: bold;
 }
 .forgotPassword {
-  font-size: 14px;
+  font-size: 12px;
   color: #0074cc;
 }
 .inputBox {
@@ -65,11 +68,12 @@ button {
 }
 
 background-color: #ffffff;
-width: 288px;
+width: 310px;
 margin: 24px;
 padding: 24px;
 border-radius: 5%;
 `;
+
 const SignGoogle = styled.div`
 width: 310px;
 height: 38px;

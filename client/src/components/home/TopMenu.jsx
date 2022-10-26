@@ -3,29 +3,31 @@ import styled from "styled-components";
 import Button from "../Button";
 
 const TopMenuComponent = styled.div`
-    border-left: 1px solid #d9d9d9;
-    width: 100%;
     h1 {
       font-size: 27px;
+      margin-top: 20px;
     }
     .askButton {
       margin-bottom: 12px;
       padding: 10.4px;
     }
+    width: 100%;
+    height: 100%;
     font-size: 13px;
     font-weight: bold;
+    border-left: 1px solid #d9d9d9;
   `;
-  const H1Component = styled.div`
+  const TopMenuBoxComponent = styled.div`
+    margin-bottom: 12px;
+    padding: 10.4px;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 12px;
-    padding: 10.4px;
+    
   `;
 
   const ButtonListsComponent = styled.div`
-    display: flex;
-    flex-direction: row-reverse;
     > button {
       width: 80px;
       height: 30px;
@@ -63,16 +65,20 @@ const TopMenuComponent = styled.div`
       width: 70px;
       color: #3e3e3e;
     }
+
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row-reverse;
   `;
   
 function TopMenu() {
   
   return (
     <TopMenuComponent>
-      <H1Component>
+      <TopMenuBoxComponent>
         <h1>Top Questions</h1>
         <Button>Ask Question</Button>
-      </H1Component>
+      </TopMenuBoxComponent>
       <ButtonListsComponent>
         <button>Month</button>
         <button>Week</button>
