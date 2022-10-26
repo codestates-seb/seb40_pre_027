@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import smallLogo from '../img/smallLogo.png'
 
-const FooterComponent = styled.div`
+function Footer() {
+  const FooterComponent = styled.div`
     .smallLogo{
       width: 50px;
       height: 50px;
@@ -35,9 +36,6 @@ const FooterComponent = styled.div`
   const StackNetworkComponent = styled.div`
     
   `
-
-function Footer() {
-  
   return (
     <FooterComponent>      
       <img className='smallLogo' alt='stack-small-logo' src={smallLogo}></img>
@@ -81,4 +79,4 @@ function Footer() {
   )
 }
 
-export default Footer``
+export default Footer
