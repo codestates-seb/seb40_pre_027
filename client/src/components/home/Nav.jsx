@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { FaGlobeAsia } from "react-icons/fa";
+import React from 'react';
+import styled from 'styled-components';
+import { FaGlobeAsia } from 'react-icons/fa';
 
 const NavBar = styled.div`
   width: 200px;
