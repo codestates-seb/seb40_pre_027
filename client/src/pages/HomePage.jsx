@@ -17,6 +17,7 @@ const HomepageComponent = styled.div`
     article {
       display: flex;
       flex-direction: column;
+      border-left: 1px solid #d9d9d9;
       .top-menu {
         height: 110px;
       }

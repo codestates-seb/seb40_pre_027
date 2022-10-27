@@ -5,10 +5,13 @@ import AnswerSorted from '../components/post/AnswerSorted';
 import Header from '../components/Header';
 import Nav from '../components/home/Nav';
 import Footer from '../components/Footer';
+import PostBody from '../components/post/PostBody';
+import TopMenu from '../components/home/TopMenu';
+import Title from '../components/post/Title';
 
 const PostPageComponent = styled.div`
   width: 100vw;
-  section {
+  .section {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -17,13 +20,17 @@ const PostPageComponent = styled.div`
       display: flex;
       flex-direction: column;
       border-left: 1px solid #d9d9d9;
-      padding-left: 2rem;
+      /* padding-left: 2rem; */
       .top-menu {
         height: 110px;
       }
     }
+    .post-aside {
+      display: flex;
+    }
     aside {
-      width: 244px;
+      width: 245px;
+      /* border: 1px solid red; */
     }
   }
 `;
@@ -32,16 +39,23 @@ function PostPage() {
   return (
     <PostPageComponent>
       <Header />
-      <section>
+
+      <div className="section">
         <Nav />
         <article>
-          {/* postViewer */}
-          <AnswerSorted />
-          {/* answerViewer */}
-          <AnswerPost />
+          <Title />
+          <div className="post-aside">
+            <div>
+              <PostBody answer={false} />
+              <AnswerSorted />
+              <PostBody answer={true} />
+              <AnswerPost />
+            </div>
+            <aside></aside>
+          </div>
         </article>
-        <aside></aside>
-      </section>
+      </div>
+
       <Footer />
     </PostPageComponent>
   );

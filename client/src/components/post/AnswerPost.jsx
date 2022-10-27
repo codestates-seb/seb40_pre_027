@@ -7,6 +7,7 @@ import LinkStyle from '../LinkStyle';
 import SocialLogin from '../SocialLogin';
 
 const AnswerPostComponent = styled.div`
+  padding-left: 2rem;
   h2 {
     padding: 1.75rem 0;
     font-weight: 600;
@@ -44,9 +45,13 @@ const AnswerPostComponent = styled.div`
     margin: 1rem 0 0 0;
     font-size: 1.25rem;
     font-weight: 500;
-    > span {
-      margin-right: 0.3rem;
+    .not-logined-status {
+      display: flex;
+      > span {
+        margin-right: 0.3rem;
+      }
     }
+
     .social {
       margin: 1rem 0;
     }
@@ -110,8 +115,10 @@ function AnswerPost({ isLogined }) {
       )}
 
       <div className="not-logined">
-        <span>Sign up or</span>
-        <LinkStyle path="/login">log in</LinkStyle>
+        <div className="not-logined-status">
+          <span>Sign up or</span>
+          <LinkStyle path="/login">log in</LinkStyle>
+        </div>
         <div className="social">
           <SocialLogin social="google">Sign up using Google</SocialLogin>
           <SocialLogin social="stack">

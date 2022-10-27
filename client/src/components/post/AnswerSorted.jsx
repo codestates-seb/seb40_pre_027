@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const AnswerSortedComponent = styled.div`
   display: flex;
   justify-content: space-between;
-
+  padding-left: 2rem;
   .answers-length {
     font-size: 1.25rem;
     line-height: 1rem;

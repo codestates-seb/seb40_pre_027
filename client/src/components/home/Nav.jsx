@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FaGlobeAsia } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import LinkStyle from '../LinkStyle';
 
 const NavBar = styled.div`
