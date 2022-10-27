@@ -1,6 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import Tag from "../Tag";
+import React from 'react';
+import styled from 'styled-components';
+import Tag from '../Tag';
+import LinkStyle from '../LinkStyle';
 
 const PostComponent = styled.div`
   width: 100%;
@@ -64,9 +65,10 @@ const PostComponent = styled.div`
 `;
 
 function Post() {
-  const imgurl = "https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg"
+  const imgurl =
+    'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
 
-  const tags = ["excel", "encoding", "power-automate"];
+  const tags = ['excel', 'encoding', 'power-automate'];
   return (
     <PostComponent>
       <div className="info-post">
@@ -75,7 +77,10 @@ function Post() {
         <div className="views">{`0 views`}</div>
       </div>
       <div className="article">
-        <h3 className="title article-status">{`tring to use a loop`}</h3>
+        <LinkStyle path="/post">
+          <h3 className="title article-status">{`tring to use a loop`}</h3>
+        </LinkStyle>
+
         <div className="article-content article-status">
           i am using arcpy to work within geo
         </div>
@@ -86,7 +91,7 @@ function Post() {
             ))}
           </div>
           <div className="info-user">
-            <img src={imgurl} alt='user-img'/>
+            <img src={imgurl} alt="user-img" />
             <span className="user-name">{`PieCharmer`}</span>
             <span className="user-answers">{15}</span>
             <span>{`asked 58 sec ago`}</span>

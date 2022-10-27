@@ -23,6 +23,11 @@ function App() {
         ></Route>
 
         <Route
+          path="/questions"
+          element={<Suspense fallback={<>...</>}>{<HomePage />}</Suspense>}
+        ></Route>
+
+        <Route
           path="/login"
           element={
             <Suspense fallback={<>...</>}>

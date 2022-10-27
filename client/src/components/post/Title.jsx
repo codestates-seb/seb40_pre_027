@@ -3,12 +3,24 @@ import styled from 'styled-components';
 import Button from '../Button';
 
 const Titlemain = styled.main`
-  width: 1300px;
+  /* width: 1300px; */
+  width: 1200px;
+
   height: 100%;
-  margin: 0 auto;
+  margin: 20px auto;
+  padding-left: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #d9d9d9;
 `;
 const TitleTxt = styled.div`
   display: inline-block;
+  width: 100%;
+  button {
+    font-size: 0.75rem;
+    width: 120px;
+    height: 36px;
+    padding: 0.1rem;
+  }
 `;
 const MainTxt = styled.div`
   display: flex;
@@ -21,6 +33,7 @@ const MainTxt = styled.div`
     margin-left: 100px;
   }
   width: 100%;
+  padding: 1rem 0;
 `;
 
 const SubTxt = styled.div`
@@ -40,7 +53,7 @@ function Title() {
             Is there a way to access internal metastore of Azure HDInsight to
             fire queries on Hive metastore tables?
           </h1>
-          <Button>Ask a Question</Button>
+          <Button>Ask Question</Button>
         </MainTxt>
         <SubTxt>
           <h3>Asked</h3>

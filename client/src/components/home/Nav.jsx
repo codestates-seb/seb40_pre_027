@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FaGlobeAsia } from 'react-icons/fa';
+import LinkStyle from '../LinkStyle';
 
 const NavBar = styled.div`
   width: 200px;
@@ -110,12 +111,17 @@ const Companies = styled.li`
 function Nav() {
   return (
     <NavBar>
-      <HomeButton>Home</HomeButton>
+      <LinkStyle path="/">
+        <HomeButton>Home</HomeButton>
+      </LinkStyle>
+
       <Public>Public</Public>
       <PublicContent>
         <Questions>
-          <FaGlobeAsia size={30} />
-          &nbsp;Questions
+          <LinkStyle path="/questions" css={{ color: '#000', hover: true }}>
+            <FaGlobeAsia size={30} />
+            &nbsp;Questions
+          </LinkStyle>
         </Questions>
         <Tags>Tags</Tags>
         <Users>Users</Users>
