@@ -20,18 +20,6 @@ const WritePageComponent = styled.div`
     .question {
       width: 100%;
     }
-    .input-area {
-      display: flex;
-      justify-content: space-between;
-      > button {
-        display: none;
-      }
-      &.step {
-        button {
-          display: block;
-        }
-      }
-    }
     h1 {
       padding: 3rem 0;
       font-weight: 700;
@@ -66,9 +54,6 @@ const WritePageComponent = styled.div`
         }
       }
     }
-    .question > button {
-      margin: 2rem 0;
-    }
   }
 `;
 
@@ -76,10 +61,6 @@ function WritePage() {
   const initialData = { title: '', introduce: '', expand: '', tags: [] };
   const [step, setStep] = useState('Title');
   const [inputData, setInputData] = useState(initialData);
-  // const [title, setTitle] = useState('');
-  // const [introduce, setIntroduce] = useState('');
-  // const [expand, setExpand] = useState('');
-  // const [tags, setTags] = useState([]);
   const stepHandler = (title) => {
     console.log(title);
     setStep(title);

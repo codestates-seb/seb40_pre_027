@@ -46,15 +46,22 @@ function InputBox({
   setValue,
   value,
 }) {
+  const [tag, setTag] = useState('');
   const editorRef = useRef();
   const onChange = (changeData) => {
-    console.log(value, title);
-    setValue({ ...value, title: changeData });
+    if (title === 'tags') {
+      setTag(changeData);
+    } else {
+      const newValue = { ...value };
+      newValue[title] = changeData;
+      setValue(newValue);
+    }
   };
   const editorOnChange = () => {
-    console.log(value, title);
-    // const newValue = (value[title] = editorRef.current.getInstance().getHTML());
-    // setValue(newValue);
+    const newValue = { ...value };
+    console.log(value);
+    newValue[title] = editorRef.current.getInstance().getHTML();
+    setValue(newValue);
   };
   return (
     <InputBoxComponent input={value[title]}>
@@ -63,7 +70,7 @@ function InputBox({
       {editor ? (
         <div
           onClick={() => stepHandler(name)}
-          className={value[title].length <= 5 ? 'disabled' : ''}
+          className={value[title].length <= 20 ? 'disabled' : ''}
         >
           <Editor
             initialValue=" "
@@ -72,7 +79,6 @@ function InputBox({
             initialEditType="markdown"
             onChange={editorOnChange}
             useCommandShortcut={true}
-            className={value[title].length <= 20 ? 'disabled' : ''}
             ref={editorRef}
           />
         </div>
@@ -85,6 +91,7 @@ function InputBox({
           onChange={(e) => onChange(e.target.value)}
         />
       )}
+
       <Button>Next</Button>
     </InputBoxComponent>
   );

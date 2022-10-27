@@ -1,11 +1,12 @@
-import "./App.css";
-import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import './App.css';
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-const HomePage = lazy(() => import("./pages/HomePage"));
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const SigninPage = lazy(() => import("./pages/SigninPage"));
-const WritePage = lazy(() => import("./pages/WritePage"));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SigninPage = lazy(() => import('./pages/SigninPage'));
+const WritePage = lazy(() => import('./pages/WritePage'));
+const PostPage = lazy(() => import('./pages/PostPage'));
 
 function App() {
   return (
@@ -38,6 +39,11 @@ function App() {
         <Route
           path="/write"
           element={<Suspense fallback={<>...</>}>{<WritePage />}</Suspense>}
+        ></Route>
+
+        <Route
+          path="/post"
+          element={<Suspense fallback={<>...</>}>{<PostPage />}</Suspense>}
         ></Route>
       </Routes>
     </div>

@@ -80,7 +80,7 @@ function Header() {
       <Topbar />
       <HeaderComponent>
         <div className="header-container">
-          <a className="logo-anchor" href="url">
+          <a className="logo-anchor" href="/">
             <span className="logo"></span>
           </a>
           <form className="search-form" onSubmit={searchHandler}>

@@ -1,14 +1,14 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import {
   FcGoogle,
   FcQuestions,
   FcInternal,
   FcExpand,
   FcLightAtTheEndOfTunnel,
-} from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
-import Header from "../components/Header";
+} from 'react-icons/fc';
+import { FaGithub } from 'react-icons/fa';
+import Header from '../components/Header';
 
 const Signpage = styled.main`
   width: 100%;
