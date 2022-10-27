@@ -16,15 +16,16 @@ const LoginPageComponent = styled.div`
 .account {
   margin-top: 20px;
   margin-bottom: 50px;
+  font-size: 13px;
 }
 .signUp {
   color: #0074cc;
 }
 
 background-color: #f1f2f3;
-height: 100%;
+height: 100vh;
 width: 100%;
-padding: 100px;
+margin-top: -50px;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -33,7 +34,8 @@ justify-content: center;
 
 const LoginBox = styled.div`
 .email {
-  font-size: 19px;
+  font-size: 15px;
+  font-weight: bold;
 }
 .pw {
   display: flex;
@@ -41,10 +43,11 @@ const LoginBox = styled.div`
   justify-content: space-between;
 }
 .password {
-  font-size: 19px;
+  font-size: 15px;
+  font-weight: bold;
 }
 .forgotPassword {
-  font-size: 14px;
+  font-size: 12px;
   color: #0074cc;
 }
 .inputBox {
@@ -65,11 +68,12 @@ button {
 }
 
 background-color: #ffffff;
-width: 288px;
+width: 310px;
 margin: 24px;
 padding: 24px;
 border-radius: 5%;
 `;
+
 const SignGoogle = styled.div`
 width: 310px;
 height: 38px;
@@ -131,72 +135,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
-// import React from "react";
-// import styled from "styled-components";
-// import Header from "../components/Header"
-// import smallLogo from "../img/smallLogo.png"
-
-// function LoginPage() {
-//   const LoginPageComponent = styled.div`
-//     .smallLogo{
-//       width: 50px;
-//       height: 50px;
-//     }
-//     .googleButton{
-//       width: 280px;
-//       height: 37.8px;
-//       margin: 4px 0px;
-//       padding: 10px;
-
-//       background-color: #fff;
-//       position: relative;
-//     display: inline-block;
-//     padding: 0.8em;
-//     outline: none;
-//     font-family: inherit;
-//     font-size: var(--fs-body1);
-//     font-weight: normal;
-//     line-height: var(--lh-sm);
-//     text-align: center;
-//     text-decoration: none;
-//     cursor: pointer;
-//     user-select: none;
-//     }
-//     .githubButton{
-//       width: 280px;
-//       height: 37.8px;
-//       margin: 4px 0px;
-//       padding: 10px;
-
-//       background-color: #2f3337;
-
-//     }
-
-//     padding: 40px;
-//     height: 100vh;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     justify-content: center;
-
-//   `
-
-//   // const GoogleLoginButtonComponent = {
-
-//   // }
-// return (
-//     <>
-//       <Header />
-//       <LoginPageComponent>
-//         <img className='smallLogo' alt='stack-small-logo' src={smallLogo}></img>
-//         <button className='googleButton'>Log in with Google</button>
-//         <button className='githubButton'>Log in with GitHub</button>
-
-//       </LoginPageComponent>
-
-//     </>
-//   )
-// }
-
-// export default LoginPage;
