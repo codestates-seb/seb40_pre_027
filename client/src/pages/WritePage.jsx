@@ -9,16 +9,17 @@ import InputArea from '../components/write/InputArea';
 import data from '../components/write/data';
 
 const WritePageComponent = styled.div`
-  header {
-    height: 50px;
-    border-bottom: 1px solid #d9d9d9;
-  }
   article {
     width: 1400px;
     margin: 0 auto;
     display: flex;
     .question {
       width: 100%;
+      > button {
+        :nth-last-child(1) {
+          margin: 0 0 2rem 0;
+        }
+      }
     }
     h1 {
       padding: 3rem 0;

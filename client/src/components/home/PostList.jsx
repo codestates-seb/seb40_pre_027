@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Post from "./Post";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Post from './Post';
 
 const PostListComponent = styled.div`
   width: 926px;
@@ -83,13 +83,13 @@ function PostList() {
       {Array(15)
         .fill()
         .map((v, i) => (
-          <Post key={i} />
+          <Post key={`idx${i}`} />
         ))}
       <div className="pagination">
         <div className="page">
           {pagination.map((v, i) => (
             <div
-              className={currentPage === v ? "page-items check" : "page-items"}
+              className={currentPage === v ? 'page-items check' : 'page-items'}
               key={i}
             >
               {v}
@@ -101,7 +101,7 @@ function PostList() {
         <div className="per">
           {per.map((v, i) => (
             <div
-              className={currentPer === v ? "per-items check" : "per-items"}
+              className={currentPer === v ? 'per-items check' : 'per-items'}
               key={i}
             >
               {v}

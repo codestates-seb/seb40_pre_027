@@ -1,20 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  FcGoogle,
   FcQuestions,
   FcInternal,
   FcExpand,
   FcLightAtTheEndOfTunnel,
 } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
 import Header from '../components/Header';
+import SocialLogin from '../components/SocialLogin';
+import LinkStyle from '../components/LinkStyle';
 
 const Signpage = styled.main`
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: center;
   flex-direction: column;
   background-color: rgb(241, 242, 243);
   .divcontent {
@@ -60,31 +59,6 @@ const SignIn = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-`;
-const SignGoogle = styled.div`
-  width: 310px;
-  height: 38px;
-  margin: 15px;
-  border-radius: 5px;
-  text-align: center;
-  line-height: 2.3rem;
-  border: 1px solid white;
-  background-color: white;
-  font-size: 0.9rem;
-  cursor: pointer;
-`;
-const SignGithub = styled.div`
-  width: 310px;
-  height: 38px;
-  margin-bottom: 25px;
-  border-radius: 5px;
-  text-align: center;
-  line-height: 2.3rem;
-  border: 1px solid #2f3337;
-  background-color: #2f3337;
-  color: white;
-  font-size: 0.9rem;
-  cursor: pointer;
 `;
 const SignMe = styled.div`
   width: 310px;
@@ -192,14 +166,9 @@ function SigninPage() {
             <h4>Get Stack Overflow for Teams free for up to 50 users.</h4>
           </SignTxt>
           <SignIn>
-            <SignGoogle>
-              <FcGoogle size={30} />
-              &nbsp;&nbsp;Sign up with Google
-            </SignGoogle>
-            <SignGithub>
-              <FaGithub size={30} />
-              &nbsp;&nbsp;Sign up with Github
-            </SignGithub>
+            <SocialLogin social="google">Sign up with Google</SocialLogin>
+            <SocialLogin social="github">Sign up with Github</SocialLogin>
+
             <SignMe>
               {/*회원가입 창*/}
               <Display>
@@ -221,7 +190,10 @@ function SigninPage() {
               <SignUp>Sign up</SignUp>
             </SignMe>
             <SignHelp>
-              Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;<h3>Log in</h3>
+              Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;
+              <div>
+                <LinkStyle path="/login">Log in</LinkStyle>
+              </div>
             </SignHelp>
           </SignIn>
         </Sign>
