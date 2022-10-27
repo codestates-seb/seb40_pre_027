@@ -4,17 +4,16 @@ import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import com.codestates.stackoverflow.member.service.MemberService;
-import net.bytebuddy.asm.Advice;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -42,7 +41,29 @@ public class MemberServiceImpl implements MemberService {
         return createdMember;
     }
 
-//    @Override
+
+    @Override
+    public Member findLoginMember() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("[getLoginMemberId] " + principal.toString());
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
+
+        Member findMember = optionalMember.orElseThrow(() -> new RuntimeException());
+
+        return findMember;
+    }
+
+    @Override
+    public void deleteMember() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
+
+        memberRepository.deleteById(optionalMember.orElseThrow(() -> new RuntimeException()).getMemberId());
+    }
+
+    //    @Override
 //    public Member loadMember (Member member) {
 //        boolean isVerified = verifyPassword(member);
 //

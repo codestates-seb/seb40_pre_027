@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/test/users")
+@RequestMapping("/users")
 @Slf4j
 @Validated
 public class MemberController {
@@ -44,6 +44,20 @@ public class MemberController {
                 HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity getMember() {
+        Member member = memberService.findLoginMember();
+
+        return ResponseEntity.ok(memberMapper.memberToMemberResponseDto(member));
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteMember() {
+        memberService.deleteMember();
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 
     // 로그인
 //    @PostMapping("/login")
@@ -65,11 +79,7 @@ public class MemberController {
 //    }
 //
 //
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
 
-        return new ResponseEntity(HttpStatus.OK);
-    }
 //    @DeleteMapping("/my-page/{member-id}")
 //    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
 //        memberService.deleteMember(memberId);

@@ -52,6 +52,7 @@ public class MemberDto {
         private String name;
         private String email;
         private List<String> roles;
-        private LocalDateTime localDateTime;
+        private LocalDateTime createdDate;
+        private LocalDateTime modifiedDate;
     }
 }
