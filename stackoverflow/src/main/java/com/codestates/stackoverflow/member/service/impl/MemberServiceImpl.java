@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
 
-        List<String> roles = authorityUtils.createRole(member.getEmail());
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
         Member createdMember = memberRepository.save(member);
 

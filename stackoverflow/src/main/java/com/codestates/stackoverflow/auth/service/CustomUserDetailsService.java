@@ -6,14 +6,18 @@ import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Slf4j
+@Component
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -28,13 +32,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     /* email 정보로 유저 찾기 (토큰 관련 구현 시 수정 또는 삭제 예정)*/
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("[loadUserByUsername] 회원 정보 탐색 시작");
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member findMember = optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         Collection<? extends GrantedAuthority> authorities =
                 authorityUtils.createAuthorities(findMember.getEmail());
+        log.info("[loadUserByUsername] " + findMember.toString());
 
+        log.info("[loadUserByUsername] 회원 정보 탐색 종료");
         return new CustomUserDetails(findMember);
     }
 
@@ -49,7 +56,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         public CustomUserDetails(Member member) {
             setMemberId(member.getMemberId());
-            setName(member.getName());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
@@ -64,13 +70,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         @Override
         public String getUsername() {
             return getEmail();
-        }
-
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // JSON 결과 출력 X
-        @Override
-        public String getPassword() {
-
-            return getPassword();
         }
 
         @Override

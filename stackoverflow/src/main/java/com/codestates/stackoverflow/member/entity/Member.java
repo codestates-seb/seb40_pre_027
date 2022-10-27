@@ -42,7 +42,6 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),
         MEMBER_SLEEP("휴먼 상태"),

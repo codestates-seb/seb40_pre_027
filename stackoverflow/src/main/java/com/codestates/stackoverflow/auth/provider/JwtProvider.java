@@ -1,4 +1,4 @@
-package com.codestates.stackoverflow.config.security;
+package com.codestates.stackoverflow.auth.provider;
 
 import com.codestates.stackoverflow.auth.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
@@ -56,9 +56,9 @@ public class JwtProvider {
                                     String subject,
                                     Date expiration,
                                     String base64EncodedSecretKey) {
-        log.info("[createToken] 토큰 생성 시작");
+        log.info("[createAccessToken] 토큰 생성 시작");
 
-        Key key = getKeyFromBase64EncodedKey(secretKey);
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -68,39 +68,48 @@ public class JwtProvider {
                 .signWith(key)
                 .compact();
 
-        log.info("[createToken] 토큰 생성 완료");
+        log.info("[createAccessToken] 토큰 생성 완료");
 
         return token;
     }
 
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
+        log.info("[createRefreshToken] 토큰 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();
+
+        log.info("[createRefreshToken] 토큰 생성 완료");
+
+        return token;
     }
 
-    public Jws<Claims> getClaims(String token, String secretKey) {
-        Key key = getKeyFromBase64EncodedKey(secretKey);
+    public Jws<Claims> getClaims(String token, String base64EncodedSecretKey) {
+        log.info("[getClaims] 토큰의 Claims 불러오기 시작");
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-
+        log.info("[getClaims] 토큰의 Claims 불러오기 완료");
         return claims;
     }
 
-    public void verifySignature(String token, String secretKey) {
-        Key key = getKeyFromBase64EncodedKey(secretKey);
+    public void verifySignature(String token, String base64EncodedSecretKey) {
+        log.info("[verifySignature] 토큰 검증 시작");
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jwts.parserBuilder().setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
+
+        log.info("[verifySignature] 토큰 검증 완료");
     }
 
     public Date getTokenExpiration(int expirationMinutes) {

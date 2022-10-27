@@ -45,7 +45,7 @@ public class MemberController {
     }
 
 
-//    // 로그인
+    // 로그인
 //    @PostMapping("/login")
 //    public ResponseEntity<MemberDto.Response> postLogin (@RequestBody @Valid MemberDto.LoginPost requestBody) {
 //        Member member = memberMapper.memberLoginPostDtoToMember(requestBody);
@@ -65,6 +65,11 @@ public class MemberController {
 //    }
 //
 //
+    @GetMapping("/{member-id}")
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 //    @DeleteMapping("/my-page/{member-id}")
 //    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
 //        memberService.deleteMember(memberId);

@@ -1,62 +1,67 @@
-package com.codestates.stackoverflow.config.security;
+package com.codestates.stackoverflow.auth.filter;
 
-import com.codestates.stackoverflow.member.dto.MemberDto;
+import com.codestates.stackoverflow.auth.dto.AuthDto;
+import com.codestates.stackoverflow.auth.provider.JwtProvider;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {  // (1)
+@Slf4j
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
-    // (2)
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
     }
 
-    // (3)
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        log.info("[attemptAuthentication] 로그인 요청 시작");
+        ObjectMapper objectMapper = new ObjectMapper();
+        AuthDto.LoginDto loginRequest = objectMapper.readValue(request.getInputStream(), AuthDto.LoginDto.class);
 
-        ObjectMapper objectMapper = new ObjectMapper();    // (3-1)
-        MemberDto.LoginPost loginRequest = objectMapper.readValue(request.getInputStream(), MemberDto.LoginPost.class); // (3-2)
-
-        // (3-3)
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-        return authenticationManager.authenticate(authenticationToken);  // (3-4)
+        log.info("[attemptAuthentication] 로그인 요청 종료");
+        return authenticationManager.authenticate(authenticationToken);
     }
 
-    // (4)
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) {
-        Member member = (Member) authResult.getPrincipal();  // (4-1)
+                                            Authentication authResult) throws ServletException, IOException {
+        log.info("[successfulAuthentication] 로그인 검증 성공");
+        Member member = (Member) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(member);   // (4-2)
-        String refreshToken = delegateRefreshToken(member); // (4-3)
+        String accessToken = delegateAccessToken(member);
+        String refreshToken = delegateRefreshToken(member);
 
-        response.setHeader("Authorization", "Bearer " + accessToken);  // (4-4)
-        response.setHeader("Refresh", refreshToken);                   // (4-5)
+        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Refresh", refreshToken);
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+
     }
 
-    // (5)
+
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());

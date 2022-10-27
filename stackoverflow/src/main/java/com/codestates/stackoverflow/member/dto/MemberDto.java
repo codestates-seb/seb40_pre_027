@@ -6,6 +6,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 public class MemberDto {
@@ -13,6 +15,7 @@ public class MemberDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    @ToString
     public static class LoginPost {
 
         @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
@@ -48,6 +51,7 @@ public class MemberDto {
         private long memberId;
         private String name;
         private String email;
-        private boolean isAuth;
+        private List<String> roles;
+        private LocalDateTime localDateTime;
     }
 }

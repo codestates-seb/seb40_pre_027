@@ -25,7 +25,7 @@ logging:
 
 # Security ??
 jwt:
-  secret-key: SESESESESESE
+  secret-key: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 360
 
