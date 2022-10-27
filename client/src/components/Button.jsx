@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import React from 'react';
 
 const ButtonComponent = styled.button`
-  background-color: ${(props) => (props.data ? props.data.background : '#0088ef')};
+  background-color: ${(props) =>
+    props.data ? props.data.background : '#0088ef'};
   color: ${(props) => (props.data ? props.data.color : 'white')};
   border-radius: 5px;
   border: none;
@@ -20,7 +21,11 @@ const ButtonComponent = styled.button`
 `;
 
 function Button(props) {
-  return <ButtonComponent data={props.data} onClick={props.onClick}>{props.children}</ButtonComponent>;
+  return (
+    <ButtonComponent data={props.data} onClick={props.onClick}>
+      {props.children}
+    </ButtonComponent>
+  );
 }
 
 export default Button;
