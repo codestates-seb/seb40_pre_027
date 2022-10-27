@@ -3,7 +3,23 @@ import styled from 'styled-components';
 import InputBox from './InputBox';
 import InputGuide from './InputGuide';
 
-const InputAreaComponent = styled.div``;
+const InputAreaComponent = styled.div`
+  .input-area {
+    display: flex;
+    justify-content: space-between;
+    > button {
+      display: none;
+    }
+    &.step {
+      button {
+        display: block;
+      }
+    }
+  }
+  .question > button {
+    margin: 2rem 0;
+  }
+`;
 
 function InputArea({ data, step, stepHandler, value, setValue }) {
   return (
