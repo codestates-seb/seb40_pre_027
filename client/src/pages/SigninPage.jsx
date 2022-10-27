@@ -221,7 +221,7 @@ function SigninPage() {
               <SignUp>Sign up</SignUp>
             </SignMe>
             <SignHelp>
-              Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;<h3>Log in</h3>
+              Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;<div>Log in</div>
             </SignHelp>
           </SignIn>
         </Sign>
