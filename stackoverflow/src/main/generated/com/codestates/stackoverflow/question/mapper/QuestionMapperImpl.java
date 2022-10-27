@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-25T16:10:32+0900",
-    comments = "version: 1.5.1.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
+    date = "2022-10-27T11:32:43+0900",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
 public class QuestionMapperImpl implements QuestionMapper {
@@ -25,10 +25,6 @@ public class QuestionMapperImpl implements QuestionMapper {
 
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
-        question.setViewCount( requestBody.getViewCount() );
-        question.setVote( requestBody.getVote() );
-        question.setCreatedAt( requestBody.getCreatedAt() );
-        question.setModifiedAt( requestBody.getModifiedAt() );
 
         return question;
     }
@@ -44,7 +40,6 @@ public class QuestionMapperImpl implements QuestionMapper {
         question.setQuestionId( requestBody.getQuestionId() );
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
-        question.setVote( requestBody.getVote() );
 
         return question;
     }
@@ -63,7 +58,7 @@ public class QuestionMapperImpl implements QuestionMapper {
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
         response.setViewCount( question.getViewCount() );
-        response.setVote( question.getVote() );
+        response.setLikeCount( question.getLikeCount() );
         response.setCreatedAt( question.getCreatedAt() );
         response.setModifiedAt( question.getModifiedAt() );
 

@@ -1,5 +1,7 @@
 package com.codestates.stackoverflow.question.service;
 
+import com.codestates.stackoverflow.like.entity.QuestionLike;
+import com.codestates.stackoverflow.like.repository.QuestionLikeRepository;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuestionLikeRepository likeRepository;
 
     public Question createQuestion(Question question) {
         return questionRepository.save(question);
     }
-
 
     public Question updateQuestion(Question question) {
         Question findQuestion = findValidQuestion(question.getQuestionId());
@@ -29,8 +31,8 @@ public class QuestionService {
                 .ifPresent(findQuestion::setTitle);
         Optional.ofNullable(question.getContent())
                 .ifPresent(findQuestion::setContent);
-        Optional.ofNullable(question.getVote())
-                .ifPresent(findQuestion::setVote);
+//        Optional.ofNullable(question.getVote())
+//                .ifPresent(findQuestion::setVote);
 
         return questionRepository.save(findQuestion);
     }
@@ -47,6 +49,11 @@ public class QuestionService {
     public void deleteQuestion(long questionId) {
         Question findQuestion = findValidQuestion(questionId);
         questionRepository.delete(findQuestion);
+    }
+
+    public int modifyLikeCount(Long questionId, int val) {
+        questionRepository.modifyLikeCount(questionId, val);
+        return questionRepository.findById(questionId).get().getLikeCount();
     }
 
     @Transactional(readOnly = true)

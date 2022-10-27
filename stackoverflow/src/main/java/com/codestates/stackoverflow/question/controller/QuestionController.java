@@ -49,6 +49,7 @@ public class QuestionController {
     public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
         Question question = questionService.findQuestion(questionId);
 
+//        questionService.findLike(questionId);
         return new ResponseEntity<>(
                 mapper.questionToQuestionResponse(question),
                 HttpStatus.OK);
@@ -72,4 +73,14 @@ public class QuestionController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+//    @PostMapping("/like")
+//    public @ResponseBody int like(Long questionId) {
+//        return questionService.saveLike(questionId);
+//    }
+//
+//    @PostMapping("/dislike")
+//    public @ResponseBody int disLike(Long questionId) {
+//        return questionService.saveLike(questionId);
+//    }
 }

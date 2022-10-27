@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.question.entity;
 
+import com.codestates.stackoverflow.like.entity.QuestionLike;
 import com.codestates.stackoverflow.tag.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -32,21 +34,24 @@ public class Question {
 //    private List<Answer> answers;
 
     @OneToMany(mappedBy = "question")
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question")
+    private List<QuestionLike> likes = new ArrayList<>();
 
     @Column(nullable = false)
-    private int likeCount;
+    private int viewCount = 0;
 
     @Column(nullable = false)
-    private int viewCount;
+    private int likeCount = 0;
 
-    @Column(nullable = false)
-    private int vote;
+//    @Column(nullable = false)
+//    private int vote;
 
     @Column(nullable = false)
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime modifiedAt;
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 }
