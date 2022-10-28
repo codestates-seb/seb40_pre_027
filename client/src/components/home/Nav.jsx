@@ -68,7 +68,7 @@ const Tags = styled.li`
   margin: 10px 0 10px 39px;
   letter-spacing: 0.6px;
   height: 4.3vh;
-  line-height: 2rem;
+  line-height: 2.5rem;
   &:hover {
     background-color: gray;
     color: white;
@@ -83,7 +83,7 @@ const Users = styled.li`
   margin: 10px 0 10px 39px;
   letter-spacing: 0.6px;
   height: 4.3vh;
-  line-height: 2rem;
+  line-height: 2.5rem;
   &:hover {
     background-color: gray;
     color: white;
@@ -98,7 +98,7 @@ const Companies = styled.li`
   margin: 10px 0 10px 39px;
   letter-spacing: 0.6px;
   height: 4.3vh;
-  line-height: 2rem;
+  line-height: 2.5rem;
   &:hover {
     background-color: gray;
     color: white;

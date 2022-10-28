@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import styled from 'styled-components';
 import {
   FcQuestions,
@@ -138,6 +138,16 @@ const SignHelp = styled.h3`
   }
 `;
 function SigninPage() {
+  const [inputV, setInputV] = useState({
+    display: '',
+    email: '',
+    password: '',
+  });
+  const handle = (event) => {
+    const { value, name } = event.target;
+    setInputV({ ...inputV, [name]: value });
+    console.log(inputV);
+  };
   return (
     <Signpage>
       <Header></Header>
@@ -173,15 +183,19 @@ function SigninPage() {
               {/*회원가입 창*/}
               <Display>
                 <h2>Display name</h2>
-                <input></input>
+                <input name="display" type="text" onChange={handle} />
               </Display>
               <Email>
                 <h2>Email</h2>
-                <input></input>
+                <input name="email" type="text" onChange={handle}></input>
               </Email>
               <Password>
                 <h2>Password</h2>
-                <input></input>
+                <input
+                  name="password"
+                  type="password"
+                  onChange={handle}
+                ></input>
               </Password>
               <Signwarn>
                 Passwords must contain at least eight characters, including at
