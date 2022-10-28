@@ -72,7 +72,7 @@ const PostListComponent = styled.div`
   }
 `;
 
-function PostList() {
+function PostList({ posts }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPer, setCurrentPer] = useState(15);
@@ -80,11 +80,14 @@ function PostList() {
   const per = [15, 30, 50];
   return (
     <PostListComponent>
-      {Array(15)
+      {/* {Array(15)
         .fill()
         .map((v, i) => (
           <Post key={`idx${i}`} />
-        ))}
+        ))} */}
+      {posts.map((v) => (
+        <Post key={v.id} post={v} />
+      ))}
       <div className="pagination">
         <div className="page">
           {pagination.map((v, i) => (

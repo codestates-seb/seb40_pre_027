@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import PostList from '../components/home/PostList';
@@ -26,8 +26,11 @@ const HomepageComponent = styled.div`
   }
 `;
 function HomePage() {
+  const [posts, setPosts] = useState();
   useEffect(() => {
-    axios.get('/question?&page=1&size=10').then((res) => console.log(res.data));
+    axios
+      .get('/question?&page=1&size=10')
+      .then((res) => console.log(setPosts(res.data)));
   }, []);
   return (
     <HomepageComponent>
@@ -36,7 +39,7 @@ function HomePage() {
         <Nav />
         <article>
           <TopMenu />
-          <PostList />
+          <PostList posts={posts} />
         </article>
         <aside>
           <TagsBox />
