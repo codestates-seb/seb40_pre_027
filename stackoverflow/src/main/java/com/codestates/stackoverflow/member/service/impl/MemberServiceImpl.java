@@ -41,7 +41,6 @@ public class MemberServiceImpl implements MemberService {
         return createdMember;
     }
 
-
     @Override
     public Member findLoginMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -55,6 +54,32 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member updateMember(Member member) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("[getLoginMemberId] " + principal.toString());
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
+
+        Member findMember = optionalMember.orElseThrow(() -> new RuntimeException());
+
+        // 프로필 사진 수정 기능 구현 필요
+
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+        Optional.ofNullable(member.getLocation())
+                .ifPresent(location -> findMember.setLocation(location));
+        Optional.ofNullable(member.getTitle())
+                .ifPresent(title -> findMember.setTitle(title));
+        Optional.ofNullable(member.getIntroduction())
+                .ifPresent(introduction -> findMember.setIntroduction(introduction));
+
+        Member updatedMember = memberRepository.save(findMember);
+
+        return updatedMember;
+    }
+
+    @Override
     public void deleteMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -62,46 +87,6 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.deleteById(optionalMember.orElseThrow(() -> new RuntimeException()).getMemberId());
     }
-
-    //    @Override
-//    public Member loadMember (Member member) {
-//        boolean isVerified = verifyPassword(member);
-//
-//        if (!isVerified) {
-//            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-//        }
-//
-//        Optional<Member> optionalMember = memberRepository.findByEmailAndPassword(member.getEmail(),
-//                member.getPassword());
-//
-//        Member findMember = optionalMember.orElseThrow(
-//                () -> new RuntimeException("비밀번호 또는 아이디를 확인해주세요."));
-//
-//        findMember.setAuth(true);
-//
-//        return memberRepository.save(findMember);
-//    }
-//
-//    @Override
-//    public Member logoutMember(long memberId) {
-//
-//        Member member = findVerifiedMember(memberId);
-//
-//        if (!member.isAuth()) {
-//            new RuntimeException("이미 로그아웃 상태입니다.");
-//        }
-//        member.setAccessedAt(LocalDateTime.now());
-//        member.setAuth(false);
-//
-//        return memberRepository.save(member);
-//    }
-//
-//    @Override
-//    public void deleteMember(long memberId) {
-//        Member findMember = findVerifiedMember(memberId);
-//
-//        memberRepository.delete(findMember);
-//    }
 
     private void verifyExistsEmail(String email) {
         boolean isExistsEmail = memberRepository.existsByEmail(email);

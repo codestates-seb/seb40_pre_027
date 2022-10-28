@@ -9,9 +9,8 @@ public interface MemberService {
     //    Member loadMember(Member member);
 //
     void deleteMember();
-//
-//    Member logoutMember(long memberId);
 
+    Member updateMember(Member member);
 
     Member findLoginMember();
 

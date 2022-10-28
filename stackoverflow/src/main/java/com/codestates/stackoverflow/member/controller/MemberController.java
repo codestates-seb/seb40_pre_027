@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/users")
@@ -43,47 +42,33 @@ public class MemberController {
                 memberMapper.memberToMemberResponseDto(savedMember),
                 HttpStatus.CREATED);
     }
-
+    // 로그인 된 회원 정보 불러오기
     @GetMapping
     public ResponseEntity getMember() {
         Member member = memberService.findLoginMember();
 
         return ResponseEntity.ok(memberMapper.memberToMemberResponseDto(member));
     }
+    // 회원 정보 수정
+    @PutMapping
+    public ResponseEntity fetchMember(@RequestBody MemberDto.FetchRequest request) {
+        Member member = memberMapper.memberFetchRequestDtoToMember(request);
 
+        Member updatedMember = memberService.updateMember(member);
+
+        MemberDto.FetchResponse response = memberMapper.memberToMemberFetchResponseDto(updatedMember);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // 회원 정보 삭제
     @DeleteMapping
     public ResponseEntity deleteMember() {
+        // 비밀번호를 전달받아야 하나..?
+
         memberService.deleteMember();
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-
-    // 로그인
-//    @PostMapping("/login")
-//    public ResponseEntity<MemberDto.Response> postLogin (@RequestBody @Valid MemberDto.LoginPost requestBody) {
-//        Member member = memberMapper.memberLoginPostDtoToMember(requestBody);
-//
-//        Member loadMember = memberService.loadMember(member);
-//
-//
-//        return ResponseEntity.ok(memberMapper.memberToMemberResponseDto(loadMember));
-//    }
-//
-//    // 로그아웃
-//    @PostMapping("/logout/{member-id}")
-//    public ResponseEntity postLogout(@PathVariable("member-id") long memberId) {
-//        MemberDto.Response response =
-//                memberMapper.memberToMemberResponseDto(memberService.logoutMember(memberId));
-//        return new ResponseEntity(response, HttpStatus.OK);
-//    }
-//
-//
-
-//    @DeleteMapping("/my-page/{member-id}")
-//    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
-//        memberService.deleteMember(memberId);
-//
-//        return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
 }

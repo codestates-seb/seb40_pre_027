@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor
 public class Member extends Auditable {
+    // 이미지 기능 추가해야 함
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,13 @@ public class Member extends Auditable {
 
     @Column(nullable = false, length = 200)
     private String password;
+
+    @Column(length = 50)
+    private String location;
+    @Column(length = 50)
+    private String title;
+    @Column(length = 200)
+    private String introduction;
 
 
     @Enumerated(value = EnumType.STRING)
