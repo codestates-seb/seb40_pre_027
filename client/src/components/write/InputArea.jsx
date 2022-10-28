@@ -6,7 +6,7 @@ import InputGuide from './InputGuide';
 const InputAreaComponent = styled.div`
   .input-area {
     display: flex;
-    justify-content: space-between;
+    margin-right: 2rem;
     > button {
       display: none;
     }
@@ -21,7 +21,16 @@ const InputAreaComponent = styled.div`
   }
 `;
 
-function InputArea({ data, step, stepHandler, value, setValue }) {
+function InputArea({
+  data,
+  step,
+  stepHandler,
+  value,
+  setValue,
+  stepBtnHandler,
+  stepBtn,
+  idx,
+}) {
   return (
     <InputAreaComponent>
       <div className={step === data.name ? 'step input-area' : 'input-area'}>
@@ -32,8 +41,12 @@ function InputArea({ data, step, stepHandler, value, setValue }) {
           placeholder={data.placeholder}
           editor={data.editor}
           stepHandler={stepHandler}
+          stepBtnHandler={stepBtnHandler}
           value={value}
           setValue={setValue}
+          stepBtn={stepBtn}
+          idx={idx}
+          step={step}
         />
         <InputGuide
           title={data.title}

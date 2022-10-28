@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Header from '../components/Header';
@@ -9,6 +9,7 @@ import InputArea from '../components/write/InputArea';
 import data from '../components/write/data';
 
 const WritePageComponent = styled.div`
+  background: rgba(240, 240, 240, 0.6);
   article {
     width: 1400px;
     margin: 0 auto;
@@ -18,6 +19,11 @@ const WritePageComponent = styled.div`
       > button {
         :nth-last-child(1) {
           margin: 0 0 2rem 0;
+          cursor: ${(props) =>
+            props.stepBtn >= 3 ? 'pointer' : 'not-allowed'};
+          pointer-events: ${(props) => (props.stepBtn <= 3 ? 'none' : '')};
+          background: ${(props) =>
+            props.stepBtn <= 3 ? '#348ed37f' : '#0088ef'};
         }
       }
     }
@@ -30,7 +36,7 @@ const WritePageComponent = styled.div`
       background-position: right;
     }
     .guide {
-      width: 1050px;
+      width: 1000px;
       border: 1px solid rgba(166, 206, 237);
       background-color: rgba(235, 244, 251);
       border-radius: 5px;
@@ -59,15 +65,15 @@ const WritePageComponent = styled.div`
 `;
 
 function WritePage() {
-  const initialData = { title: '', introduce: '', expand: '', tags: [] };
-  const [step, setStep] = useState('Title');
-  const [inputData, setInputData] = useState(initialData);
-  const stepHandler = (title) => {
-    console.log(title);
-    setStep(title);
-  };
+  const initialData = { title: '', introduce: '', expand: '', tags: [] }; // 글쓰기 기본 양식
+  const [step, setStep] = useState('Title'); // 현재 글쓰기 step
+  const [stepBtn, setStepBtn] = useState(0); // 각 step의 next 버튼을 눌렀을 때 다음 step으로 이동하기 위한
+  const [inputData, setInputData] = useState(initialData); // 글쓰기 상태
+  const stepHandler = (title) => setStep(title);
+  const stepBtnHandler = () => setStepBtn(stepBtn + 1);
+
   return (
-    <WritePageComponent>
+    <WritePageComponent stepBtn={stepBtn}>
       <Modal />
       <header>
         <Header />
@@ -103,8 +109,11 @@ function WritePage() {
               step={step}
               data={v}
               key={i}
-              stepHandler={stepHandler}
+              stepBtn={stepBtn}
+              idx={i}
               value={inputData}
+              stepHandler={stepHandler}
+              stepBtnHandler={stepBtnHandler}
               setValue={setInputData}
             />
           ))}

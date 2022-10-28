@@ -61,48 +61,49 @@ const ModalComponent = styled.div`
   }
 `;
 
-function Modal(props) {
+function Modal() {
   const [isConfirm, setIsConfirm] = useState(false);
 
   const confirmHandler = () => {
     setIsConfirm(true);
   };
+  if (isConfirm) document.body.style.overflow = 'unset';
+  else document.body.style.overflow = 'hidden';
 
   return (
     <>
       {!isConfirm && (
         <Backdrop>
-            <ModalComponent>
-              <header className="header">
-                <h2>Asking a good question</h2>
-              </header>
-              <div className="content">
-                <p>
-                  You're ready to ask your first programming-related<br></br>
-                  question and the community is here to help! To get you
-                  <br></br>
-                  the best answers, we've provided some guidance:
-                </p>
-                <p>
-                  Before you post, <a href="/questions">search the site</a> to
-                  make sure your<br></br>question hasn't been answered
-                </p>
-                <p>
-                  <span className="numbering">1.</span> Summarize the problem
-                </p>
-                <p>
-                  <span className="numbering">2.</span> Describe what you've
-                  tried
-                </p>
-                <p>
-                  <span className="numbering">3.</span> When appropriate, show
-                  some code
-                </p>
-              </div>
-              <footer className="actions">
-                <Button onClick={confirmHandler}>Start writing</Button>
-              </footer>
-            </ModalComponent>
+          <ModalComponent>
+            <header className="header">
+              <h2>Asking a good question</h2>
+            </header>
+            <div className="content">
+              <p>
+                You're ready to ask your first programming-related<br></br>
+                question and the community is here to help! To get you
+                <br></br>
+                the best answers, we've provided some guidance:
+              </p>
+              <p>
+                Before you post, <a href="/questions">search the site</a> to
+                make sure your<br></br>question hasn't been answered
+              </p>
+              <p>
+                <span className="numbering">1.</span> Summarize the problem
+              </p>
+              <p>
+                <span className="numbering">2.</span> Describe what you've tried
+              </p>
+              <p>
+                <span className="numbering">3.</span> When appropriate, show
+                some code
+              </p>
+            </div>
+            <footer className="actions">
+              <Button onClick={confirmHandler}>Start writing</Button>
+            </footer>
+          </ModalComponent>
         </Backdrop>
       )}
     </>
