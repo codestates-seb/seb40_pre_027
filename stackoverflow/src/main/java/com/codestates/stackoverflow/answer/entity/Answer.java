@@ -30,6 +30,9 @@ public class Answer {
     private Long answerLikesCount;
 
     @Column
+    private long questionId;
+
+    @Column
     @CreatedDate
     private LocalDateTime answerCreatedAt;
 
@@ -37,10 +40,10 @@ public class Answer {
     @LastModifiedDate
     private LocalDateTime answerModifiedAt;
 
-    //Question과의 매핑
     //@ManyToOne
     //@JoinColumn(name = "QUESTION_ID")
     //private Question question;
+
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "Replies")
     private List<Reply> answerReplyComments = new ArrayList<>();

@@ -1,4 +1,4 @@
-package com.codestates.stackoverflow.aduit;
+package com.codestates.stackoverflow.audit;
 
 import lombok.Getter;
 import lombok.Setter;

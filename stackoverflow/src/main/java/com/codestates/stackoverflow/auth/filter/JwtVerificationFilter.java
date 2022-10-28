@@ -1,7 +1,7 @@
 package com.codestates.stackoverflow.auth.filter;
 
-import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
+import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
