@@ -53,8 +53,7 @@ public class Member extends Auditable {
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),
         MEMBER_SLEEP("휴먼 상태"),
-        MEMBER_QUIT("탈퇴 상태"),
-        ;
+        MEMBER_QUIT("탈퇴 상태");
         @Getter
         private String status;
 
