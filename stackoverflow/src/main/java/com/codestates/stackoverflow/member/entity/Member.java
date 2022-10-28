@@ -1,18 +1,16 @@
 package com.codestates.stackoverflow.member.entity;
 
-import com.codestates.stackoverflow.aduit.Auditable;
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.codestates.stackoverflow.audit.Auditable;
+import com.codestates.stackoverflow.comment.entity.Comment;
+import com.codestates.stackoverflow.question.entity.Question;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -42,13 +40,18 @@ public class Member extends Auditable {
     @Column(length = 200)
     private String introduction;
 
-
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Comment> replies = new ArrayList<>();
 
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),

@@ -3,13 +3,14 @@ package com.codestates.stackoverflow.question.mapper;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-27T11:32:43+0900",
+    date = "2022-10-28T13:35:10+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -25,6 +26,10 @@ public class QuestionMapperImpl implements QuestionMapper {
 
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
+        String[] tags = requestBody.getTags();
+        if ( tags != null ) {
+            question.setTags( Arrays.copyOf( tags, tags.length ) );
+        }
 
         return question;
     }
@@ -66,7 +71,7 @@ public class QuestionMapperImpl implements QuestionMapper {
     }
 
     @Override
-    public List<QuestionDto.Response> questionsToQuestionResponse(List<Question> questions) {
+    public List<QuestionDto.Response> questionsToQuestionResponses(List<Question> questions) {
         if ( questions == null ) {
             return null;
         }
