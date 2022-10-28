@@ -2,7 +2,6 @@ package com.codestates.stackoverflow.answer.dto;
 
 import lombok.*;
 
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
@@ -14,6 +13,8 @@ public class AnswerDto {
 
         @NotBlank(message = "내용을 필수로 입력해야 합니다.")
         private String answerContent;
+
+        private long questionId;
 
     }
 
@@ -43,6 +44,8 @@ public class AnswerDto {
         private long answerId;
 
         private String answerContent;
+
+        private long questionId;
 
         private long answerLikesCount;
 

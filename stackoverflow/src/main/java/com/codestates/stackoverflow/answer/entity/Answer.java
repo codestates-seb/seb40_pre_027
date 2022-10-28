@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,15 +23,9 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
-    //수정 및 삭제 권한은 answerWriterId로..?
-    //@ManyToOne
-    //@JoinColumn(name = "MEMBER_ID")
-    //private Member answerWriter;
-
     @Column(nullable = false , length = 255)
     private String answerContent;
 
-    //각 앤서 하나당, 좋아요 카운트가 존재합니다. Default 는 0이며, AnswerLikes 를 통해 수정이 가능합니다.
     @Column
     private Long answerLikesCount;
 
@@ -39,14 +34,17 @@ public class Answer {
     private LocalDateTime answerCreatedAt;
 
     @Column
-    @CreatedDate
+    @LastModifiedDate
     private LocalDateTime answerModifiedAt;
 
-    //answerLikes
-    @OneToOne(cascade = {CascadeType.ALL})
-    private AnswerLikes answerLikes;
+    //Question과의 매핑
+    //@ManyToOne
+    //@JoinColumn(name = "QUESTION_ID")
+    //private Question question;
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "Replies")
     private List<Reply> answerReplyComments = new ArrayList<>();
+
+
 
 }
