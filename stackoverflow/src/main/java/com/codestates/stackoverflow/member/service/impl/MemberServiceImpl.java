@@ -80,11 +80,13 @@ public class MemberServiceImpl implements MemberService {
     // 이름 또는 이메일 중복 유무 체크
     private void verifyExistsNameOrEmail(String name, String email) {
         boolean isExistsName = memberRepository.existsByName(name);
+        log.info("[verifyExistsNameOrEmail] - isExistsName : " + isExistsName);
         boolean isExistsEmail = memberRepository.existsByEmail(email);
+        log.info("[verifyExistsNameOrEmail] - isExistsEmail : " + isExistsEmail);
 
         if(isExistsName) {
             throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
-        } if (!isExistsEmail) {
+        } if (isExistsEmail) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
     }
