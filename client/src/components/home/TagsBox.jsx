@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const CustomBox = styled.div`
   width: 250px;
   height: 120px;
   border: 1px solid #f0f0f0;
   margin: 15px;
-  box-shadow: 2px 7px 15px 7px #d8d8d8;
+  box-shadow: 2px 3px 15px 5px #d8d8d8;
 `;
 const CB = styled.h1`
   font-size: 0.8rem;
@@ -28,7 +28,7 @@ const WatchedBox = styled.div`
   height: 120px;
   border: 1px solid #f0f0f0;
   margin: 15px;
-  box-shadow: 2px 7px 15px 7px #d8d8d8;
+  box-shadow: 2px 3px 15px 5px #d8d8d8;
 `;
 const WatchedTxt = styled.div`
   width: 100%;
@@ -51,7 +51,7 @@ const IgnoredBox = styled.div`
   height: 120px;
   border: 1px solid #f0f0f0;
   margin: 15px;
-  box-shadow: 2px 7px 15px 7px #d8d8d8;
+  box-shadow: 2px 3px 15px 5px #d8d8d8;
 `;
 const IgnoredTxt = styled.div`
   width: 250px;
