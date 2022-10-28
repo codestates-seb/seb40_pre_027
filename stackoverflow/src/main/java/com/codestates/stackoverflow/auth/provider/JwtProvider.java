@@ -1,27 +1,24 @@
 package com.codestates.stackoverflow.auth.provider;
 
-import com.codestates.stackoverflow.auth.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -34,14 +31,14 @@ public class JwtProvider {
 
     @Getter
     @Setter
-//    @Value("${jwt.access-token-expiration-minutes}")
-    private int accessTokenExpirationMinutes = 60 * 60 * 1000;
+    @Value("${jwt.access-token-expiration-minutes}")
+    private int accessTokenExpirationMinutes;
 
     // Refresh Token 추후 구현 예정
     @Getter
     @Setter
-//    @Value("${jwt.refresh-token-expiration-minutes}")
-    private int refreshTokenExpirationMinutes = 60 * 60 * 1000;
+    @Value("${jwt.refresh-token-expiration-minutes}")
+    private int refreshTokenExpirationMinutes;
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
