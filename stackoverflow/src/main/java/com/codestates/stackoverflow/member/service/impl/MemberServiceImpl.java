@@ -1,9 +1,14 @@
 package com.codestates.stackoverflow.member.service.impl;
 
 import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
+import com.codestates.stackoverflow.exception.BusinessLogicException;
+import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import com.codestates.stackoverflow.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,85 +16,77 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
-    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
-        this.memberRepository = memberRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityUtils = authorityUtils;
-    }
-
     @Override
     public Member createMember(Member member) {
-        verifyExistsEmail(member.getEmail());
-        verifyExistsName(member.getName());
+        verifyExistsNameOrEmail(member.getName(), member.getEmail());
 
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
 
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
+
         Member createdMember = memberRepository.save(member);
 
         return createdMember;
     }
 
-//    @Override
-//    public Member loadMember (Member member) {
-//        boolean isVerified = verifyPassword(member);
-//
-//        if (!isVerified) {
-//            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-//        }
-//
-//        Optional<Member> optionalMember = memberRepository.findByEmailAndPassword(member.getEmail(),
-//                member.getPassword());
-//
-//        Member findMember = optionalMember.orElseThrow(
-//                () -> new RuntimeException("비밀번호 또는 아이디를 확인해주세요."));
-//
-//        findMember.setAuth(true);
-//
-//        return memberRepository.save(findMember);
-//    }
-//
-//    @Override
-//    public Member logoutMember(long memberId) {
-//
-//        Member member = findVerifiedMember(memberId);
-//
-//        if (!member.isAuth()) {
-//            new RuntimeException("이미 로그아웃 상태입니다.");
-//        }
-//        member.setAccessedAt(LocalDateTime.now());
-//        member.setAuth(false);
-//
-//        return memberRepository.save(member);
-//    }
-//
-//    @Override
-//    public void deleteMember(long memberId) {
-//        Member findMember = findVerifiedMember(memberId);
-//
-//        memberRepository.delete(findMember);
-//    }
+    @Override
+    public Member findLoginMember() {
 
-    private void verifyExistsEmail(String email) {
-        boolean isExistsEmail = memberRepository.existsByEmail(email);
+        Member findMember = findAuthenticatedMember();
 
-        if(isExistsEmail)
-            throw new RuntimeException("이미 존재하는 이메일입니다");
+        return findMember;
     }
 
-    private void verifyExistsName(String name) {
-        boolean isExistsName = memberRepository.existsByName(name);
+    @Override
+    public Member updateMember(Member member) {
 
-        if(isExistsName)
-            throw new RuntimeException("이미 존재하는 이름입니다");
+        Member findMember = findAuthenticatedMember();
+
+        // 프로필 사진 수정 기능 구현 필요
+
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+        Optional.ofNullable(member.getLocation())
+                .ifPresent(location -> findMember.setLocation(location));
+        Optional.ofNullable(member.getTitle())
+                .ifPresent(title -> findMember.setTitle(title));
+        Optional.ofNullable(member.getIntroduction())
+                .ifPresent(introduction -> findMember.setIntroduction(introduction));
+
+        Member updatedMember = memberRepository.save(findMember);
+
+        return updatedMember;
+    }
+
+    @Override
+    public void deleteMember() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
+
+        memberRepository.deleteById(optionalMember.orElseThrow(() -> new RuntimeException()).getMemberId());
+    }
+
+    // 이름 또는 이메일 중복 유무 체크
+    private void verifyExistsNameOrEmail(String name, String email) {
+        boolean isExistsName = memberRepository.existsByName(name);
+        boolean isExistsEmail = memberRepository.existsByEmail(email);
+
+        if(isExistsName) {
+            throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
+        } if (!isExistsEmail) {
+            throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
+        }
     }
 
     private Member findVerifiedMember(long memberId) {
@@ -101,20 +98,14 @@ public class MemberServiceImpl implements MemberService {
         return findMember;
     }
 
-    private boolean verifyPassword(Member member) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(member.getEmail());
+    private Member findAuthenticatedMember() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("[getLoginMemberId] " + principal.toString());
 
-        Member findMember = optionalMember
-                .orElseThrow(() -> new RuntimeException("존재하는 회원이 아닙니다."));
+        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
 
-        String rowPassword = member.getPassword();
-        String encodedPassword = findMember.getPassword();
+        Member findMember = optionalMember.orElseThrow(() -> new RuntimeException("인증된 상태가 아닙니다."));
 
-//        if (passwordEncoder.matches(rowPassword, encodedPassword)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return true;
+        return findMember;
     }
 }

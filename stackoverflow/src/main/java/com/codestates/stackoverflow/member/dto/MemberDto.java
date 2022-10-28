@@ -41,6 +41,33 @@ public class MemberDto {
         private String password;
 
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FetchRequest {
+        // 이미지 수정 기능 구현해야 함
+
+        private String name;
+        private String Location;
+        private String title;
+        private String introduction;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FetchResponse {
+        // 이미지
+
+        private String name;
+        private String Location;
+        private String title;
+        private String introduction;
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor
@@ -50,6 +77,7 @@ public class MemberDto {
         private String name;
         private String email;
         private List<String> roles;
-        private LocalDateTime localDateTime;
+        private LocalDateTime createdDate;
+        private LocalDateTime modifiedDate;
     }
 }

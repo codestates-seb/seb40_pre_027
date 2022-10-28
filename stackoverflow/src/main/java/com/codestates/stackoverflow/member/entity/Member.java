@@ -18,6 +18,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 public class Member extends Auditable {
+    // 이미지 기능 추가해야 함
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,13 @@ public class Member extends Auditable {
 
     @Column(nullable = false, length = 200)
     private String password;
+
+    @Column(length = 50)
+    private String location;
+    @Column(length = 50)
+    private String title;
+    @Column(length = 200)
+    private String introduction;
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
@@ -48,8 +56,7 @@ public class Member extends Auditable {
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),
         MEMBER_SLEEP("휴먼 상태"),
-        MEMBER_QUIT("탈퇴 상태"),
-        ;
+        MEMBER_QUIT("탈퇴 상태");
         @Getter
         private String status;
 

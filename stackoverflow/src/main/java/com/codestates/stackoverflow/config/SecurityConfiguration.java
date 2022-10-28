@@ -2,6 +2,8 @@ package com.codestates.stackoverflow.config;
 
 import com.codestates.stackoverflow.auth.filter.JwtAuthenticationFilter;
 import com.codestates.stackoverflow.auth.filter.JwtVerificationFilter;
+import com.codestates.stackoverflow.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.stackoverflow.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.stackoverflow.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.stackoverflow.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
@@ -16,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -48,11 +51,18 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())  // (1) 추가
+                .accessDeniedHandler(new MemberAccessDeniedHandler())            // (2) 추가
+                .and()
+
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-//                        .antMatchers("/users/signup", "/users/login", "/").permitAll()
-                        .anyRequest().permitAll());
+                                .antMatchers("/users/signup", "/users/login", "/").permitAll()
+                                .anyRequest().permitAll());
+//                        .anyRequest().hasRole("USER")
 
         return http.build();
     }
@@ -67,11 +77,11 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtProvider, authorityUtils);  // (2) 추가
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtProvider, authorityUtils);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);   // (3)추가
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 }

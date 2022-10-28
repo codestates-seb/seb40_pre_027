@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-28T13:40:26+0900",
+    date = "2022-10-28T14:29:17+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -45,6 +45,38 @@ public class MemberMapperImpl implements MemberMapper {
     }
 
     @Override
+    public Member memberFetchRequestDtoToMember(MemberDto.FetchRequest memberFetchDtoRequest) {
+        if ( memberFetchDtoRequest == null ) {
+            return null;
+        }
+
+        Member member = new Member();
+
+        member.setName( memberFetchDtoRequest.getName() );
+        member.setLocation( memberFetchDtoRequest.getLocation() );
+        member.setTitle( memberFetchDtoRequest.getTitle() );
+        member.setIntroduction( memberFetchDtoRequest.getIntroduction() );
+
+        return member;
+    }
+
+    @Override
+    public MemberDto.FetchResponse memberToMemberFetchResponseDto(Member member) {
+        if ( member == null ) {
+            return null;
+        }
+
+        MemberDto.FetchResponse fetchResponse = new MemberDto.FetchResponse();
+
+        fetchResponse.setName( member.getName() );
+        fetchResponse.setLocation( member.getLocation() );
+        fetchResponse.setTitle( member.getTitle() );
+        fetchResponse.setIntroduction( member.getIntroduction() );
+
+        return fetchResponse;
+    }
+
+    @Override
     public MemberDto.Response memberToMemberResponseDto(Member member) {
         if ( member == null ) {
             return null;
@@ -61,6 +93,8 @@ public class MemberMapperImpl implements MemberMapper {
         if ( list != null ) {
             response.setRoles( new ArrayList<String>( list ) );
         }
+        response.setCreatedDate( member.getCreatedDate() );
+        response.setModifiedDate( member.getModifiedDate() );
 
         return response;
     }

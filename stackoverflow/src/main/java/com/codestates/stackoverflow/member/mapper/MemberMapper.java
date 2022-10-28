@@ -12,5 +12,11 @@ public interface MemberMapper {
 
     Member memberRegisterPostDtoToMember(MemberDto.RegisterPost memberRegisterPostDto);
 
+    Member memberFetchRequestDtoToMember(MemberDto.FetchRequest memberFetchDtoRequest);
+
+    MemberDto.FetchResponse memberToMemberFetchResponseDto(Member member);
+
     MemberDto.Response memberToMemberResponseDto(Member member);
+
+
 }

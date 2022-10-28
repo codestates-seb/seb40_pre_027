@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.auth.filter;
 
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
 import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.SignatureException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +36,18 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("[JwtVerificationFilter - doFilterInternal] request 로 들어오는 Jwt 유효성 검증 시작");
+        try {
+            Map<String, Object> claims = verifyJws(request);
+            setAuthenticationToContext(claims);
+//        }
+//        catch (SignatureException signatureException) {
+//            request.setAttribute("exception", signatureException);
+        } catch (ExpiredJwtException ee) {
+            request.setAttribute("exception", ee);
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
 
-        Map<String, Object> claims = verifyJws(request);
-        setAuthenticationToContext(claims);
 
         filterChain.doFilter(request, response);
     }

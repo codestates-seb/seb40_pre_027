@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,16 +30,24 @@ public class JwtProvider {
     private String secretKey;
 
     @Getter
-    @Value("${jwt.access-token-expiration-minutes}")
-    private int accessTokenExpirationMinutes;
+    @Setter
+//    @Value("${jwt.access-token-expiration-minutes}")
+    private int accessTokenExpirationMinutes = 60 * 60 * 1000;
 
     // Refresh Token 추후 구현 예정
     @Getter
-    @Value("${jwt.refresh-token-expiration-minutes}")
-    private int refreshTokenExpirationMinutes;
+    @Setter
+//    @Value("${jwt.refresh-token-expiration-minutes}")
+    private int refreshTokenExpirationMinutes = 60 * 60 * 1000;
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public void clearToken() {
+        this.accessTokenExpirationMinutes = 0;
+        this.refreshTokenExpirationMinutes = 0;
+        log.info("토큰 초기화 완료");
     }
 
 

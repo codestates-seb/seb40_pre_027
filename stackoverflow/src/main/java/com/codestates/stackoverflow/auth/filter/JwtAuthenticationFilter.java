@@ -1,6 +1,6 @@
 package com.codestates.stackoverflow.auth.filter;
 
-import com.codestates.stackoverflow.auth.dto.AuthDto;
+import com.codestates.stackoverflow.auth.dto.LoginDto;
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,12 +35,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         log.info("[attemptAuthentication] 로그인 요청 시작");
         ObjectMapper objectMapper = new ObjectMapper();
-        AuthDto.LoginDto loginRequest = objectMapper.readValue(request.getInputStream(), AuthDto.LoginDto.class);
+        LoginDto loginRequest = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+
+        log.info("[attemptAuthentication] " + loginRequest.getUsername());
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-        log.info("[attemptAuthentication] 로그인 요청 종료");
+        log.info("[attemptAuthentication] 로그인 요청 종료 (UsernamePasswordAuthenticationToken 생성 완료)");
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -49,7 +51,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws ServletException, IOException {
-        log.info("[successfulAuthentication] 로그인 검증 성공");
+        log.info("[successfulAuthentication] 로그인 Request 정보로 JWT 생성 시작");
         Member member = (Member) authResult.getPrincipal();
 
         String accessToken = delegateAccessToken(member);
@@ -57,12 +59,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+        log.info("[successfulAuthentication] Response에 JWT 삽입");
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 
     }
 
 
     private String delegateAccessToken(Member member) {
+        log.info("[delegateAccessToken] 로그인 Request 정보로 JWT-Access 생성 시작");
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
@@ -73,18 +77,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(jwtProvider.getSecretKey());
 
         String accessToken = jwtProvider.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
+        log.info("[delegateAccessToken] 로그인 Request 정보로 JWT-Access 생성 완료");
         return accessToken;
     }
 
-    // (6)
     private String delegateRefreshToken(Member member) {
+        log.info("[delegateAccessToken] 로그인 Request 정보로 JWT-Refresh 생성 시작");
         String subject = member.getEmail();
         Date expiration = jwtProvider.getTokenExpiration(jwtProvider.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(jwtProvider.getSecretKey());
 
         String refreshToken = jwtProvider.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-
+        log.info("[delegateAccessToken] 로그인 Request 정보로 JWT-Refresh 생성 완료");
         return refreshToken;
     }
 }
