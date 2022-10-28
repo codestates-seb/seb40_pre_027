@@ -25,8 +25,9 @@ public class QuestionLikeService {
     public int saveLike(Long questionId, int val) {
         Optional<QuestionLike> findLike = likeRepository.findByQuestion_Id(questionId);
         if (findLike.isEmpty()) {
-            Question question = questionRepository.findById(questionId).orElseThrow(RuntimeException::new);
-            QuestionLike questionLike = QuestionLike.of(question, val);
+            questionRepository.findById(questionId).orElseThrow(RuntimeException::new);
+
+            QuestionLike questionLike = QuestionLike.of(questionId, val);
             likeRepository.save(questionLike);
 
             return questionService.modifyLikeCount(questionId, val);

@@ -9,16 +9,16 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface QuestionLikeRepository extends JpaRepository<QuestionLike, Long> {
-    @Query(value = "SELECT q from Question_Like q where q.questionId = :questionId", nativeQuery = true)
+    @Query(value = "SELECT l from QuestionLike l where l.questionId = :questionId")
     Optional<QuestionLike> findByQuestion_Id(@Param("questionId") Long questionId);
 //    Optional<QuestionLike> findByQuestion_IdAndMember_Id(Long questionId);
 
     @Modifying
-    @Query(value = "DELETE from Question_Like q where q.questionId = :questionId", nativeQuery = true)
+    @Query("DELETE from QuestionLike l where l.questionId = :questionId")
     void deleteByQuestion_Id(@Param("questionId") Long questionId);
 //    void deleteByQuestion_IdAndMember_Id(Long questionId);
 
     @Modifying
-    @Query(value = "UPDATE q from Question_Like q set q.val = :val where q.questionId = :questionId", nativeQuery = true)
+    @Query("UPDATE QuestionLike l set l.val = :val where l.questionId = :questionId")
     void changeLikeVal(@Param("questionId") Long questionId, @Param("val") int val);
 }

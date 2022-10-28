@@ -19,6 +19,6 @@ public class Tag {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "QUESTION_ID")
     private Question question;
 }

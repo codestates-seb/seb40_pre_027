@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/question")
 @RequiredArgsConstructor
 @Validated
 @Slf4j
@@ -27,6 +28,7 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
+        System.out.println(Arrays.toString(requestBody.getTags()));
         Question question = questionService.createQuestion(mapper.questionPostToQuestion(requestBody));
 
         return new ResponseEntity<>(
@@ -62,7 +64,21 @@ public class QuestionController {
         List<Question> questions = pageQuestions.getContent();
 
         return new ResponseEntity<>(
-                mapper.questionsToQuestionResponse(questions),
+                mapper.questionsToQuestionResponses(questions),
+                HttpStatus.OK);
+    }
+
+    /**
+     * 요청의 tag 전달 방식에 따라 추후 변경 가능
+     */
+    @GetMapping("/search-tag")
+    public ResponseEntity getQuestionsViaTag(
+            @RequestParam String tag,
+            @RequestParam int page,
+            @RequestParam int size) {
+            Page<Question> pageQuestions = questionService.findQuestionsViaTag(page - 1, size, tag);
+            List<Question> questions = pageQuestions.getContent();
+        return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
                 HttpStatus.OK);
     }
 
