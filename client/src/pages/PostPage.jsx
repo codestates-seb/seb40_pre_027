@@ -6,7 +6,6 @@ import Header from '../components/Header';
 import Nav from '../components/home/Nav';
 import Footer from '../components/Footer';
 import PostBody from '../components/post/PostBody';
-import TopMenu from '../components/home/TopMenu';
 import Title from '../components/post/Title';
 
 const PostPageComponent = styled.div`

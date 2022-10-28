@@ -16,8 +16,10 @@ const InputGuideComponent = styled.aside`
     border-bottom: 1px solid #d9d9d9d9;
   }
   > div {
+    background: #fff;
     display: flex;
-    margin: 16px;
+    /* margin: 16px; */
+    padding: 16px;
     .icon {
       width: 48px;
       font-size: 3rem;
@@ -28,6 +30,7 @@ const InputGuideComponent = styled.aside`
     }
     .disc {
       font-size: 0.8rem;
+
       div {
         padding: 0.3rem 0;
         line-height: 1.15rem;
@@ -37,7 +40,7 @@ const InputGuideComponent = styled.aside`
 `;
 
 function InputGuide({ title, disabled }) {
-  const viewData = data.guideData.filter((v) => v.title === title)[0];
+  const viewData = data.guideData.filter((v) => v.title === title)[0]; // 글쓰기 가이드 데이터
   return (
     <InputGuideComponent disabled={disabled}>
       <h2>{viewData.guideTitle}</h2>
