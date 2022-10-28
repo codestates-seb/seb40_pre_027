@@ -34,7 +34,6 @@ public class JwtProvider {
     @Value("${jwt.access-token-expiration-minutes}")
     private int accessTokenExpirationMinutes;
 
-    // Refresh Token 추후 구현 예정
     @Getter
     @Setter
     @Value("${jwt.refresh-token-expiration-minutes}")
@@ -43,13 +42,6 @@ public class JwtProvider {
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
-
-    public void clearToken() {
-        this.accessTokenExpirationMinutes = 0;
-        this.refreshTokenExpirationMinutes = 0;
-        log.info("토큰 초기화 완료");
-    }
-
 
     @PostConstruct
     protected void init() {
