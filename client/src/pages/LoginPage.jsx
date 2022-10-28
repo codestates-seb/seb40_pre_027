@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import smallLogo from '../img/smallLogo.png';
@@ -79,8 +79,27 @@ const LoginBox = styled.div`
   border-radius: 5%;
 `;
 
-function LoginPage() {
+function LoginPage() {  
+  // email, password 확인
+  const [account, setAccount] = useState({
+    email: "",
+    password: "",
+  });
+
+
+  const onChangeAccount = (e) => {
+  setAccount({
+    ...account,
+    [e.target.name]: e.target.value
+  })
+  
+  console.log(account)
+  }
+
+  
+
   return (
+    
     <>
       <LoginPageComponent>
         <Header />
@@ -96,13 +115,23 @@ function LoginPage() {
           <SocialLogin social="github">Log in with Github</SocialLogin>
           <LoginBox>
             <div className="email">Email</div>
-            <input className="inputBox"></input>
+            <input 
+              className="inputBox" 
+              name="email" 
+              onChange={onChangeAccount}
+              >
+            </input>
             <div className="pw">
               <div className="password">Password</div>
               <div className="forgotPassword">Forgot Password?</div>
             </div>
-            <input className="inputBox"></input>
-            <button>Log in</button>
+            <input 
+              className="inputBox" 
+              name="password" 
+              onChange={onChangeAccount}
+              >
+              </input>
+            <button onClick={onChangeAccount} >Log in</button>
           </LoginBox>
           <div className="account">
             <span>Don't have an account?</span>
@@ -117,3 +146,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
