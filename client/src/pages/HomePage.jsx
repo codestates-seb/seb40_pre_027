@@ -25,13 +25,9 @@ const HomepageComponent = styled.div`
     }
   }
 `;
-async function getPost() {
-  const data = await axios.get('?page=1&size=10');
-  console.log(data);
-}
 function HomePage() {
   useEffect(() => {
-    getPost();
+    axios.get('/question?&page=1&size=10').then((res) => console.log(res.data));
   }, []);
   return (
     <HomepageComponent>
