@@ -14,6 +14,7 @@ import java.util.Optional;
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
+    //private final QuestionService questionService;
 
     public AnswerService(AnswerRepository answerRepository){
         this.answerRepository = answerRepository;

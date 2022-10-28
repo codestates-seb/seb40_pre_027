@@ -6,7 +6,6 @@ import com.codestates.stackoverflow.answer.dto.AnswerDto;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.mapper.AnswerMapper;
 import com.codestates.stackoverflow.answer.service.AnswerService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping
-//@RequiredArgsConstructor 를 사용하여 간단히 표현할 수 있음.
+@RequestMapping("/v1/answers")
 @Validated
 @Slf4j
 public class AnswerController {
@@ -34,15 +32,16 @@ public class AnswerController {
         this.mapper = mapper;
     }
 
-    @PostMapping
-    public ResponseEntity postAnswer(@RequestBody @Valid AnswerDto.Post answerPost){
+    @PostMapping("/{question-id}")
+    public ResponseEntity postAnswer(@PathVariable("question-id") @Positive long questionId,
+                                     @RequestBody @Valid AnswerDto.Post answerPost){
         Answer answer = answerService.createAnswer(mapper.AnswerPostDtoToAnswer(answerPost));
         return new ResponseEntity<>(mapper.AnswerToAnswerResponseDto(answer), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{answer-id}")
-    public ResponseEntity patchAnswer(@RequestBody AnswerDto.Patch answerPatch,
-                                      @PathVariable("answer-id") Long answerId){
+    public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive long answerId,
+                                      @RequestBody @Valid AnswerDto.Patch answerPatch){
         Answer answer = mapper.AnswerPatchDtoToAnswer(answerPatch);
         answer.setAnswerId(answerId);
         answerService.updateAnswer(answer);
