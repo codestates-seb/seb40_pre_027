@@ -6,8 +6,6 @@ public interface MemberService {
 
     Member createMember(Member member);
 
-    //    Member loadMember(Member member);
-//
     void deleteMember();
 
     Member updateMember(Member member);

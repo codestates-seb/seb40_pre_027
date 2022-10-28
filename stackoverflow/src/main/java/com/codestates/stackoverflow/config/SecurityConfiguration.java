@@ -60,9 +60,10 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/users/signup", "/users/login", "/").permitAll()
-                        .anyRequest().hasRole("USER")
-                );
+                                .antMatchers("/users/signup", "/users/login", "/").permitAll()
+                                .anyRequest().permitAll());
+//                        .anyRequest().hasRole("USER")
+
         return http.build();
     }
 
@@ -76,7 +77,7 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtProvider, authorityUtils); 
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtProvider, authorityUtils);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
