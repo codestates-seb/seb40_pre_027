@@ -9,6 +9,7 @@ import {
 import Header from '../components/Header';
 import SocialLogin from '../components/SocialLogin';
 import LinkStyle from '../components/LinkStyle';
+import axios from 'axios';
 
 const Signpage = styled.main`
   width: 100%;
@@ -138,16 +139,73 @@ const SignHelp = styled.h3`
   }
 `;
 function SigninPage() {
+  const [isCorrect, setIsCorrect] = useState({
+    displayCorrect: true,
+    emailCorrect: true,
+    passwordCorrect: true,
+  });
   const [inputV, setInputV] = useState({
     display: '',
     email: '',
     password: '',
   });
+  console.log(inputV);
   const handle = (event) => {
     const { value, name } = event.target;
-    setInputV({ ...inputV, [name]: value });
-    console.log(inputV);
+    setInputV((prevInputV) => {
+      return { ...prevInputV, [name]: value };
+    });
   };
+
+  //axios 회원가입 요청
+  async function postSingin() {
+    try {
+      const response = await axios.post('/users/signup', {
+        name: inputV.display,
+        email: inputV.email,
+        password: inputV.password,
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  //회원가입 제출 버튼 누를 시 form에서의 submit event
+  const signinHandler = (event) => {
+    event.preventDefault();
+    if (inputV.display.trim().length === 0) {
+      setIsCorrect((prev) => {
+        return { ...prev, displayCorrect: false };
+      });
+      return;
+    }
+    if (inputV.email.trim().length === 0 || !inputV.email.includes('@')) {
+      setIsCorrect((prev) => {
+        return { ...prev, emailCorrect: false };
+      });
+      return;
+    }
+    if (inputV.password.length < 8) {
+      setIsCorrect((prev) => {
+        return { ...prev, passwordCorrect: false };
+      });
+      return;
+    } else {
+      setIsCorrect({
+        displayCorrect: true,
+        emailCorrect: true,
+        passwordCorrect: true,
+      });
+    }
+    postSingin();
+    setInputV({
+      display: '',
+      email: '',
+      password: '',
+    });
+  };
+
   return (
     <Signpage>
       <Header></Header>
@@ -181,27 +239,49 @@ function SigninPage() {
 
             <SignMe>
               {/*회원가입 창*/}
-              <Display>
-                <h2>Display name</h2>
-                <input name="display" type="text" onChange={handle} />
-              </Display>
-              <Email>
-                <h2>Email</h2>
-                <input name="email" type="text" onChange={handle}></input>
-              </Email>
-              <Password>
-                <h2>Password</h2>
-                <input
-                  name="password"
-                  type="password"
-                  onChange={handle}
-                ></input>
-              </Password>
-              <Signwarn>
-                Passwords must contain at least eight characters, including at
-                least and 1 number
-              </Signwarn>
-              <SignUp>Sign up</SignUp>
+              <form onSubmit={signinHandler}>
+                <Display>
+                  <h2>Display name</h2>
+                  <input
+                    name="display"
+                    type="text"
+                    onChange={handle}
+                    value={inputV.display}
+                  />
+                  {!isCorrect.displayCorrect && (
+                    <div>DisplayName은 반드시 입력해야 합니다.</div>
+                  )}
+                </Display>
+                <Email>
+                  <h2>Email</h2>
+                  <input
+                    name="email"
+                    type="text"
+                    onChange={handle}
+                    value={inputV.email}
+                  />
+                  {!isCorrect.emailCorrect && (
+                    <div>올바른 이메일 형식을 입력하세요.</div>
+                  )}
+                </Email>
+                <Password>
+                  <h2>Password</h2>
+                  <input
+                    name="password"
+                    type="password"
+                    onChange={handle}
+                    value={inputV.password}
+                  />
+                  {!isCorrect.passwordCorrect && (
+                    <div>비밀번호는 8자 이상을 입력하세요.</div>
+                  )}
+                </Password>
+                <Signwarn>
+                  Passwords must contain at least eight characters, including at
+                  least and 1 number
+                </Signwarn>
+                <SignUp type="submit">Sign up</SignUp>
+              </form>
             </SignMe>
             <SignHelp>
               Already have an account?&nbsp;&nbsp;&nbsp;&nbsp;
