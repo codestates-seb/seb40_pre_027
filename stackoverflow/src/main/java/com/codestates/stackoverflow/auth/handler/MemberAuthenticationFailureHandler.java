@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/* 로그인 검증이 실패할 경우 호출되는 클래스 */
 @Slf4j
 public class MemberAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+    // 로그인 실패 후 처리되야 할 로직 작성해야 함.
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         log.error("[onAuthenticationFailure] " + exception.getMessage());

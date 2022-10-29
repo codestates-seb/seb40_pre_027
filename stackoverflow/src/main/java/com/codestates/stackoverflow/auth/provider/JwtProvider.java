@@ -75,6 +75,7 @@ public class JwtProvider {
         log.info("[createRefreshToken] 토큰 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
+        log.info("generateRefreshToken " + subject.toString());
         String token = Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
