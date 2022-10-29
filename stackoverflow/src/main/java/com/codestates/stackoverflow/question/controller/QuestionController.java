@@ -1,12 +1,14 @@
 package com.codestates.stackoverflow.question.controller;
 
+import com.codestates.stackoverflow.question.mapper.QuestionMapper;
+import com.codestates.stackoverflow.questionLikes.service.QuestionLikeService;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
-import com.codestates.stackoverflow.question.mapper.QuestionMapper;
 import com.codestates.stackoverflow.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,11 +26,11 @@ import java.util.List;
 @Slf4j
 public class QuestionController {
     private final QuestionService questionService;
+    private final QuestionLikeService questionLikeService;
     private final QuestionMapper mapper;
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
-        System.out.println(Arrays.toString(requestBody.getTags()));
         Question question = questionService.createQuestion(mapper.questionPostToQuestion(requestBody));
 
         return new ResponseEntity<>(
@@ -48,8 +50,11 @@ public class QuestionController {
     }
 
     @GetMapping("{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
-        Question question = questionService.findQuestion(questionId);
+    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId,
+                                      @RequestParam int answerPage,
+                                      @RequestParam int answerSize) {
+        Question question = questionService
+                .findQuestion(questionId, PageRequest.of(answerPage - 1, answerSize));
 
 //        questionService.findLike(questionId);
         return new ResponseEntity<>(
@@ -76,7 +81,7 @@ public class QuestionController {
             @RequestParam String tag,
             @RequestParam int page,
             @RequestParam int size) {
-            Page<Question> pageQuestions = questionService.findQuestionsViaTag(page - 1, size, tag);
+            Page<Question> pageQuestions = questionService.findQuestionsByTag(tag, page - 1, size);
             List<Question> questions = pageQuestions.getContent();
         return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
                 HttpStatus.OK);
@@ -90,13 +95,13 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @PostMapping("/like")
-//    public @ResponseBody int like(Long questionId) {
-//        return questionService.saveLike(questionId);
-//    }
-//
-//    @PostMapping("/dislike")
-//    public @ResponseBody int disLike(Long questionId) {
-//        return questionService.saveLike(questionId);
-//    }
+    @PostMapping("/like")
+    public @ResponseBody int like(Long questionId) {
+        return questionLikeService.saveLike(questionId, 1);
+    }
+
+    @PostMapping("/dislike")
+    public @ResponseBody int disLike(Long questionId) {
+        return questionLikeService.saveLike(questionId, -1);
+    }
 }

@@ -6,6 +6,7 @@ import com.codestates.stackoverflow.comment.mapper.CommentMapper;
 import com.codestates.stackoverflow.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("/reply")
+@RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper mapper;
@@ -26,7 +27,8 @@ public class CommentController {
     @PostMapping("{question-id}")
     public ResponseEntity postComment(@PathVariable("question-id") Long questionId,
                                       @Valid @RequestBody CommentDto.Post requestBody) {
-        Comment comment = commentService.createComment(mapper.commentPostToComment(requestBody));
+
+        Comment comment = commentService.createComment(questionId, mapper.commentPostToComment(requestBody));
 
         return new ResponseEntity<>(
                 mapper.commentToCommentResponse(comment),
@@ -45,10 +47,11 @@ public class CommentController {
     }
 
     @GetMapping("{question-id}")
-    public ResponseEntity getCommentsOfQuestion(@PathVariable("comment-id") Long questionId,
+    public ResponseEntity getCommentsOfQuestion(@PathVariable("question-id") Long questionId,
                                       @Positive @RequestParam int page,
                                       @Positive @RequestParam int size) {
-        Page<Comment> pageComments = commentService.findComments(questionId, page, size);
+
+        Page<Comment> pageComments = commentService.findComments(questionId, PageRequest.of(page - 1, size));
         List<Comment> comments = pageComments.getContent();
 
         return new ResponseEntity<>(

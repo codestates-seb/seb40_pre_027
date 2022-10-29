@@ -84,7 +84,8 @@ public class MemberServiceImpl implements MemberService {
 
         if(isExistsName) {
             throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
-        } if (!isExistsEmail) {
+        }
+        if (isExistsEmail) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
     }

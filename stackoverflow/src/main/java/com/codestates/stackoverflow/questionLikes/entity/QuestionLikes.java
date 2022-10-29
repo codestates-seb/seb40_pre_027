@@ -1,6 +1,5 @@
-package com.codestates.stackoverflow.like.entity;
+package com.codestates.stackoverflow.questionLikes.entity;
 
-import com.codestates.stackoverflow.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +7,8 @@ import javax.persistence.*;
 
 @Getter @Setter
 @Entity
-@Table(name = "QUESTION_LIKE")
-public class QuestionLike {
+@Table
+public class QuestionLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
@@ -24,10 +23,10 @@ public class QuestionLike {
     private int val;
 
 
-    public static QuestionLike of(Long questionId, int val) {
-        QuestionLike questionLike = new QuestionLike();
-        questionLike.setQuestionId(questionId);
-        questionLike.setVal(val);
-        return questionLike;
+    public static QuestionLikes of(Long questionId, int val) {
+        QuestionLikes questionLikes = new QuestionLikes();
+        questionLikes.setQuestionId(questionId);
+        questionLikes.setVal(val);
+        return questionLikes;
     }
 }

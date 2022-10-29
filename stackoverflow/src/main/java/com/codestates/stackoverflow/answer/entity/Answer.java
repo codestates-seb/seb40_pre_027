@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.answer.entity;
 
 import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
+import com.codestates.stackoverflow.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,9 +39,9 @@ public class Answer {
     private LocalDateTime answerModifiedAt;
 
     //Question과의 매핑
-    //@ManyToOne
-    //@JoinColumn(name = "QUESTION_ID")
-    //private Question question;
+    @ManyToOne
+    @JoinColumn(name = "QUESTION_ID")
+    private Question question;
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "Replies")
     private List<Reply> answerReplyComments = new ArrayList<>();

@@ -6,6 +6,7 @@ import com.codestates.stackoverflow.answer.dto.AnswerDto;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.mapper.AnswerMapper;
 import com.codestates.stackoverflow.answer.service.AnswerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,8 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/answers")
+@RequestMapping("/answer")
+@RequiredArgsConstructor
 @Validated
 @Slf4j
 public class AnswerController {
@@ -26,15 +28,11 @@ public class AnswerController {
     private final AnswerMapper mapper;
     private final AnswerService answerService;
 
-    public AnswerController(AnswerMapper mapper,
-                            AnswerService answerService){
-        this.answerService = answerService;
-        this.mapper = mapper;
-    }
-
     @PostMapping("/{question-id}")
     public ResponseEntity postAnswer(@PathVariable("question-id") @Positive long questionId,
                                      @RequestBody @Valid AnswerDto.Post answerPost){
+        //추가
+        answerPost.setQuestionId(questionId);
         Answer answer = answerService.createAnswer(mapper.AnswerPostDtoToAnswer(answerPost));
         return new ResponseEntity<>(mapper.AnswerToAnswerResponseDto(answer), HttpStatus.CREATED);
     }
