@@ -106,7 +106,8 @@ public class MemberServiceImpl implements MemberService {
 
         Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
 
-        Member findMember = optionalMember.orElseThrow(() -> new RuntimeException("인증된 상태가 아닙니다."));
+        Member findMember = optionalMember.orElseThrow(
+                () -> new RuntimeException("인증된 상태가 아닙니다."));
 
         return findMember;
     }

@@ -1,8 +1,6 @@
 package com.codestates.stackoverflow.auth.provider;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
@@ -50,10 +49,11 @@ public class JwtProvider {
         log.info("[init] JwtTokenProvider - secretKey 초기화 완료");
     }
 
+    // Access Token 생성 메서드
     public String generateAccessToken(Map<String, Object> claims,
-                                    String subject,
-                                    Date expiration,
-                                    String base64EncodedSecretKey) {
+                                      String subject,
+                                      Date expiration,
+                                      String base64EncodedSecretKey) {
         log.info("[createAccessToken] 토큰 생성 시작");
 
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -71,6 +71,7 @@ public class JwtProvider {
         return token;
     }
 
+    // Refresh Token 생성 메서드
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         log.info("[createRefreshToken] 토큰 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -88,28 +89,50 @@ public class JwtProvider {
         return token;
     }
 
+    // request에 담겨 있는 토큰 가져오기
+    public String resolveToken(HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+
+        return jws;
+    }
+
     public Jws<Claims> getClaims(String token, String base64EncodedSecretKey) {
-        log.info("[getClaims] 토큰의 Claims 불러오기 시작");
+        log.info("[getClaims] 토큰의 Claims 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-        log.info("[getClaims] 토큰의 Claims 불러오기 완료");
+        log.info("[getClaims] 토큰의 Claims 생성 시작");
         return claims;
     }
 
-    public void verifySignature(String token, String base64EncodedSecretKey) {
+    // 토큰의 유효 및 만료 시간 확인 메서드
+    public boolean verifySignature(String token, String base64EncodedSecretKey) {
         log.info("[verifySignature] 토큰 검증 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        Jwts.parserBuilder().setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            log.info("[verifySignature] claims : " + claims.getBody().toString());
 
-        log.info("[verifySignature] 토큰 검증 완료");
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (SecurityException | MalformedJwtException e) {
+            log.error("Invalid JWT Signature");
+            return false;
+        } catch (UnsupportedJwtException e) {
+            log.error("Unsupported JWT Token");
+            return false;
+        } catch (IllegalStateException e) {
+            log.error("JWT token is invalid");
+            return false;
+        }
     }
+
+    // 토큰
 
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();

@@ -54,7 +54,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws ServletException, IOException {
         log.info("[successfulAuthentication] 로그인 Request 정보로 JWT 생성 시작");
         Member member = (Member) authResult.getPrincipal();
-
         // request 정보로 JWT 생성
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
