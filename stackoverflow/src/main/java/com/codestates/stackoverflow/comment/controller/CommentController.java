@@ -24,7 +24,7 @@ public class CommentController {
     private final CommentService commentService;
     private final CommentMapper mapper;
 
-    @PostMapping("{question-id}")
+    @PostMapping("/{question-id}")
     public ResponseEntity postComment(@PathVariable("question-id") Long questionId,
                                       @Valid @RequestBody CommentDto.Post requestBody) {
 
@@ -35,7 +35,7 @@ public class CommentController {
                 HttpStatus.CREATED);
     }
 
-    @PatchMapping("{comment-id}")
+    @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") Long commentId,
                                        @Valid @RequestBody CommentDto.Patch requestBody) {
         requestBody.setCommentId(commentId);
@@ -46,7 +46,7 @@ public class CommentController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("{question-id}")
+    @GetMapping("/{question-id}")
     public ResponseEntity getCommentsOfQuestion(@PathVariable("question-id") Long questionId,
                                       @Positive @RequestParam int page,
                                       @Positive @RequestParam int size) {
@@ -59,7 +59,7 @@ public class CommentController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("{comment-id}")
+    @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@PathVariable("comment-id") Long commentId) {
         commentService.deleteComment(commentId);
 

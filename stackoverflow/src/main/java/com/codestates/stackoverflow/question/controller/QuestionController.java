@@ -38,7 +38,7 @@ public class QuestionController {
                 HttpStatus.CREATED);
     }
 
-    @PatchMapping("{question-id}")
+    @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion (@PathVariable("question-id") @Positive Long questionId,
                                          @Valid @RequestBody QuestionDto.Patch requestBody) {
         requestBody.setQuestionId(questionId);
@@ -49,10 +49,11 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("{question-id}")
+    @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId,
                                       @RequestParam int answerPage,
                                       @RequestParam int answerSize) {
+        System.out.println("[Get Controller(단건)] 동작");
         Question question = questionService
                 .findQuestion(questionId, PageRequest.of(answerPage - 1, answerSize));
 
@@ -87,7 +88,7 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("{question-id}")
+    @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(
             @PathVariable("question-id") @Positive Long questionId) {
             questionService.deleteQuestion(questionId);
