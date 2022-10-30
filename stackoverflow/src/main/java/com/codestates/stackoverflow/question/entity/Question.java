@@ -30,6 +30,9 @@ public class Question {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private int Bounty = 0;
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;

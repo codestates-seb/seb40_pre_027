@@ -101,6 +101,7 @@ public class MemberServiceImpl implements MemberService {
         return findMember;
     }
 
+    // 멤버 정보 이 메서드 활용할 것!
     private Member findAuthenticatedMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("[getLoginMemberId] " + principal.toString());

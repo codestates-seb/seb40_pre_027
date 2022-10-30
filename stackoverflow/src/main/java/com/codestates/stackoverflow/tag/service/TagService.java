@@ -18,7 +18,7 @@ public class TagService {
     private final TagRepository tagRepository;
     private final QuestionRepository questionRepository;
 
-    public List<Tag> sortTags(List<Tag> tags) {
+    public List<Tag> saveTags(List<Tag> tags) {
         for (Tag tag : tags) {
             Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
             System.out.println("[sortTags] 작동");

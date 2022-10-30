@@ -18,8 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,17 +34,7 @@ public class QuestionService {
 
     public Question createQuestion(Question question) {
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
-        Optional.ofNullable(question.getTags())
-                .ifPresent(tagNames -> {
-                    List<Tag> tags = tagService.tagNameArrayToTagList(tagNames);
-//                    mapQuestionAndTags(question, tags);
-                    tags.stream().forEach(tag -> {
-                        QuestionTag questionTag = QuestionTag.of(question, tag);
-                        question.setQuestionTags(questionTag);
-                        tag.setQuestionTags(questionTag);
-                    });
-                    tagService.sortTags(tags);
-                });
+        mapAndSaveTags(question);
         //question과 tag를 저장한다.
 
         return questionRepository.save(question);
@@ -59,17 +47,7 @@ public class QuestionService {
                 .ifPresent(findQuestion::setTitle);
         Optional.ofNullable(question.getContent())
                 .ifPresent(findQuestion::setContent);
-        Optional.ofNullable(question.getTags())
-                .ifPresent(tagNames -> {
-                    List<Tag> tags = tagService.tagNameArrayToTagList(tagNames);
-//                    mapQuestionAndTags(question, tags);
-                    tags.stream().forEach(tag -> {
-                        QuestionTag questionTag = QuestionTag.of(question, tag);
-                        question.setQuestionTags(questionTag);
-                        tag.setQuestionTags(questionTag);
-                    });
-                    tagService.sortTags(tags);
-                });
+        mapAndSaveTags(question);
         findQuestion.setModifiedAt(LocalDateTime.now());
 
         return questionRepository.save(findQuestion);
@@ -93,6 +71,11 @@ public class QuestionService {
                 Sort.by("questionId").descending()));
     }
 
+    @Transactional(readOnly = true)
+    public Page<Question> findQuestionsActive(int page, int size) {
+        return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
+    }
+
     /**
      * tag가 null이거나 빈 경우 필요한지 추후 검토 후 수정
      */
@@ -109,20 +92,31 @@ public class QuestionService {
         questionRepository.delete(findQuestion);
     }
 
-//    public void mapQuestionAndTags(Question question, List<Tag> tags) {
-//        tags.stream().forEach(tag -> {
-//            QuestionTag questionTag = QuestionTag.of(question, tag);
-//            question.setQuestionTags(questionTag);
-//            tag.setQuestionTags(questionTag);
-//        });
-//    }
-
     public int modifyLikeCount(Long questionId, int val) {
         Question findQuestion = findValidQuestion(questionId);
         int newLikeCount = findQuestion.getLikeCount() + val;
         findQuestion.setLikeCount(newLikeCount);
 
         return questionRepository.save(findQuestion).getLikeCount();
+    }
+
+    public Question addBounty(Question question, int bounty) {
+        question.setBounty(question.getBounty() + bounty);
+        return question;
+    }
+
+    public void mapAndSaveTags(Question question) {
+        Optional.ofNullable(question.getTags())
+                .ifPresent(tagNames -> {
+                    List<Tag> tags = tagService.tagNameArrayToTagList(tagNames);
+//                    mapQuestionAndTags(question, tags);
+                    tags.stream().forEach(tag -> {
+                        QuestionTag questionTag = QuestionTag.of(question, tag);
+                        question.setQuestionTags(questionTag);
+                        tag.setQuestionTags(questionTag);
+                    });
+                    tagService.saveTags(tags);
+                });
     }
 
     @Transactional(readOnly = true)
