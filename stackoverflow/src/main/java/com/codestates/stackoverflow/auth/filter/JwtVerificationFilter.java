@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.SignatureException;
 import java.util.List;
 import java.util.Map;
 
@@ -38,16 +37,23 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     //
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("request URI : "+request.getRequestURI());
+        if (request.getRequestURI().startsWith("/auth/reissue")) {
+            log.info("들어오라고;;;;");
+            filterChain.doFilter(request, response);
+        }
         log.info("[JwtVerificationFilter - doFilterInternal] request 로 들어오는 Jwt 유효성 검증 시작");
-
         try {
             String base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(jwtProvider.getSecretKey());
-            String token = jwtProvider.resolveToken(request); // 요청받은 request에서 token을 가져온다.
+            String token = jwtProvider.getAccessTokenFromRequest(request); // 요청받은 request에서 token을 가져온다.
             boolean isValidated = jwtProvider.verifySignature(token, base64EncodedSecretKey); // 토큰이 유효한지 검증한다.
 
             if (token != null && isValidated) { // Headers에 token이 담겨있고 유효하다면 Security Context Holder에 저장함.
                 Map<String, Object> claims = jwtProvider.getClaims(token, base64EncodedSecretKey).getBody();
+                log.info(claims.get("username").toString() + "의 인증정보 저장");
                 setAuthenticationToContext(claims);
+            } else {
+                log.debug("유효한 JWT 토큰이 없습니다.");
             }
             filterChain.doFilter(request, response);
 

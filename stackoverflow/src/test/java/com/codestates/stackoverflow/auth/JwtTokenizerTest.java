@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.auth;
 
 
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
+import com.codestates.stackoverflow.member.repository.MemberRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,9 +25,11 @@ public class JwtTokenizerTest {
     private String secretKey;
     private String base64EncodedSecretKey;
 
+    private MemberRepository memberRepository;
+
     @BeforeAll
     public void init() {
-        jwtProvider = new JwtProvider();
+        jwtProvider = new JwtProvider(memberRepository);
         secretKey = "kevin1234123412341234123412341234";  // encoded "a2V2aW4xMjM0MTIzNDEyMzQxMjM0MTIzNDEyMzQxMjM0"
 
         base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(secretKey);

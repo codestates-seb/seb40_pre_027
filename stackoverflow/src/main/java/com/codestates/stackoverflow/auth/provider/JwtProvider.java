@@ -1,5 +1,8 @@
 package com.codestates.stackoverflow.auth.provider;
 
+import com.codestates.stackoverflow.exception.BusinessLogicException;
+import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -37,6 +40,9 @@ public class JwtProvider {
     @Setter
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
+
+    // refresh Token 저장용
+    private final MemberRepository memberRepository;
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -84,18 +90,39 @@ public class JwtProvider {
                 .signWith(key)
                 .compact();
 
+        memberRepository.updateRefreshToken(subject, token);
+
         log.info("[createRefreshToken] 토큰 생성 완료");
 
         return token;
     }
 
-    // request에 담겨 있는 토큰 가져오기
-    public String resolveToken(HttpServletRequest request) {
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+    // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
+//    public String reissueAccessToken(Map<String, Object> claims , String refreshToken, String base64EncodedSecretKey) {
+//        String username = claims.get("username").toString();
+//        Member member = memberRepository.findByEmail(username).get();
+//
+//        String verifiedRefreshToken = member.getRefreshToken();
+//
+//        if (!(refreshToken == verifiedRefreshToken)) {
+//            throw new RuntimeException("토큰 이상함");
+//        }
+//
+//    }
 
+    // request에 담겨 있는 토큰 가져오기
+    public String getAccessTokenFromRequest(HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
         return jws;
     }
 
+    public String getRefreshTokenFromRequest(HttpServletRequest request) {
+        String refreshToken = request.getHeader("Refresh");
+
+        return refreshToken;
+    }
+
+    // Access 토큰이 만료되어 갱신때 필요한 유저 정보를 얻기 위한 메서드
     public Jws<Claims> getClaims(String token, String base64EncodedSecretKey) {
         log.info("[getClaims] 토큰의 Claims 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
