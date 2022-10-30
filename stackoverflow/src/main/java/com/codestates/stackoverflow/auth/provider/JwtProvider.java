@@ -31,14 +31,14 @@ public class JwtProvider {
 
     @Getter
     @Setter
-//    @Value("${jwt.access-token-expiration-minutes}")
-    private int accessTokenExpirationMinutes = 60 * 60 * 1000;
+    @Value("${jwt.access-token-expiration-minutes}")
+    private int accessTokenExpirationMinutes;
 
     // Refresh Token 추후 구현 예정
     @Getter
     @Setter
-//    @Value("${jwt.refresh-token-expiration-minutes}")
-    private int refreshTokenExpirationMinutes = 60 * 60 * 1000;
+    @Value("${jwt.refresh-token-expiration-minutes}")
+    private int refreshTokenExpirationMinutes;
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
