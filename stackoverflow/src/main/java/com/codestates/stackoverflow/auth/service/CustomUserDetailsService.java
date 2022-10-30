@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -29,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.authorityUtils = authorityUtils;
     }
 
-    /* email 정보로 유저 찾기 (토큰 관련 구현 시 수정 또는 삭제 예정)*/
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("[loadUserByUsername] 회원 정보 탐색 시작");

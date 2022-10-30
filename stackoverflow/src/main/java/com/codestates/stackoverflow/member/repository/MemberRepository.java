@@ -19,9 +19,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByEmailAndPassword(String email, String password);
 
-    // refresh token 저장
-    @Transactional
-    @Modifying
-    @Query("UPDATE Member m SET m.refreshToken=:token WHERE m.email=:email")
-    void updateRefreshToken(@Param("email") String email, @Param("token") String token);
 }
