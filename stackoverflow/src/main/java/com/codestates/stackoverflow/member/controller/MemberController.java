@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.member.controller;
 
+import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.member.dto.MemberDto;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.mapper.MemberMapper;

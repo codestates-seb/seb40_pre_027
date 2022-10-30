@@ -38,8 +38,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("request URI : "+request.getRequestURI());
+
         if (request.getRequestURI().startsWith("/auth/reissue")) {
-            log.info("들어오라고;;;;");
+            // Access Token 재발급 URI 요청 시 아래 로직을 거치지 않고 바로 다음 Filter로 넘김.
             filterChain.doFilter(request, response);
         }
         log.info("[JwtVerificationFilter - doFilterInternal] request 로 들어오는 Jwt 유효성 검증 시작");

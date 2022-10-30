@@ -38,7 +38,7 @@ public class JwtService {
         String username = claims.get("username").toString();
         log.info("[JwtService - reissueAccessToken] username : " + username);
 
-        String refreshToken = memberRepository.findByEmail(username).get().getRefreshToken(); // 회원 없을 경우 로직 처리
+        String refreshToken = memberRepository.findByEmail(username).get().getRefreshToken().getToken(); // 회원 없을 경우 로직 처리
 
         log.info("rowRefreshToken : " + rowRefreshToken);
         log.info("refreshToken : " + refreshToken);

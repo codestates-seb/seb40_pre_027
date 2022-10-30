@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.member.service.impl;
 
+import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import com.codestates.stackoverflow.exception.BusinessLogicException;
 import com.codestates.stackoverflow.exception.ExceptionCode;
@@ -30,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
 
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
-
+        member.setRefreshToken(new RefreshToken());
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
 
@@ -78,6 +79,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 이름 또는 이메일 중복 유무 체크
+//    @Transactional(readOnly = true)
     private void verifyExistsNameOrEmail(String name, String email) {
         boolean isExistsName = memberRepository.existsByName(name);
         log.info("[verifyExistsNameOrEmail] - isExistsName : " + isExistsName);

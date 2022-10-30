@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.auth.provider;
 
+import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.exception.BusinessLogicException;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
@@ -13,6 +14,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +80,7 @@ public class JwtProvider {
     }
 
     // Refresh Token 생성 메서드
+    @Transactional
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         log.info("[createRefreshToken] 토큰 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -90,7 +93,10 @@ public class JwtProvider {
                 .signWith(key)
                 .compact();
 
-        memberRepository.updateRefreshToken(subject, token);
+        Member member = memberRepository.findByEmail(subject).get();
+        log.info("member : " + member.toString());
+        member.getRefreshToken().setToken(token);
+        memberRepository.save(member);
 
         log.info("[createRefreshToken] 토큰 생성 완료");
 

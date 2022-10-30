@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.member.entity;
 
 import com.codestates.stackoverflow.audit.Auditable;
+import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.entity.Question;
 import lombok.Getter;
@@ -47,7 +48,18 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    private String refreshToken;
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private RefreshToken refreshToken;
+
+    public void setRefreshToken (RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
+        if (refreshToken.getMember() != this) {
+            refreshToken.setMember(this);
+        }
+    }
+
+
+
 
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),
