@@ -3,13 +3,14 @@ package com.codestates.stackoverflow.comment.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 public class CommentDto {
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Post {
@@ -17,6 +18,9 @@ public class CommentDto {
         private String content;
     }
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Patch {
         private Long commentId;
 
@@ -28,6 +32,9 @@ public class CommentDto {
         }
     }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter @Setter
     public static class Response {
         private Long commentId;
 

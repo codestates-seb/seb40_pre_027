@@ -13,12 +13,14 @@ public class RefreshToken extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private String id;
 
     @Column(nullable = false)
     private Long key;
 
     @Column(nullable = true)
+
     private String token;
 
     public RefreshToken updateToken(String token) {
@@ -27,8 +29,10 @@ public class RefreshToken extends Auditable {
     }
 
 
+
     public RefreshToken(Long key, String token) {
         this.key = key;
+
         this.token = token;
     }
 }

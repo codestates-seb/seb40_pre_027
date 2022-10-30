@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.comment.entity;
 
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +16,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "question_id")
+    @JsonBackReference
     private Question question;
 
     @ManyToOne
@@ -26,7 +28,7 @@ public class Comment {
     /**
      * stackoverflow comment length 확인하고 추후 수정
      */
-    @Column(length = 30000, nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column

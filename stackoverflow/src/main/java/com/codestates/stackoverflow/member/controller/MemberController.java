@@ -34,7 +34,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<MemberDto.Response> signup (
             @RequestBody @Valid MemberDto.RegisterPost requestBody) {
-
+        System.out.println("[Member controller] Post 동작");
         Member member = memberMapper.memberRegisterPostDtoToMember(requestBody);
 
         Member savedMember = memberService.createMember(member);

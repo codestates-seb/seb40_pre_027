@@ -49,7 +49,6 @@ public class Member extends Auditable {
 
     private String refreshToken;
 
-
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),
         MEMBER_SLEEP("휴먼 상태"),

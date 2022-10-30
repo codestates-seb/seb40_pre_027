@@ -2,6 +2,8 @@ package com.codestates.stackoverflow.answer.entity;
 
 import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
+import com.codestates.stackoverflow.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +32,6 @@ public class Answer {
     private Long answerLikesCount;
 
     @Column
-    private long questionId;
-
-    @Column
     @CreatedDate
     private LocalDateTime answerCreatedAt;
 
@@ -40,14 +39,11 @@ public class Answer {
     @LastModifiedDate
     private LocalDateTime answerModifiedAt;
 
-    //@ManyToOne
-    //@JoinColumn(name = "QUESTION_ID")
-    //private Question question;
-
+    @ManyToOne
+    @JoinColumn(name = "QUESTION_ID")
+    @JsonBackReference
+    private Question question;
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "Replies")
     private List<Reply> answerReplyComments = new ArrayList<>();
-
-
-
 }

@@ -1,12 +1,15 @@
 package com.codestates.stackoverflow.question.entity;
 
 
+import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,24 +27,24 @@ public class Question {
     @Column(length = 150, nullable = false)
     private String title;
 
-    @Column(length = 30000, nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-//    @OneToMany(mappedBy = "question")
-//    private List<Answer> answers;
-
-//    @Column
-    String[] tags;
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-    private List<Comment> replies = new ArrayList<>();
+    @JsonManagedReference
+    private List<Answer> answers;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<QuestionTag> questionTags = new ArrayList<>();
+
+    private String[] tags;
 
 //    @OneToMany(mappedBy = "question")
 //    private List<QuestionLike> likes = new ArrayList<>();
@@ -54,8 +57,26 @@ public class Question {
 
     @Column(nullable = false)
     @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd : HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd : HH:mm:ss")
     private LocalDateTime modifiedAt = LocalDateTime.now();
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    //== 연관관계 편의 메서드==//
+    // 연관관계 한 번에 정리
+    public void setComments(Comment comment) {
+        this.comments.add(comment);
+        comment.setQuestion(this);
+    }
+
+    public void setQuestionTags(QuestionTag questionTag) {
+        this.questionTags.add(questionTag);
+        questionTag.setQuestion(this);
+    }
 }

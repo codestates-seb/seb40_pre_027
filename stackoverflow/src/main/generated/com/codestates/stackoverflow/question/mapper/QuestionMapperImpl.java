@@ -1,5 +1,7 @@
 package com.codestates.stackoverflow.question.mapper;
 
+import com.codestates.stackoverflow.answer.entity.Answer;
+import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-28T13:35:10+0900",
+    date = "2022-10-30T14:56:12+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -45,6 +47,10 @@ public class QuestionMapperImpl implements QuestionMapper {
         question.setQuestionId( requestBody.getQuestionId() );
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
+        String[] tags = requestBody.getTags();
+        if ( tags != null ) {
+            question.setTags( Arrays.copyOf( tags, tags.length ) );
+        }
 
         return question;
     }
@@ -62,6 +68,18 @@ public class QuestionMapperImpl implements QuestionMapper {
         }
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
+        List<Answer> list = question.getAnswers();
+        if ( list != null ) {
+            response.setAnswers( new ArrayList<Answer>( list ) );
+        }
+        List<Comment> list1 = question.getComments();
+        if ( list1 != null ) {
+            response.setComments( new ArrayList<Comment>( list1 ) );
+        }
+        String[] tags = question.getTags();
+        if ( tags != null ) {
+            response.setTags( Arrays.copyOf( tags, tags.length ) );
+        }
         response.setViewCount( question.getViewCount() );
         response.setLikeCount( question.getLikeCount() );
         response.setCreatedAt( question.getCreatedAt() );
