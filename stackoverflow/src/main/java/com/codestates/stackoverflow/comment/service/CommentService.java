@@ -3,6 +3,7 @@ package com.codestates.stackoverflow.comment.service;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.comment.repository.CommentRepository;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,12 +20,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final QuestionRepository questionRepository;
     private final QuestionService questionService;
 
     public Comment createComment(Long questionId, Comment comment) {
         Question question = questionService.findValidQuestion(questionId);
         question.setComments(comment);
-        questionService.updateQuestion(question);
+        questionRepository.save(question);
 
         return commentRepository.save(comment);
     }

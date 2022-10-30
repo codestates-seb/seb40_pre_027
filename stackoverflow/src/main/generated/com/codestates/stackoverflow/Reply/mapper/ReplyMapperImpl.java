@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-28T14:29:17+0900",
+    date = "2022-10-30T14:56:12+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -25,6 +25,9 @@ public class ReplyMapperImpl implements ReplyMapper {
 
         reply.setReplyWriterId( post.getReplyWriterId() );
         reply.setReplyContent( post.getReplyContent() );
+        if ( post.getAnswerId() != null ) {
+            reply.setAnswerId( post.getAnswerId() );
+        }
 
         return reply;
     }
@@ -56,6 +59,7 @@ public class ReplyMapperImpl implements ReplyMapper {
         response.setReplyWriterId( reply.getReplyWriterId() );
         response.setReplyCreatedAt( reply.getReplyCreatedAt() );
         response.setReplyModifiedAt( reply.getReplyModifiedAt() );
+        response.setAnswerId( reply.getAnswerId() );
 
         return response;
     }

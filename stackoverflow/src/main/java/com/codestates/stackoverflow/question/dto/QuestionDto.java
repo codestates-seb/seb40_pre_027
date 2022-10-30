@@ -53,12 +53,6 @@ public class QuestionDto {
 
         private String content;
 
-        private List<Answer> answers;
-
-        private List<Comment> comments;
-
-        private String[] tags;
-
         private int viewCount;
 
         private int likeCount;
@@ -66,5 +60,11 @@ public class QuestionDto {
         private LocalDateTime createdAt;
 
         private LocalDateTime modifiedAt;
+
+        private String[] tags;
+
+        private List<Comment> comments;
+
+        private List<Answer> answers;
     }
 }

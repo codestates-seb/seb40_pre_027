@@ -13,6 +13,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     //    @Modifying
 //    @Query(value = "UPDATE Question q set q.likeCount = q.likeCount + :val where q.questionId = :questionId")
 //    public void modifyLikeCount(@Param("questionId") Long questionId, @Param("val") int val);
-    @Query(value = "SELECT q FROM Question AS q INNER JOIN q.questionTag qt INNER JOIN t.tag t WHERE t.tagName = :tagName", nativeQuery = true)
+    @Query("SELECT q from Question q INNER JOIN q.questionTags qt INNER JOIN qt.tag t WHERE t.tagName = :tagName")
     Page<Question> findByTagName(@Param("tagName") String tagName, Pageable pageable);
 }

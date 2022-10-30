@@ -1,5 +1,7 @@
 package com.codestates.stackoverflow.question.service;
 
+import com.codestates.stackoverflow.answer.entity.Answer;
+import com.codestates.stackoverflow.answer.repository.AnswerRepository;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.comment.repository.CommentRepository;
 import com.codestates.stackoverflow.question.entity.Question;
@@ -16,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,7 @@ import java.util.Optional;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionTagRepository questionTagRepository;
+    private final AnswerRepository answerRepository;
     private final CommentRepository commentRepository;
     private final TagService tagService;
 
@@ -72,12 +77,13 @@ public class QuestionService {
 
     public Question findQuestion(Long questionId, Pageable pageable) {
         Question findQuestion = findValidQuestion(questionId);
-        findQuestion.setViewCount(findQuestion.getViewCount() + 1);
-        questionRepository.save(findQuestion);
+        List<Answer> findAnswers = answerRepository.findByQuestion(findQuestion, pageable).getContent();
+        findQuestion.setAnswers(findAnswers);
 
         List<Comment> comments = commentRepository.findByQuestion(findQuestion, pageable).getContent();
         findQuestion.setComments(comments);
 
+        findQuestion.setViewCount(findQuestion.getViewCount() + 1);
         return findQuestion;
     }
 
@@ -93,6 +99,7 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public Page<Question> findQuestionsByTag(String tagName, int page, int size) {
         //tag의 tagName이 동일한 경우 페이지
+        System.out.println("[findQuestionByTag] 작동" + tagName);
         return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
                 Sort.by("questionId").descending()));
     }
