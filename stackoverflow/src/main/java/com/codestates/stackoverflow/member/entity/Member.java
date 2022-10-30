@@ -47,11 +47,11 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<Question> questions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Comment> replies = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<Question> questions = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "member")
+//    private List<Comment> replies = new ArrayList<>();
 
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),

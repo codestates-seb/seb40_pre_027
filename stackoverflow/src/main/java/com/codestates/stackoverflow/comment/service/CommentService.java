@@ -6,6 +6,7 @@ import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final QuestionService questionService;
 
-    public Comment createComment(Comment comment) {
+    public Comment createComment(Long questionId, Comment comment) {
+        Question question = questionService.findValidQuestion(questionId);
+        question.setComments(comment);
+        questionService.updateQuestion(question);
+
         return commentRepository.save(comment);
     }
 
@@ -47,9 +52,9 @@ public class CommentService {
     /**
      * 1 : N 조회 기능 구현 필요
      */
-    public Page<Comment> findComments(Long questionId, int page, int size) {
+    public Page<Comment> findComments(Long questionId, Pageable pageable) {
         Question findQuestion = questionService.findValidQuestion(questionId);
-        return null;
+        return commentRepository.findByQuestion(findQuestion, pageable);
     }
 
     public void deleteComment(Long commentId) {

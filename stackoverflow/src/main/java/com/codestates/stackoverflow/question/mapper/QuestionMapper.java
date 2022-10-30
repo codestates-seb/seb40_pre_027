@@ -2,8 +2,10 @@ package com.codestates.stackoverflow.question.mapper;
 
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.codestates.stackoverflow.tag.entity.Tag;
 import org.mapstruct.Mapper;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")

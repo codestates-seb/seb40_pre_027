@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.question.dto;
 
-import com.codestates.stackoverflow.tag.Tag;
+import com.codestates.stackoverflow.answer.entity.Answer;
+import com.codestates.stackoverflow.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,8 @@ public class QuestionDto {
 
         private String content;
 
+        private String[] tags;
+
         public void setQuestionId(Long questionId) {
             this.questionId = questionId;
         }
@@ -49,6 +52,12 @@ public class QuestionDto {
         private String title;
 
         private String content;
+
+        private List<Answer> answers;
+
+        private List<Comment> comments;
+
+        private String[] tags;
 
         private int viewCount;
 

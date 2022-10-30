@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-28T11:00:39+0900",
+    date = "2022-10-30T06:09:38+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -36,6 +36,9 @@ public class CommentMapperImpl implements CommentMapper {
 
         Comment comment = new Comment();
 
+        comment.setCommentId( requestBody.getCommentId() );
+        comment.setContent( requestBody.getContent() );
+
         return comment;
     }
 
@@ -46,6 +49,10 @@ public class CommentMapperImpl implements CommentMapper {
         }
 
         CommentDto.Response response = new CommentDto.Response();
+
+        response.setCommentId( comment.getCommentId() );
+        response.setContent( comment.getContent() );
+        response.setCreatedAt( comment.getCreatedAt() );
 
         return response;
     }

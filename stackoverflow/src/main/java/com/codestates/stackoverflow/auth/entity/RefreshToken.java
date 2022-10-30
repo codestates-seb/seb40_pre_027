@@ -14,9 +14,9 @@ public class RefreshToken extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String refreshTokenId;
+    private Long refreshTokenId;
     @Column(nullable = false)
-    private Long key;
+    private Long tokenKey;
     @Column(nullable = false)
     private String token;
 
@@ -25,8 +25,8 @@ public class RefreshToken extends Auditable {
         return this;
     }
 
-    public RefreshToken(Long key, String token) {
-        this.key = key;
+    public RefreshToken(Long tokenKey, String token) {
+        this.tokenKey = tokenKey;
         this.token = token;
     }
 
