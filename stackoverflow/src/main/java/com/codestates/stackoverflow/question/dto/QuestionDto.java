@@ -29,12 +29,13 @@ public class QuestionDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch {
-
         private Long questionId;
 
         private String title;
 
         private String content;
+
+        private int bounty;
 
         private String[] tags;
 
@@ -52,6 +53,8 @@ public class QuestionDto {
         private String title;
 
         private String content;
+
+        private int bounty;
 
         private int viewCount;
 

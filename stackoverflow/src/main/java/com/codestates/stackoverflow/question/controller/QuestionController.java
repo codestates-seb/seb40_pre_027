@@ -74,6 +74,17 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity getQuestionsActive(@Positive @RequestParam int page,
+                                             @Positive @RequestParam int size) {
+        Page<Question> pageQuestions = questionService.findQuestionsActive(page - 1, size);
+        List<Question> questions = pageQuestions.getContent();
+
+        return new ResponseEntity<>(
+                mapper.questionsToQuestionResponses(questions),
+                HttpStatus.OK);
+    }
+
     /**
      * 요청의 tag 전달 방식에 따라 추후 변경 가능
      */
