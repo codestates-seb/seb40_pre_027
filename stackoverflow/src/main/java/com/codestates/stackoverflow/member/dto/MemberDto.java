@@ -50,7 +50,7 @@ public class MemberDto {
         // 이미지 수정 기능 구현해야 함
 
         private String name;
-        private String Location;
+        private String location;
         private String title;
         private String introduction;
     }

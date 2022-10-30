@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -41,6 +43,15 @@ public class MemberController {
         return new ResponseEntity<MemberDto.Response>(
                 memberMapper.memberToMemberResponseDto(savedMember),
                 HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public HttpServletResponse login(HttpServletRequest request, HttpServletResponse response) {
+
+        log.info("들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴");
+        response.setStatus(500);
+
+        return response;
     }
     // 로그인 된 회원 정보 불러오기
     @GetMapping

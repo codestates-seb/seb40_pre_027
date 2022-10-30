@@ -46,6 +46,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(authenticationToken);
     }
 
+    // 로그인 검증이 성공하였을 때 실행되는 메서드
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
@@ -53,13 +54,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws ServletException, IOException {
         log.info("[successfulAuthentication] 로그인 Request 정보로 JWT 생성 시작");
         Member member = (Member) authResult.getPrincipal();
-
+        // request 정보로 JWT 생성
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
+        // 생성된 토큰 response 헤더 쪽에 담아 준다.
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
         log.info("[successfulAuthentication] Response에 JWT 삽입");
+
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 
     }

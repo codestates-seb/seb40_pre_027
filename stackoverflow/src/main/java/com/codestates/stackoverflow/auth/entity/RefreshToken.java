@@ -6,18 +6,21 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "refresh_token")
-@Getter
 @NoArgsConstructor
+@Entity
+@Getter
 public class RefreshToken extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long refreshTokenId;
+
+    private String id;
+
     @Column(nullable = false)
-    private Long tokenKey;
-    @Column(nullable = false)
+    private Long key;
+
+    @Column(nullable = true)
+
     private String token;
 
     public RefreshToken updateToken(String token) {
@@ -25,9 +28,11 @@ public class RefreshToken extends Auditable {
         return this;
     }
 
-    public RefreshToken(Long tokenKey, String token) {
-        this.tokenKey = tokenKey;
+
+
+    public RefreshToken(Long key, String token) {
+        this.key = key;
+
         this.token = token;
     }
-
 }
