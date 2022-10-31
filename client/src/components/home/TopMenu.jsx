@@ -12,11 +12,10 @@ const TopMenuComponent = styled.div`
     margin-bottom: 12px;
     padding: 10.4px;
   }
-  width: 1000px;
+  width: 926px;
   height: 100%;
   font-size: 13px;
   font-weight: bold;
-  /* border-left: 1px solid #d9d9d9;s */
 `;
 const TopMenuBoxComponent = styled.div`
   margin-bottom: 12px;

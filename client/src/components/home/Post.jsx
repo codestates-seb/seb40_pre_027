@@ -9,6 +9,7 @@ const PostComponent = styled.div`
   border-top: 1px solid #d9d9d9;
   display: flex;
   align-items: center;
+  padding: 4.5rem 0;
   .info-post {
     display: flex;
     flex-direction: column;
@@ -65,24 +66,30 @@ const PostComponent = styled.div`
 `;
 
 function Post({ post }) {
-  const { title, content } = post;
+  const { questionId, title, content, tags, viewCount, likeCount } = post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
-
-  const tags = ['excel', 'encoding', 'power-automate'];
+  const deleteTagContent = content
+    .replace(/<[^>]*>?/g, '')
+    .replace(/&lt;/g, '')
+    .replace(/&gt;/g, '');
   return (
     <PostComponent>
       <div className="info-post">
-        <div className="vote">{`0 votes`}</div>
+        <div className="vote">{`${likeCount} votes`}</div>
         <div className="answers">{`0 answers`}</div>
-        <div className="views">{`0 views`}</div>
+        <div className="views">{`${viewCount} views`}</div>
       </div>
       <div className="article">
-        <LinkStyle path="/post">
+        <LinkStyle path={`/post/${questionId}`}>
           <h3 className="title article-status">{title}</h3>
         </LinkStyle>
 
-        <div className="article-content article-status">{content}</div>
+        <div className="article-content article-status">
+          {deleteTagContent.length <= 160
+            ? deleteTagContent
+            : `${deleteTagContent.substring(0, 160)}...`}
+        </div>
         <div className="info-side article-status">
           <div className="tags">
             {tags.map((v, i) => (

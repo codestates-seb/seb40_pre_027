@@ -66,6 +66,7 @@ const InputBoxComponent = styled.div`
       top: 40px;
       left: 0;
       padding: 0.5rem;
+      z-index: 2;
     }
   }
 `;
@@ -166,7 +167,11 @@ function InputBox({
       ) : (
         <div
           className={
-            value.title.length <= 5
+            title === 'title'
+              ? value.title.length <= 5
+                ? 'disabled input-title-tag'
+                : 'input-title-tag'
+              : value.tags.length <= 0
               ? 'disabled input-title-tag'
               : 'input-title-tag'
           }

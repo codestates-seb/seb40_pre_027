@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
+import { useNavigate } from 'react-router-dom';
 
 const Titlemain = styled.main`
   /* width: 1300px; */
@@ -24,6 +25,7 @@ const TitleTxt = styled.div`
 `;
 const MainTxt = styled.div`
   display: flex;
+  justify-content: space-between;
   & h1 {
     font-size: 1.5rem;
     line-height: 2.4rem;
@@ -44,24 +46,22 @@ const SubTxt = styled.div`
     margin-right: 10px;
   }
 `;
-function Title() {
+function Title({ title, viewCount, createdAt, modifiedAt }) {
+  const navigate = useNavigate();
   return (
     <Titlemain>
       <TitleTxt>
         <MainTxt>
-          <h1>
-            Is there a way to access internal metastore of Azure HDInsight to
-            fire queries on Hive metastore tables?
-          </h1>
-          <Button>Ask Question</Button>
+          <h1>{title}</h1>
+          <Button onClick={() => navigate('/write')}>Ask Question</Button>
         </MainTxt>
         <SubTxt>
           <h3>Asked</h3>
-          <h4>8 months ago</h4>&nbsp;&nbsp;
+          <h4>{new Date(createdAt).toLocaleString()}</h4>&nbsp;&nbsp;
           <h3>Modified</h3>
-          <h4>today</h4>&nbsp;&nbsp;
+          <h4>{new Date(modifiedAt).toLocaleString()}</h4>&nbsp;&nbsp;
           <h3>Viewed</h3>
-          <h4>68 times</h4>
+          <h4>{`${viewCount} times`}</h4>
         </SubTxt>
       </TitleTxt>
     </Titlemain>
