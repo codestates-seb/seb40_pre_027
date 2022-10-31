@@ -39,9 +39,9 @@ public class Reply {
     private LocalDateTime replyModifiedAt;
 
     //연관관계 매핑 필요 !!!
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="answer_id")
-    private Answer Replies;
+    private Answer answer;
 
 //    @ManyToOne
 //    @JoinColumn(name="user_id")

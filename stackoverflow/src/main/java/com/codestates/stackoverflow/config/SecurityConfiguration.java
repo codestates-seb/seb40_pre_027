@@ -28,7 +28,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Slf4j
 public class SecurityConfiguration {
 
-
     private final JwtProvider jwtProvider;
     private final CustomAuthorityUtils authorityUtils;
 
@@ -46,7 +45,6 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // (1) 추가
@@ -62,8 +60,8 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                                .antMatchers("/user/signup", "/user/login", "/").permitAll()
-                                .anyRequest().permitAll());
+                        .antMatchers("/user/signup", "/user/login", "/").permitAll()
+                        .anyRequest().permitAll());
 //                        .anyRequest().hasRole("USER")
 
         return http.build();

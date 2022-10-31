@@ -11,13 +11,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RefreshToken {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tokenId;
+
     private String token;
 
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
@@ -25,8 +25,6 @@ public class RefreshToken {
         this.member = member;
         if (member.getRefreshToken() != this) {
             member.setRefreshToken(this);
-
         }
     }
-
 }

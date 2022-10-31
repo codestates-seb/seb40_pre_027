@@ -41,7 +41,7 @@ public class Answer {
     @LastModifiedDate
     private LocalDateTime answerModifiedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
 

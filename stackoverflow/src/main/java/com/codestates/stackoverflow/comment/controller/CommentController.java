@@ -50,7 +50,6 @@ public class CommentController {
     public ResponseEntity getCommentsOfQuestion(@PathVariable("question-id") Long questionId,
                                       @Positive @RequestParam int page,
                                       @Positive @RequestParam int size) {
-
         Page<Comment> pageComments = commentService.findComments(questionId, PageRequest.of(page - 1, size));
         List<Comment> comments = pageComments.getContent();
 

@@ -4,6 +4,9 @@ import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.comment.repository.CommentRepository;
+import com.codestates.stackoverflow.exception.BusinessLogicException;
+import com.codestates.stackoverflow.exception.ExceptionCode;
+import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
@@ -53,6 +56,13 @@ public class QuestionService {
         return questionRepository.save(findQuestion);
     }
 
+    public Question findQuestion(Long questionId) {
+        Question findQuestion = findValidQuestion(questionId);
+
+        findQuestion.setViewCount(findQuestion.getViewCount() + 1);
+        return questionRepository.save(findQuestion);
+    }
+
     public Question findQuestion(Long questionId, Pageable pageable) {
         Question findQuestion = findValidQuestion(questionId);
         List<Answer> findAnswers = answerRepository.findByQuestion(findQuestion, pageable).getContent();
@@ -71,6 +81,9 @@ public class QuestionService {
                 Sort.by("questionId").descending()));
     }
 
+    /**
+     * createdAt으로 조회하는 기능 필요한지 확인 후 삭제 가능
+     */
     @Transactional(readOnly = true)
     public Page<Question> findQuestionsActive(int page, int size) {
         return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
@@ -100,6 +113,9 @@ public class QuestionService {
         return questionRepository.save(findQuestion).getLikeCount();
     }
 
+    /**
+     * Bounty 기능 추가시 사용할 메서드
+     */
     public Question addBounty(Question question, int bounty) {
         question.setBounty(question.getBounty() + bounty);
         return question;
@@ -122,6 +138,6 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public Question findValidQuestion(Long questionId) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
-        return optionalQuestion.orElseThrow(RuntimeException::new);
+        return optionalQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     }
 }
