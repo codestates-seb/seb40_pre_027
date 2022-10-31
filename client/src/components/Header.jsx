@@ -4,6 +4,7 @@ import Button from './Button';
 import { GoSearch } from 'react-icons/go';
 import Logo from '../img/Logo.png';
 import { Link } from 'react-router-dom';
+import UserCard from './UserCard';
 
 const HeaderComponent = styled.header`
   border-bottom: 2px solid #d9d9d9;
@@ -80,8 +81,8 @@ const Topbar = styled.div`
 
 function Header() {
   const searchHandler = () => {};
-  const loginHandler = () => {};
-  const signupHandler = () => {};
+
+  const isLogin = true;
   return (
     <>
       <Topbar />
@@ -104,22 +105,31 @@ function Header() {
                 />
               </div>
             </form>
-            <Link to="/login">
-              <Button
-                data={{
-                  background: '#e1ecf4',
-                  color: '#315877',
-                  hovercolor: '#B3D3EA',
-                  activecolor: '#B3D3EA',
-                }}
-              >
-                Log in
-              </Button>
-            </Link>
+            {isLogin ? (
+              <>
+                <UserCard />
+                <Button>Log out</Button>
+              </>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button
+                    data={{
+                      background: '#e1ecf4',
+                      color: '#315877',
+                      hovercolor: '#B3D3EA',
+                      activecolor: '#B3D3EA',
+                    }}
+                  >
+                    Log in
+                  </Button>
+                </Link>
 
-            <Link to="/sign">
-              <Button onClick={signupHandler}>Sign up</Button>
-            </Link>
+                <Link to="/sign">
+                  <Button>Sign up</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </HeaderComponent>
