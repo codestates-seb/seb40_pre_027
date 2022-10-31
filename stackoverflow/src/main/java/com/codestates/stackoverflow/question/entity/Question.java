@@ -33,10 +33,6 @@ public class Question {
     @Column(nullable = false)
     private int Bounty = 0;
 
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Answer> answers;

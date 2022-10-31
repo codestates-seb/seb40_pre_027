@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.answer.entity;
 
 import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
+import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
