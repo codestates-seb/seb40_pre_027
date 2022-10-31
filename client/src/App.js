@@ -47,7 +47,7 @@ function App() {
         ></Route>
 
         <Route
-          path="/post"
+          path="/post/:id"
           element={<Suspense fallback={<>...</>}>{<PostPage />}</Suspense>}
         ></Route>
       </Routes>

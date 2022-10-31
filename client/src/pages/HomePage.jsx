@@ -34,10 +34,11 @@ function HomePage() {
   const sizeHandler = (per) => setSize(per);
 
   useEffect(() => {
-    axios
-      .get(`/question?&page=1&size=${size}`)
-      .then((res) => console.log(setPosts(res.data)));
-  }, []);
+    axios.get(`/question?&page=1&size=${15}`).then((res) => {
+      setPosts(res.data);
+      console.log(res.data);
+    });
+  }, [size]);
   return (
     <HomepageComponent>
       <Header />
@@ -45,7 +46,7 @@ function HomePage() {
         <Nav />
         <article>
           <TopMenu />
-          {posts.length && <PostList posts={posts} sizeHandler={sizeHandler} />}
+          {posts.length ? <PostList posts={posts} /> : <div>...</div>}
           <Pagination
             size={size}
             sizeHandler={sizeHandler}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AnswerPost from '../components/post/AnswerPost';
 import AnswerSorted from '../components/post/AnswerSorted';
@@ -7,6 +7,8 @@ import Nav from '../components/home/Nav';
 import Footer from '../components/Footer';
 import PostBody from '../components/post/PostBody';
 import Title from '../components/post/Title';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const PostPageComponent = styled.div`
   width: 100vw;
@@ -35,25 +37,49 @@ const PostPageComponent = styled.div`
 `;
 
 function PostPage() {
+  const [post, setPost] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+    axios.get(`/question/${id}`).then((res) => setPost(res.data));
+  }, []);
+  console.log(post);
+  const { questionId, title, content, viewCount, createdAt, modifiedAt, tags } =
+    post;
   return (
     <PostPageComponent>
       <Header />
 
-      <div className="section">
-        <Nav />
-        <article>
-          <Title />
-          <div className="post-aside">
-            <div>
-              <PostBody answer={false} />
-              <AnswerSorted />
-              <PostBody answer={true} />
-              <AnswerPost />
+      {Object.keys(post).length ? (
+        <div className="section">
+          <Nav />
+          <article>
+            <Title
+              title={title}
+              viewCount={viewCount}
+              createdAt={createdAt}
+              modifiedAt={modifiedAt}
+            />
+            <div className="post-aside">
+              <div>
+                <PostBody
+                  answer={false}
+                  questionId={questionId}
+                  content={content}
+                  tags={tags}
+                  createdAt={createdAt}
+                  modifiedAt={modifiedAt}
+                />
+                <AnswerSorted />
+                <PostBody answer={true} />
+                <AnswerPost />
+              </div>
+              <aside></aside>
             </div>
-            <aside></aside>
-          </div>
-        </article>
-      </div>
+          </article>
+        </div>
+      ) : (
+        <div>...</div>
+      )}
 
       <Footer />
     </PostPageComponent>

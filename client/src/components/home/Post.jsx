@@ -65,20 +65,19 @@ const PostComponent = styled.div`
 `;
 
 function Post({ post }) {
-  const { title, content } = post;
+  const { questionId, title, content, tags, viewCount, likeCount } = post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
 
-  const tags = ['excel', 'encoding', 'power-automate'];
   return (
     <PostComponent>
       <div className="info-post">
-        <div className="vote">{`0 votes`}</div>
+        <div className="vote">{`${likeCount} votes`}</div>
         <div className="answers">{`0 answers`}</div>
-        <div className="views">{`0 views`}</div>
+        <div className="views">{`${viewCount} views`}</div>
       </div>
       <div className="article">
-        <LinkStyle path="/post">
+        <LinkStyle path={`/post/${questionId}`}>
           <h3 className="title article-status">{title}</h3>
         </LinkStyle>
 
