@@ -32,13 +32,14 @@ function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const sizeHandler = (per) => setSize(per);
+  const currentPageHandler = (p) => setCurrentPage(p);
 
   useEffect(() => {
-    axios.get(`/question?&page=1&size=${15}`).then((res) => {
+    axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
       setPosts(res.data);
       console.log(res.data);
     });
-  }, [size]);
+  }, [size, currentPage]);
   return (
     <HomepageComponent>
       <Header />
@@ -51,6 +52,7 @@ function HomePage() {
             size={size}
             sizeHandler={sizeHandler}
             currentPage={currentPage}
+            currentPageHandler={currentPageHandler}
           />
         </article>
         <aside>

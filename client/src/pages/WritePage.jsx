@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Header from '../components/Header';
@@ -7,6 +8,7 @@ import backgroundsvg from '../img/background.svg';
 import Modal from '../components/Modal';
 import InputArea from '../components/write/InputArea';
 import data from '../components/write/data';
+import axios from 'axios';
 
 const WritePageComponent = styled.div`
   background: rgba(240, 240, 240, 0.6);
@@ -71,6 +73,20 @@ function WritePage() {
   const [inputData, setInputData] = useState(initialData); // 글쓰기 상태
   const stepHandler = (title) => setStep(title);
   const stepBtnHandler = () => setStepBtn(stepBtn + 1);
+  const navigate = useNavigate();
+  const postHandler = () => {
+    // post submit button handler
+    axios
+      .post('/question', {
+        title: inputData.title,
+        content: `${inputData.introduce} <br/> ${inputData.expand}`,
+        tags: inputData.tags,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate('/questions');
+      });
+  };
 
   return (
     <WritePageComponent stepBtn={stepBtn}>
@@ -118,7 +134,7 @@ function WritePage() {
             />
           ))}
 
-          <Button>Review your question</Button>
+          <Button onClick={() => postHandler()}>Review your question</Button>
         </div>
       </article>
 

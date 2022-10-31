@@ -7,7 +7,7 @@ const PostListComponent = styled.div`
   border-left: 1px solid #d9d9d9;
 `;
 
-function PostList({ posts, sizeHandler }) {
+function PostList({ posts }) {
   const [data, setData] = useState([]);
 
   return (

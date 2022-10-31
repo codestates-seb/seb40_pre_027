@@ -69,7 +69,7 @@ const PaginationComponent = styled.div`
   }
 `;
 
-function Pagination({ size, sizeHandler, currentPage }) {
+function Pagination({ size, sizeHandler, currentPage, currentPageHandler }) {
   const pagination = [1, 2, 3];
   const pers = [15, 30, 50];
   return (
@@ -79,6 +79,7 @@ function Pagination({ size, sizeHandler, currentPage }) {
           {pagination.map((v, i) => (
             <div
               className={currentPage === v ? 'page-items check' : 'page-items'}
+              onClick={() => currentPageHandler(v)}
               key={i}
             >
               {v}

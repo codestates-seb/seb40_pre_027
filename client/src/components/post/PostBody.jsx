@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 import Tag from '../Tag';
@@ -8,7 +8,12 @@ const PostBodyComponent = styled.div`
   display: flex;
   margin-top: 2rem;
   padding-left: 2rem;
-
+  code {
+    /* border: 1px solid black; */
+    padding: 0.3rem;
+    border-radius: 5px;
+    background: #c9d4df;
+  }
   .post-body-container {
     width: 100%;
     display: flex;
@@ -118,9 +123,8 @@ const PostBodyComponent = styled.div`
 function PostBody(props) {
   const [shareClicked, setShareClicked] = useState(false);
 
-  const shareHandler = () => {
-    setShareClicked(!shareClicked);
-  };
+  const shareHandler = () => setShareClicked(!shareClicked);
+  const contentRef = useRef();
 
   console.log(shareClicked);
 
@@ -131,7 +135,13 @@ function PostBody(props) {
     <PostBodyComponent>
       <Recommend />
       <div className="post-body-container">
-        <section className="main-content">{props.content}</section>
+        <section
+          className="main-content"
+          ref={contentRef}
+          dangerouslySetInnerHTML={{ __html: props.content }}
+        >
+          {/* {contentRef.innerHTML(props.content)} */}
+        </section>
         {!props.answer && (
           <section className="tags">
             {props.tags.map((v, i) => (
