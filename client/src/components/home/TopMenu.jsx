@@ -16,7 +16,6 @@ const TopMenuComponent = styled.div`
   height: 100%;
   font-size: 13px;
   font-weight: bold;
-  /* border-left: 1px solid #d9d9d9;s */
 `;
 const TopMenuBoxComponent = styled.div`
   margin-bottom: 12px;

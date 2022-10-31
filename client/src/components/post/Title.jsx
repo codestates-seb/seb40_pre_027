@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
+import { useNavigate } from 'react-router-dom';
 
 const Titlemain = styled.main`
   /* width: 1300px; */
@@ -46,12 +47,13 @@ const SubTxt = styled.div`
   }
 `;
 function Title({ title, viewCount, createdAt, modifiedAt }) {
+  const navigate = useNavigate();
   return (
     <Titlemain>
       <TitleTxt>
         <MainTxt>
           <h1>{title}</h1>
-          <Button>Ask Question</Button>
+          <Button onClick={() => navigate('/write')}>Ask Question</Button>
         </MainTxt>
         <SubTxt>
           <h3>Asked</h3>
