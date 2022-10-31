@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import smallLogo from '../img/smallLogo.png';
@@ -34,7 +34,6 @@ const LoginPageComponent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* margin-top: 50px; */
   }
   background-color: #f1f2f3;
 `;
@@ -82,18 +81,16 @@ const LoginBox = styled.div`
 `;
 
 function LoginPage() {  
-  useEffect(() => {
-    axios.get('user/login')
-    .then((res) =>
-    console.log(res.data));
-  }, []);
+  const [isCorrect, setIsCorrect] = useState({
+    emailCorrect: true,
+    passwordCorrect: true,
+  });
 
   // email, password 확인
   const [account, setAccount] = useState({
     email: "",
     password: "",
   });
-
 
   const onChangeAccount = (e) => {
   setAccount({
@@ -104,10 +101,48 @@ function LoginPage() {
   console.log(account)
   }
 
-  
+  // 로그인 요청
+  async function postLogin() {
+    try {
+      const response = await axios.post('user/login', {
+        email: account.email,
+        password: account.password,
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  return (
-    
+  // 유효성 검사
+  const LoginHandler = (e) => {
+    e.preventDefault();
+    if(account.email.trim().length === 0 || !account.email.includes('@')) {
+      setIsCorrect((prev) => {
+        return { ...prev, emailCorrect: false };
+      });
+      return;
+    }
+    if (account.password.length < 8) {
+      setIsCorrect((prev) => {
+        return { ...prev, passwordCorrect: false };
+      });
+      return;
+    } 
+    else {
+      setIsCorrect({
+        emailCorrect: true,
+        passwordCorrect: true,
+      });
+    }
+    postLogin();
+    setAccount({
+      email: "",
+      password: "",
+    });
+  };
+
+  return ( 
     <>
       <LoginPageComponent>
         <Header />
@@ -122,25 +157,34 @@ function LoginPage() {
           <SocialLogin social="google">Log in with Google</SocialLogin>
           <SocialLogin social="github">Log in with Github</SocialLogin>
           <LoginBox>
-            <div className="email">Email</div>
-            <input 
-              className="inputBox" 
-              name="email" 
-              onChange={onChangeAccount}
-              >
-            </input>
-            <div className="pw">
-              <div className="password">Password</div>
-              <div className="forgotPassword">Forgot Password?</div>
-            </div>
-            <input 
-              className="inputBox" 
-              name="password" 
-              onChange={onChangeAccount}
-              >
-              </input>
-            <button onClick={onChangeAccount} >Log in</button>
+            <form onSubmit={LoginHandler}>
+              <div className="email">Email</div>
+              <input 
+                className= "inputBox" 
+                name= "email" 
+                onChange={onChangeAccount}
+                value={account.email}
+                />
+                {!isCorrect.emailCorrect && (
+                  <div>올바른 이메일 형식을 입력하세요.</div>
+                )}
+              <div className="pw">
+                <div className="password">Password</div>
+                <div className="forgotPassword">Forgot Password?</div>
+              </div>
+              <input 
+                className="inputBox" 
+                name="password" 
+                onChange={onChangeAccount}
+                value={account.password}
+                />
+                {!isCorrect.passwordCorrect && (
+                  <div>비밀번호는 8자 이상을 입력하세요.</div>
+                )}
+              <button onClick={onChangeAccount} >Log in</button>
+            </form>
           </LoginBox>
+
           <div className="account">
             <span>Don't have an account?</span>
             <LinkStyle path="/sign">
