@@ -39,7 +39,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("request URI : "+request.getRequestURI());
 
-        if (request.getRequestURI().startsWith("/auth/reissue")) {
+        if (request.getRequestURI().startsWith("user/auth/reissue")) {
             // Access Token 재발급 URI 요청 시 아래 로직을 거치지 않고 바로 다음 Filter로 넘김.
             filterChain.doFilter(request, response);
         }
