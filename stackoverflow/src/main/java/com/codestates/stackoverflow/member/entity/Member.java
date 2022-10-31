@@ -34,12 +34,19 @@ public class Member extends Auditable {
     @Column(nullable = false, length = 200)
     private String password;
 
+    // 프로필
     @Column(length = 50)
     private String location;
     @Column(length = 50)
     private String title;
     @Column(length = 200)
     private String introduction;
+
+    // 질문 영역
+//    @OneToMany(mappedBy = "member")
+//    private List<Question> questions;
+//
+//    @OneToMany(mappedBy = "member")
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
@@ -57,9 +64,6 @@ public class Member extends Auditable {
             refreshToken.setMember(this);
         }
     }
-
-
-
 
     public static enum MemberStatus {
         MEMBER_ACTIVE("활동 중"),

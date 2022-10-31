@@ -46,14 +46,6 @@ public class MemberController {
                 HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
-    public HttpServletResponse login(HttpServletRequest request, HttpServletResponse response) {
-
-        log.info("들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴들어옴");
-        response.setStatus(500);
-
-        return response;
-    }
     // 로그인 된 회원 정보 불러오기
     @GetMapping
     public ResponseEntity getMember() {
@@ -82,5 +74,7 @@ public class MemberController {
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    // 회원이 작성한 질문글 불러오기
 
 }
