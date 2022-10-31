@@ -6,6 +6,9 @@ import SocialLogin from '../components/SocialLogin';
 import LinkStyle from '../components/LinkStyle';
 import axios from 'axios';
 
+//redux 관련 import
+import { useSelector, useDispatch } from 'react-redux';
+import { loginActions } from '../store/reduxIndex';
 
 const LoginPageComponent = styled.div`
   height: 100vh;
@@ -80,7 +83,11 @@ const LoginBox = styled.div`
   border-radius: 5%;
 `;
 
-function LoginPage() {  
+function LoginPage() {
+  //dispatch 변수 할당, isLogin 상태 할당
+  const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.isLogin);
+
   const [isCorrect, setIsCorrect] = useState({
     emailCorrect: true,
     passwordCorrect: true,
@@ -88,36 +95,39 @@ function LoginPage() {
 
   // email, password 확인
   const [account, setAccount] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const onChangeAccount = (e) => {
-  setAccount({
-    ...account,
-    [e.target.name]: e.target.value
-  })
-  
-  console.log(account)
-  }
-
+    setAccount({
+      ...account,
+      [e.target.name]: e.target.value,
+    });
+  };
+  console.log(account, isLogin);
   // 로그인 요청
   async function getLogin() {
     try {
-      const response = await axios.post('/user/login', {
-        username: account.email,
-        password: account.password,
-      });
+      const response = await axios
+        .post('/user/login', {
+          username: account.email,
+          password: account.password,
+        })
+        .then(
+          //dispatch로 로그인 상태 redux에 저장
+          dispatch(loginActions.login())
+        );
       console.log(response);
     } catch (error) {
       console.error(error);
     }
-  } 
-  
+  };
+
   // 유효성 검사
   const LoginHandler = (e) => {
     e.preventDefault();
-    if(account.email.trim().length === 0 || !account.email.includes('@')) {
+    if (account.email.trim().length === 0 || !account.email.includes('@')) {
       setIsCorrect((prev) => {
         return { ...prev, emailCorrect: false };
       });
@@ -128,8 +138,7 @@ function LoginPage() {
         return { ...prev, passwordCorrect: false };
       });
       return;
-    } 
-    else {
+    } else {
       setIsCorrect({
         emailCorrect: true,
         passwordCorrect: true,
@@ -137,12 +146,12 @@ function LoginPage() {
     }
     getLogin();
     setAccount({
-      username: "",
-      password: "",
+      email: '',
+      password: '',
     });
   };
 
-  return ( 
+  return (
     <>
       <LoginPageComponent>
         <Header />
@@ -159,27 +168,29 @@ function LoginPage() {
           <LoginBox>
             <form onSubmit={LoginHandler}>
               <div className="email">Email</div>
-              <input 
-                className= "inputBox" 
-                name= "email" 
+              <input
+                className="inputBox"
+                name="email"
                 onChange={onChangeAccount}
-                />
-                {!isCorrect.emailCorrect && (
-                  <div>올바른 이메일 형식을 입력하세요.</div>
-                )}
+                value={account.email}
+              />
+              {!isCorrect.emailCorrect && (
+                <div>올바른 이메일 형식을 입력하세요.</div>
+              )}
               <div className="pw">
                 <div className="password">Password</div>
                 <div className="forgotPassword">Forgot Password?</div>
               </div>
-              <input 
-                className="inputBox" 
-                name="password" 
+              <input
+                className="inputBox"
+                name="password"
                 onChange={onChangeAccount}
-                />
-                {!isCorrect.passwordCorrect && (
-                  <div>비밀번호는 8자 이상을 입력하세요.</div>
-                )}
-              <button onClick={onChangeAccount} >Log in</button>
+                value={account.password}
+              />
+              {!isCorrect.passwordCorrect && (
+                <div>비밀번호는 8자 이상을 입력하세요.</div>
+              )}
+              <button onClick={onChangeAccount}>Log in</button>
             </form>
           </LoginBox>
 
@@ -196,4 +207,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
