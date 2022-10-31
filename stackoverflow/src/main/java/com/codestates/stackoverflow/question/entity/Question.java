@@ -42,6 +42,7 @@ public class Question {
     private List<Answer> answers;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
@@ -76,6 +77,15 @@ public class Question {
     public void setComments(Comment comment) {
         this.comments.add(comment);
         comment.setQuestion(this);
+    }
+
+    public void setAnswers(Answer answer) {
+        this.answers.add(answer);
+        answer.setQuestion(this);
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     public void setQuestionTags(QuestionTag questionTag) {

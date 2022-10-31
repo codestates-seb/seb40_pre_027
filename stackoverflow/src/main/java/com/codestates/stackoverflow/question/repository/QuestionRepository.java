@@ -19,15 +19,13 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findByOrderByCreatedAtDesc(Pageable pageable);
 
-    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t" +
-            "WHERE t.tagName = :tagName" +
+    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
+            "WHERE t.tagName = :tagName " +
             "ORDER BY qt.createdAt DESC")
     Page<Question> findAllWithTag(@Param(("tagName")) String tagName, Pageable pageable);
 
-    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t" +
-            "WHERE t.tagName = :tagName AND qt.createdAt >= since" +
+    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
+            "WHERE t.tagName = :tagName AND qt.createdAt >= :since " +
             "ORDER BY qt.createdAt DESC")
     Page<Question> findAllWithTagSince(@Param(("tagName")) String tagName, @Param("since") LocalDateTime since, Pageable pageable);
-
-
 }

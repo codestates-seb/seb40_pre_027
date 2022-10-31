@@ -15,6 +15,5 @@ public class AnswerLikesDto {
         private Long AnswerLikesId;
         private Long answerId;
         private Long whoAnswerLikeId;
-        private AnswerLikes.LikesStatus likeStatus;
     }
 }

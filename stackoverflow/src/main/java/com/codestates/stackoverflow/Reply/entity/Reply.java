@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.Reply.entity;
 
 import com.codestates.stackoverflow.answer.entity.Answer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,29 +22,16 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long replyId;
 
-    @Column
-    private Long replyWriterId;
-
     @Column(length = 300)
     private String replyContent;
-
-    @Column(name = "answer_No")
-    private long answerId;
 
     @Column
     @CreatedDate
     private LocalDateTime replyCreatedAt;
 
-    @Column
-    @CreatedDate
-    private LocalDateTime replyModifiedAt;
-
-    //연관관계 매핑 필요 !!!
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="answer_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "answer_id")
+    @JsonBackReference
     private Answer answer;
 
-//    @ManyToOne
-//    @JoinColumn(name="user_id")
-//    private User ReplyWriter;
 }

@@ -83,7 +83,6 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-
     @GetMapping("/active")
     public ResponseEntity getQuestionsActive(@Positive @RequestParam int page,
                                              @Positive @RequestParam int size) {

@@ -1,6 +1,5 @@
 package com.codestates.stackoverflow.answerLikes.service;
 
-import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
 import com.codestates.stackoverflow.answer.service.AnswerService;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
@@ -8,10 +7,7 @@ import com.codestates.stackoverflow.answerLikes.repository.AnswerLikesRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
-import static com.codestates.stackoverflow.answerLikes.entity.AnswerLikes.LikesStatus.*;
-
+import java.util.Optional;
 @Service
 public class AnswerLikesService {
     private final AnswerLikesRepository answerLikesRepository;
@@ -27,51 +23,36 @@ public class AnswerLikesService {
         this.answerService = answerService;
     }
 
-    public void addLike(Long whoAnswerLikes,
-                        Long answerId){
-        Answer findAnswer = answerService.findVerifiedAnswer(answerId);
-        //NULL 일 경우의 수를 answerService 에 추가할 것 !!
-        findAnswer.setAnswerId(answerId);
-
-        AnswerLikes answerLikes = answerLikesRepository.findByAnswerAndWhoAnswerLikeId(findAnswer,whoAnswerLikes);
-        
-        if(answerLikes.getLikeStatus() == LIKE_CLICK){
-            findAnswer.setAnswerLikesCount(findAnswer.getAnswerLikesCount()+1);
-            answerLikes.setLikeStatus(NO_CLICK);
+    public long saveLike(Long answerId, int val) {
+        Optional<AnswerLikes> findAnswerLikes = answerLikesRepository.findByAnswerId(answerId);
+        if (findAnswerLikes.isEmpty()) {
+            return createLike(answerId, val);
+        } else {
+            return updateLike(findAnswerLikes.get(), answerId, val);
         }
-        else if(answerLikes.getLikeStatus() == NO_CLICK){
-            findAnswer.setAnswerLikesCount(findAnswer.getAnswerLikesCount()+1);
-            answerLikes.setLikeStatus(LIKE_CLICK);
-        }
-        else if(answerLikes.getLikeStatus() == HATE_CLICK){
-            findAnswer.setAnswerLikesCount(findAnswer.getAnswerLikesCount()-2);
-            answerLikes.setLikeStatus(HATE_CLICK);
-        }
-        answerRepository.save(findAnswer);
-        answerLikesRepository.save(answerLikes);
     }
-    public void addHate(Long whoAnswerLikes,
-                        Long answerId){
-        Answer findAnswer = answerService.findVerifiedAnswer(answerId);
-        //NULL 일 경우의 수를 answerService 에 추가할 것 !!
-        findAnswer.setAnswerId(answerId);
 
-        AnswerLikes answerLikes = answerLikesRepository.findByAnswerAndWhoAnswerLikeId(findAnswer,whoAnswerLikes);
+    public long createLike(Long answerId, int val) {
+        answerRepository.findById(answerId).orElseThrow(RuntimeException::new);
 
-        if(answerLikes.getLikeStatus() == LIKE_CLICK){
-            findAnswer.setAnswerLikesCount(findAnswer.getAnswerLikesCount()-2);
-            answerLikes.setLikeStatus(HATE_CLICK);
-        }
-        else if(answerLikes.getLikeStatus() == NO_CLICK){
-            findAnswer.setAnswerLikesCount(findAnswer.getAnswerLikesCount()-1);
-            answerLikes.setLikeStatus(HATE_CLICK);
-
-        }
-        else if(answerLikes.getLikeStatus() == HATE_CLICK){
-            findAnswer.setAnswerLikesCount(findAnswer.getAnswerLikesCount()+1);
-            answerLikes.setLikeStatus(NO_CLICK);
-        }
-        answerRepository.save(findAnswer);
+        AnswerLikes answerLikes = AnswerLikes.of(answerId, val);
         answerLikesRepository.save(answerLikes);
+
+        return answerService.modifyLikeCount(answerId, val);
+    }
+
+    public long updateLike(AnswerLikes answerLikes, Long answerId, int val) {
+        if(answerLikes.getVal() == val) {
+            answerLikesRepository.deleteByAnswer_Id(answerId);
+
+            return answerService.modifyLikeCount(answerId, -1);
+        } else {
+            answerLikesRepository.changeLikeVal(answerId, val);
+
+            if (val == 1)
+                return answerService.modifyLikeCount(answerId, 2);
+            else
+                return answerService.modifyLikeCount(answerId, -2);
+        }
     }
 }

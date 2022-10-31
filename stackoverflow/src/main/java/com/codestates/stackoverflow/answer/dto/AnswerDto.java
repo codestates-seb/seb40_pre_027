@@ -13,9 +13,6 @@ public class AnswerDto {
 
         @NotBlank(message = "내용을 필수로 입력해야 합니다.")
         private String answerContent;
-
-        private long questionId;
-
     }
 
     @Getter
@@ -44,8 +41,6 @@ public class AnswerDto {
         private long answerId;
 
         private String answerContent;
-
-        private long questionId;
 
         private long answerLikesCount;
 

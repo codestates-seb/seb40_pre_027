@@ -63,18 +63,6 @@ public class QuestionService {
         return questionRepository.save(findQuestion);
     }
 
-    public Question findQuestion(Long questionId, Pageable pageable) {
-        Question findQuestion = findValidQuestion(questionId);
-        List<Answer> findAnswers = answerRepository.findByQuestion(findQuestion, pageable).getContent();
-        findQuestion.setAnswers(findAnswers);
-
-        List<Comment> comments = commentRepository.findByQuestion(findQuestion, pageable).getContent();
-        findQuestion.setComments(comments);
-
-        findQuestion.setViewCount(findQuestion.getViewCount() + 1);
-        return findQuestion;
-    }
-
     @Transactional(readOnly = true)
     public Page<Question> findQuestions(int page, int size) {
         return questionRepository.findAll(PageRequest.of(page, size,
