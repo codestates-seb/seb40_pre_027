@@ -64,7 +64,8 @@ const PostComponent = styled.div`
   }
 `;
 
-function Post() {
+function Post({ post }) {
+  const { title, content } = post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
 
@@ -78,12 +79,10 @@ function Post() {
       </div>
       <div className="article">
         <LinkStyle path="/post">
-          <h3 className="title article-status">{`tring to use a loop`}</h3>
+          <h3 className="title article-status">{title}</h3>
         </LinkStyle>
 
-        <div className="article-content article-status">
-          i am using arcpy to work within geo
-        </div>
+        <div className="article-content article-status">{content}</div>
         <div className="info-side article-status">
           <div className="tags">
             {tags.map((v, i) => (
