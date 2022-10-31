@@ -22,7 +22,6 @@ public class QuestionLikes {
     @Column(nullable = false)
     private int val;
 
-
     public static QuestionLikes of(Long questionId, int val) {
         QuestionLikes questionLikes = new QuestionLikes();
         questionLikes.setQuestionId(questionId);

@@ -41,7 +41,7 @@ public class CommentService {
         LocalDateTime createdAt = findComment.getCreatedAt();
         LocalDateTime modifiedAt = LocalDateTime.now();
 
-        if(Duration.between(createdAt, modifiedAt).getSeconds() > 300) {
+        if (Duration.between(createdAt, modifiedAt).getSeconds() > 300) {
             throw new RuntimeException();
         } else {
             Optional.ofNullable(comment.getContent())
