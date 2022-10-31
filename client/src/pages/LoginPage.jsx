@@ -102,18 +102,18 @@ function LoginPage() {
   }
 
   // 로그인 요청
-  async function postLogin() {
+  async function getLogin() {
     try {
-      const response = await axios.post('user/login', {
-        email: account.email,
+      const response = await axios.post('/user/login', {
+        username: account.email,
         password: account.password,
       });
       console.log(response);
     } catch (error) {
       console.error(error);
     }
-  }
-
+  } 
+  
   // 유효성 검사
   const LoginHandler = (e) => {
     e.preventDefault();
@@ -135,9 +135,9 @@ function LoginPage() {
         passwordCorrect: true,
       });
     }
-    postLogin();
+    getLogin();
     setAccount({
-      email: "",
+      username: "",
       password: "",
     });
   };
@@ -163,7 +163,6 @@ function LoginPage() {
                 className= "inputBox" 
                 name= "email" 
                 onChange={onChangeAccount}
-                value={account.email}
                 />
                 {!isCorrect.emailCorrect && (
                   <div>올바른 이메일 형식을 입력하세요.</div>
@@ -176,7 +175,6 @@ function LoginPage() {
                 className="inputBox" 
                 name="password" 
                 onChange={onChangeAccount}
-                value={account.password}
                 />
                 {!isCorrect.passwordCorrect && (
                   <div>비밀번호는 8자 이상을 입력하세요.</div>
