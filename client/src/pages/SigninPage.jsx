@@ -63,7 +63,7 @@ const SignIn = styled.div`
 `;
 const SignMe = styled.div`
   width: 310px;
-  height: 430px;
+  height: auto;
   border: 1px solid white;
   background-color: white;
   box-shadow: 0px 6px 15px 0px #a8a8a8;
@@ -83,6 +83,11 @@ const Display = styled.div`
   & h2 {
     margin-bottom: 10px;
   }
+  & div {
+    margin-top: 10px;
+    color: red;
+    font-size: 0.7rem;
+  }
 `;
 const Email = styled.div`
   display: block;
@@ -98,6 +103,11 @@ const Email = styled.div`
   & h2 {
     margin-bottom: 10px;
   }
+  & div {
+    margin-top: 10px;
+    color: red;
+    font-size: 0.7rem;
+  }
 `;
 const Password = styled.div`
   display: block;
@@ -112,6 +122,11 @@ const Password = styled.div`
   }
   & h2 {
     margin-bottom: 10px;
+  }
+  & div {
+    margin-top: 10px;
+    color: red;
+    font-size: 0.7rem;
   }
 `;
 const Signwarn = styled.h2`
@@ -160,7 +175,7 @@ function SigninPage() {
   //axios 회원가입 요청
   async function postSingin() {
     try {
-      const response = await axios.post('/users/signup', {
+      const response = await axios.post('/user/signup', {
         name: inputV.display,
         email: inputV.email,
         password: inputV.password,
