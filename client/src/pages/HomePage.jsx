@@ -6,6 +6,7 @@ import Nav from '../components/home/Nav';
 import Footer from '../components/Footer';
 import TagsBox from '../components/home/TagsBox';
 import TopMenu from '../components/home/TopMenu';
+import Pagination from '../components/home/Pagination';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -26,10 +27,15 @@ const HomepageComponent = styled.div`
   }
 `;
 function HomePage() {
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
+  const [size, setSize] = useState(15);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const sizeHandler = (per) => setSize(per);
+
   useEffect(() => {
     axios
-      .get('/question?&page=1&size=10')
+      .get(`/question?&page=1&size=${size}`)
       .then((res) => console.log(setPosts(res.data)));
   }, []);
   return (
@@ -39,7 +45,12 @@ function HomePage() {
         <Nav />
         <article>
           <TopMenu />
-          <PostList posts={posts} />
+          {posts.length && <PostList posts={posts} sizeHandler={sizeHandler} />}
+          <Pagination
+            size={size}
+            sizeHandler={sizeHandler}
+            currentPage={currentPage}
+          />
         </article>
         <aside>
           <TagsBox />
