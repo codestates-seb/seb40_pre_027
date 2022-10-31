@@ -9,7 +9,6 @@ const PostListComponent = styled.div`
 
 function PostList({ posts, sizeHandler }) {
   const [data, setData] = useState([]);
-  const [currentPer, setCurrentPer] = useState(15);
 
   return (
     <PostListComponent>
