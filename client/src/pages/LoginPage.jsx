@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import smallLogo from '../img/smallLogo.png';
 import SocialLogin from '../components/SocialLogin';
 import LinkStyle from '../components/LinkStyle';
+import axios from 'axios';
+
 
 const LoginPageComponent = styled.div`
   height: 100vh;
@@ -80,6 +82,12 @@ const LoginBox = styled.div`
 `;
 
 function LoginPage() {  
+  useEffect(() => {
+    axios.get('user/login')
+    .then((res) =>
+    console.log(res.data));
+  }, []);
+
   // email, password 확인
   const [account, setAccount] = useState({
     email: "",
