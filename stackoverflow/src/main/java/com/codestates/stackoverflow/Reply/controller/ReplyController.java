@@ -9,6 +9,7 @@ import com.codestates.stackoverflow.Reply.service.ReplyService;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.service.AnswerService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,31 +24,23 @@ import java.util.List;
 @RequestMapping("/reply")
 public class ReplyController {
     private final ReplyService replyService;
-    private final AnswerService answerService;
     private final ReplyMapper mapper;
 
     public ReplyController(ReplyService replyService,
-                           ReplyMapper mapper,
-                           AnswerService answerService){
+                           ReplyMapper mapper){
         this.replyService = replyService;
         this.mapper = mapper;
-        this.answerService = answerService;
     }
 
     @PostMapping("/{answer-id}")
-    public ResponseEntity postReply(@PathVariable("answer-id") long answerId,
+    public ResponseEntity postReply(@PathVariable("answer-id") Long answerId,
                                     @Valid @RequestBody ReplyDto.post post){
-        post.setAnswerId(answerId);
-        Reply reply = mapper.ReplyPostDtoToReply(post);
-        Answer answer = answerService.findAnswer(answerId);
-        reply.setReplies(answer);
-        long replyWriterId = reply.getReplyWriterId();
-        Reply makeReply = replyService.createReply(reply,replyWriterId);
-        ReplyDto.response response = mapper.ReplyToReplyResponseDto(makeReply);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+        Reply reply = replyService.createReply(mapper.ReplyPostDtoToReply(post),answerId);
+        return new ResponseEntity(mapper.ReplyToReplyResponseDto(reply),HttpStatus.CREATED);
+
     }
 
-    @PatchMapping
+    @PatchMapping("/{reply-id}")
     public ResponseEntity patchReply(@PathVariable("reply-id") Long replyId,
                                      @Valid @RequestBody ReplyDto.patch patch){
         patch.setReplyId(replyId);
@@ -55,21 +48,17 @@ public class ReplyController {
         return new ResponseEntity<>(mapper.ReplyToReplyResponseDto(reply),HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity getReply(@Positive @RequestParam int page ,
+    @GetMapping("/{answer-id}")
+    public ResponseEntity getReply(@PathVariable("answer-id") Long answerId,
+                                @Positive @RequestParam int page ,
                                 @Positive @RequestParam int size){
-        Page<Reply> replyPage = replyService.getReplies(page-1,size);
-        PageInfo pageInfo = new PageInfo(page,size,(int)replyPage.getTotalElements(),replyPage.getTotalPages());
-
-        List<Reply> replies = replyPage.getContent();
-        List<ReplyDto.response> response = mapper.ReplyToReplyResponseDtos(replies);
-
-        return new ResponseEntity(new ReplyAllDto(response,pageInfo),HttpStatus.OK);
+        Page<Reply> pageReply = replyService.getReplies(answerId, PageRequest.of(page - 1, size));
+        List<Reply> replies = pageReply.getContent();
+        return new ResponseEntity<>(mapper.ReplyToReplyResponseDtos(replies), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteReply(@PathVariable("answer-id") Long answerId,
-                                      @PathVariable("reply-id") Long replyId){
+    @DeleteMapping("/{reply-id}")
+    public ResponseEntity deleteReply(@PathVariable("reply-id") Long replyId){
         replyService.deleteReply(replyId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

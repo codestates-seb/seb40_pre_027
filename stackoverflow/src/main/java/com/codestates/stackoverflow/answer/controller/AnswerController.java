@@ -6,9 +6,12 @@ import com.codestates.stackoverflow.answer.dto.AnswerDto;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.mapper.AnswerMapper;
 import com.codestates.stackoverflow.answer.service.AnswerService;
+import com.codestates.stackoverflow.answerLikes.service.AnswerLikesService;
+import com.codestates.stackoverflow.comment.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,13 +30,12 @@ public class AnswerController {
 
     private final AnswerMapper mapper;
     private final AnswerService answerService;
+    private final AnswerLikesService answerLikesService;
 
     @PostMapping("/{question-id}")
     public ResponseEntity postAnswer(@PathVariable("question-id") @Positive long questionId,
                                      @RequestBody @Valid AnswerDto.Post answerPost){
-        answerPost.setQuestionId(questionId);
-        Answer answer = answerService.createAnswer(mapper.AnswerPostDtoToAnswer(answerPost));
-        //Answer answer = mapper.AnswerPostDtoToAnswer(answerPost);
+        Answer answer = answerService.createAnswer(mapper.AnswerPostDtoToAnswer(answerPost),questionId);
         return new ResponseEntity<>(mapper.AnswerToAnswerResponseDto(answer), HttpStatus.CREATED);
     }
 
@@ -46,22 +48,33 @@ public class AnswerController {
         return new ResponseEntity<>(mapper.AnswerToAnswerResponseDto(answer),HttpStatus.OK);
     }
 
-    //페이지네이션 구현
-    @GetMapping
-    public ResponseEntity getAnswer(@Positive @RequestParam int page,
+    //10.30 question <-> answer mapping add
+    @GetMapping("/{question-id}")
+    public ResponseEntity getAnswer(@PathVariable("question-id") long questionId,
+                                    @Positive @RequestParam int page,
                                     @Positive @RequestParam int size){
-        Page<Answer> answerPage = answerService.getAnswers(page-1,size);
-        PageInfo pageInfo = new PageInfo(page,size,(int)answerPage.getTotalElements(),answerPage.getTotalPages());
+        Page<Answer> pageAnswer = answerService.getAnswers(questionId, PageRequest.of(page - 1, size));
+        List<Answer> answers = pageAnswer.getContent();
 
-        List<Answer> answers = answerPage.getContent();
-        List<AnswerDto.Response> response = mapper.AnswerToAnswerResponseDtos(answers);
-
-        return new ResponseEntity(new AnswerAllDto(response,pageInfo),HttpStatus.OK);
+        return new ResponseEntity<>(mapper.AnswerToAnswerResponseDtos(answers), HttpStatus.OK);
     }
-
     @DeleteMapping("/{answer-id}")
     public ResponseEntity deleteAnswer(@PathVariable("answer-id") Long answerId){
         answerService.deleteAnswer(answerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PostMapping("/like/{answer-id}")
+    public @ResponseBody long like(@PathVariable("answer-id")Long answerId) {
+        return answerLikesService.saveLike(answerId, 1);
+    }
+
+    @PostMapping("/dislike")
+    public @ResponseBody long disLike(Long answerId) {
+        return answerLikesService.saveLike(answerId, -1);
+    }
+
+    @PatchMapping("/bestAnswer")
+    public void selectBest(long questionId,long answerId){
+        answerService.bestAnswer(questionId, answerId);
     }
 }

@@ -1,11 +1,9 @@
 package com.codestates.stackoverflow.answerLikes.entity;
 
-import com.codestates.stackoverflow.answer.entity.Answer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -17,33 +15,22 @@ import javax.persistence.*;
 public class AnswerLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answerLikesId;
+    private Long likeId;
 
+    @Column(updatable = false, nullable = true)
+    private Long memberId;
 
-    //answerLikesCount 에 접근하기 위해 OneToOne 으로 매핑해줍니다.
-    @OneToOne
-    @JoinColumn(name = "ANSWER_ID")
-    private Answer answer;
+    @Column(updatable = false, nullable = false)
+    private Long answerId;
 
     @Column(nullable = false)
-    private Long whoAnswerLikeId;
+    private int val;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    @ColumnDefault("3")
-    private LikesStatus LikeStatus;
 
-    public enum LikesStatus{
-        LIKE_CLICK("좋아요"),
-        HATE_CLICK("싫어요"),
-        NO_CLICK("안눌렀어요");
-
-        @Getter
-        private String status;
-
-        LikesStatus(String status){
-            this.status = status;
-        }
-
+    public static AnswerLikes of(Long answerId, int val) {
+        AnswerLikes answerLikes = new AnswerLikes();
+        answerLikes.setAnswerId(answerId);
+        answerLikes.setVal(val);
+        return answerLikes;
     }
 }

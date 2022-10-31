@@ -21,29 +21,15 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long replyId;
 
-    @Column
-    private Long replyWriterId;
-
     @Column(length = 300)
     private String replyContent;
-
-    @Column(name = "answer_No")
-    private long answerId;
 
     @Column
     @CreatedDate
     private LocalDateTime replyCreatedAt;
 
-    @Column
-    @CreatedDate
-    private LocalDateTime replyModifiedAt;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
 
-    //연관관계 매핑 필요 !!!
-    @ManyToOne
-    @JoinColumn(name="answer_id")
-    private Answer Replies;
-
-//    @ManyToOne
-//    @JoinColumn(name="user_id")
-//    private User ReplyWriter;
 }

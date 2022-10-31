@@ -28,10 +28,7 @@ public class Answer {
     private String answerContent;
 
     @Column
-    private Long answerLikesCount;
-
-    @Column
-    private long questionId;
+    private Long answerLikesCount = 0L;
 
     @Column
     @CreatedDate
@@ -41,13 +38,18 @@ public class Answer {
     @LastModifiedDate
     private LocalDateTime answerModifiedAt;
 
+    @Column
+    private long bestAnswer;
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "Replies")
-    private List<Reply> answerReplyComments = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "answer")
+    private List<Reply> replies = new ArrayList<>();
 
-
+    public void setReplies(Reply reply){
+        this.replies.add(reply);
+        reply.setAnswer(this);
+    }
 
 }
