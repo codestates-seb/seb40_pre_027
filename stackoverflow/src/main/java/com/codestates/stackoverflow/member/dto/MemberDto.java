@@ -1,6 +1,8 @@
 package com.codestates.stackoverflow.member.dto;
 
+import com.codestates.stackoverflow.answer.dto.AnswerDto;
 import com.codestates.stackoverflow.answer.entity.Answer;
+import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
 import lombok.*;
 
@@ -33,6 +35,8 @@ public class MemberDto {
         private long memberId;
         private String name;
         private String email;
+        private LocalDateTime createdDate;
+        private LocalDateTime loginDate;
     }
 
     @Getter
@@ -42,6 +46,8 @@ public class MemberDto {
     public static class Profile {
         // 이미지 url 추가 예정
         private String name;
+        private LocalDateTime createdDate;
+        private LocalDateTime loginDate;
         private String location;
         private String title;
         private String introduction;
@@ -52,9 +58,12 @@ public class MemberDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Activity {
-
-        private List<Answer> answer;
-        private List<Question> question;
+        private String name;
+        private LocalDateTime createdDate;
+        private LocalDateTime loginDate;
+        private List<QuestionDto.Response> questions;
+        private List<AnswerDto.Response> answers;
 
     }
+
 }
