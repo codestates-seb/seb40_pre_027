@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -31,10 +32,11 @@ public class AnswerService {
     private final MemberRepository memberRepository;
 
     public Answer createAnswer(Answer answer, long questionId){
-        Member member = memberServiceImpl.findAuthenticatedMember();
-        member.setAnswers(answer);
         Question question = questionService.findValidQuestion(questionId);
         question.setAnswers(answer);
+        Member member = memberServiceImpl.findAuthenticatedMember();
+        member.setAnswers(answer);
+
         memberRepository.save(member);
         questionRepository.save(question);
         return answerRepository.save(answer);

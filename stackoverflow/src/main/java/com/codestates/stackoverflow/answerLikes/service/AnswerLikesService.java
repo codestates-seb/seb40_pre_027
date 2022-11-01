@@ -5,7 +5,6 @@ import com.codestates.stackoverflow.answer.service.AnswerService;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
 import com.codestates.stackoverflow.answerLikes.repository.AnswerLikesRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

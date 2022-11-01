@@ -4,7 +4,6 @@ import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
-import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -47,6 +45,7 @@ public class Member extends Auditable {
     // 질문 영역
 
     @OneToMany(mappedBy = "member")
+    @ToString.Exclude
     private List<Question> questions;
     public void setQuestions(Question question) {
         this.questions.add(question);
@@ -55,7 +54,15 @@ public class Member extends Auditable {
 
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
+    @ToString.Exclude
     private List<Answer> answers = new ArrayList<>();
+
+    public void setQuestions(Question question) {
+        if (question.getMember() != this) {
+            question.setMember(this);
+        }
+        questions.add(question);
+    }
 
     public void setAnswers(Answer answer) {
         this.answers.add(answer);
@@ -63,6 +70,7 @@ public class Member extends Auditable {
     }
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "replyWriter")
+    @ToString.Exclude
     private List<Reply> replies = new ArrayList<>();
 
     public void setReplies(Reply reply) {
@@ -103,6 +111,4 @@ public class Member extends Auditable {
         ROLE_USER,
         ROLE_ADMIN
     }
-
-
 }

@@ -16,6 +16,7 @@ import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.tag.entity.Tag;
 import com.codestates.stackoverflow.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,30 +25,36 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Transactional
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionTagRepository questionTagRepository;
     private final AnswerRepository answerRepository;
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
-    private final MemberServiceImpl memberServiceImpl;
     private final TagService tagService;
+    private final MemberServiceImpl memberServiceImpl;
+    private final MemberRepository memberRepository;
 
     public Question createQuestion(Question question) {
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
+        log.info("[createQuestion] 매핑 전 태그 : " + Arrays.toString(question.getTags()));
         mapAndSaveTags(question);
-        //question과 tag를 저장한다.
-        Member member = memberServiceImpl.findAuthenticatedMember();
-        member.setQuestions(question);
-        question.setMember(member);
-        memberRepository.save(member);
 
+        Member authMember = memberServiceImpl.findAuthenticatedMember();
+
+        authMember.setQuestions(question); // 수정
+        Member writer = memberRepository.save(authMember); // a
+        question.setMember(writer);
+
+        //question과 tag를 저장한다.
+        log.info("[createQuestion] 매핑 후 태그 : " + question.getQuestionTags());
         return questionRepository.save(question);
     }
 
@@ -73,27 +80,52 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public Page<Question> findQuestions(int page, int size) {
-        return questionRepository.findAll(PageRequest.of(page, size,
+        return questionRepository.findAll(PageRequest.of(page, 15,
                 Sort.by("questionId").descending()));
     }
+
+//    public Page<Question> findQuestionsNewest(int i, int size) {
+//        // question의 구성요소의 modifiedAt 중 가장 빠른 것을 기준으로 정렬
+//
+//    }
 
     /**
      * createdAt으로 조회하는 기능 필요한지 확인 후 삭제 가능
      */
     @Transactional(readOnly = true)
     public Page<Question> findQuestionsActive(int page, int size) {
-        return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
+        log.info("[findQuestionsActive] 작동");
+        return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, 15));
     }
+
+//    public Page<Question> findQuestionsBountied(int i, int size) {
+//
+//    }
+
+//    public Page<Question> findQuestionsUnanswered(int page, int size) {
+//        log.info("[findQuestionsUnanswered] 작동");
+//        return questionRepository.findAllWithNoAnswerOrderByLikes();
+//    }
+
+//    public Page<Question> findQuestionsFrequent(int page, int size) {
+//
+//    }
+//
+//    public Page<Question> findQuestionsScore(int page, int size) {
+//        log.info("[findQuestionsScore] 작동");
+//        return questionRepository.findByOrderByQuestionLikes();
+//    }
 
     /**
      * tag가 null이거나 빈 경우 필요한지 추후 검토 후 수정
      */
     @Transactional(readOnly = true)
-    public Page<Question> findQuestionsByTag(String tagName, int page, int size) {
+    public List<Question> findQuestionsByTag(String tagName, int page, int size) {
         //tag의 tagName이 동일한 경우 페이지
-        System.out.println("[findQuestionByTag] 작동" + tagName);
-        return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
-                Sort.by("questionId").descending()));
+        log.info("[findQuestionsByTag 작동]: Tag = " + tagName);
+
+        return questionRepository.findByTagName(tagName, PageRequest.of(page, 36,
+                Sort.by("questionId").descending())).getContent();
     }
 
     public void deleteQuestion(long questionId) {
