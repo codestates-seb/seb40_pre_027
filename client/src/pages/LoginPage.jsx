@@ -6,6 +6,9 @@ import SocialLogin from '../components/SocialLogin';
 import LinkStyle from '../components/LinkStyle';
 import axios from 'axios';
 
+// 로그인 후 리디렉션을 위한 useNavigate훅 import
+import { useNavigate } from 'react-router-dom';
+
 //redux 관련 import
 import { useSelector, useDispatch } from 'react-redux';
 import { loginActions } from '../store/reduxIndex';
@@ -84,9 +87,11 @@ const LoginBox = styled.div`
 `;
 
 function LoginPage() {
-  //dispatch 변수 할당, isLogin 상태 할당
+  //useDispatch훅 dispatch 변수에 할당, useSelector를 통한 isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.isLogin);
+  //useNavigate훅 navigate 변수에 할당
+  const navigate = useNavigate();
 
   const [isCorrect, setIsCorrect] = useState({
     emailCorrect: true,
@@ -106,23 +111,28 @@ function LoginPage() {
     });
   };
   console.log(account, isLogin);
+
   // 로그인 요청
   async function getLogin() {
     try {
-      const response = await axios
+      await axios
         .post('/user/login', {
-          username: account.email,
+          email: account.email,
           password: account.password,
         })
-        .then(
-          //dispatch로 로그인 상태 redux에 저장
-          dispatch(loginActions.login())
-        );
-      console.log(response);
+        .then((data) => {
+          //dispatch로 로그인 상태 redux에 저장, 로컬에 토큰 저장
+          dispatch(loginActions.login());
+          localStorage.clear();
+          localStorage.setItem('accessToken', data.headers.access);
+          localStorage.setItem('refreshToken', data.headers.refresh);
+          navigate('/');
+          console.log(data);
+        });
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   // 유효성 검사
   const LoginHandler = (e) => {
