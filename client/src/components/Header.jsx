@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Button from './Button';
 import { GoSearch } from 'react-icons/go';
 import Logo from '../img/Logo.png';
 import { Link } from 'react-router-dom';
 import UserCard from './UserCard';
+import axios from 'axios';
 
 //redux 관련 import
 import { useSelector, useDispatch } from 'react-redux';
@@ -87,11 +88,14 @@ function Header() {
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.isLogin);
+  console.log(isLogin);
 
   //logoutHandler
   const logoutHandler = () => {
     //dispatch로 로그아웃 상태 redux에 저장
     dispatch(loginActions.logout());
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
   };
 
   const searchHandler = () => {};
