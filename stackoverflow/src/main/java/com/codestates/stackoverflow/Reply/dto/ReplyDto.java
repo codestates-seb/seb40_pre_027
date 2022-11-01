@@ -29,9 +29,9 @@ public class ReplyDto {
         @NotBlank(message = "내용을 필수로 입력해야 합니다.")
         private String replyContent;
 
-//        public void setAnswerId(Long answerId){
-//            this.replyId = replyId;
-//        }
+        public void setReplyId(Long replyId){
+            this.replyId = replyId;
+        }
 
     }
 

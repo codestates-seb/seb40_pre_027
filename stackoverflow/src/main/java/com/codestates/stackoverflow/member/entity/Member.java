@@ -47,7 +47,12 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     @ToString.Exclude
     private List<Question> questions;
-    
+    public void setQuestions(Question question) {
+        this.questions.add(question);
+        question.setMember(this);
+    }
+
+
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     @ToString.Exclude
     private List<Answer> answers = new ArrayList<>();
