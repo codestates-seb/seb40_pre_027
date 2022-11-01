@@ -44,13 +44,20 @@ public class Member extends Auditable {
     private String introduction;
 
     // 질문 영역
-//    @OneToMany(mappedBy = "member")
-//    private List<Question> questions;
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions;
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     private List<Answer> answers = new ArrayList<>();
     public void setAnswers(Answer answer) {
         this.answers.add(answer);
         answer.setAnswerWriter(this);
+    }
+
+    public void setQuestions(Question question) {
+        if (question.getMember() != this){
+            question.setMember(this);
+        }
+        questions.add(question);
     }
 
 

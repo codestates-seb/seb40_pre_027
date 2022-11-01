@@ -87,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 이메일 중복 유무 체크
-//    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     private void verifyExistsEmail(String email) {
 
         boolean isExistsEmail = memberRepository.existsByEmail(email);
