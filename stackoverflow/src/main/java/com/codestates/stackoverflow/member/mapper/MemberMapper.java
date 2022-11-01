@@ -8,15 +8,15 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "SPRING", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMapper {
 
-    Member memberLoginPostDtoToMember(MemberDto.LoginPost memberLoginPostDto);
+    Member requestSignupToMember(MemberDto.RequestSignup request);
 
-    Member memberRegisterPostDtoToMember(MemberDto.RegisterPost memberRegisterPostDto);
+    MemberDto.ResponseSignup memberToResponseSignup(Member member);
 
-    Member memberFetchRequestDtoToMember(MemberDto.FetchRequest memberFetchDtoRequest);
+    Member profileToMember(MemberDto.Profile request);
 
-    MemberDto.FetchResponse memberToMemberFetchResponseDto(Member member);
+    MemberDto.Profile memberToProfile(Member member);
 
-    MemberDto.Response memberToMemberResponseDto(Member member);
+
 
 
 }

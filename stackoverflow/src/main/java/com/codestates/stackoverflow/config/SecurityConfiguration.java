@@ -98,10 +98,7 @@ public class SecurityConfiguration {
         config.addExposedHeader("Authorization");
         config.addAllowedHeader("*");// 모든 헤더에 응답 허용
         config.addAllowedMethod("*");// 모든 http 메소드 응답 허용
-
         source.registerCorsConfiguration("/**",config);
-
         return new CorsFilter(source);
-
     }
 }

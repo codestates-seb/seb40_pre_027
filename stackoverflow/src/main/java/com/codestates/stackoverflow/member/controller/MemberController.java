@@ -34,40 +34,41 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<MemberDto.Response> signup (
-            @RequestBody @Valid MemberDto.RegisterPost requestBody) {
-        System.out.println("[Member controller] Post 동작");
-        Member member = memberMapper.memberRegisterPostDtoToMember(requestBody);
+    public ResponseEntity signup (
+            @RequestBody @Valid MemberDto.RequestSignup request) {
+        log.info("[회원가입 시작] : {}", request.getEmail());
+        Member member = memberMapper.requestSignupToMember(request);
 
         Member savedMember = memberService.createMember(member);
         log.info(savedMember.toString());
 
-        return new ResponseEntity<MemberDto.Response>(
-                memberMapper.memberToMemberResponseDto(savedMember),
-                HttpStatus.CREATED);
+        return new ResponseEntity(
+                memberMapper.memberToResponseSignup(savedMember), HttpStatus.CREATED);
     }
 
-    // 로그인 된 회원 정보 불러오기
-    @GetMapping
-    public ResponseEntity getMember() {
-        Member member = memberService.findLoginMember();
+    /*
+    스택오버플로우 profile 페이지에서 profile과 edit에서 보여주는 정보가 동일하게 진행됨에 따라
+    GetMapping의 value를 다중으로 처리하였습니다.
+     */
+    // 프로필 : edit - profile 정보 불러오기
+    @GetMapping(value = {"/profile/edit", "/profile"})
+    public ResponseEntity getMemberProfile() {
+        Member member = memberService.findMemberProfile();
 
-        return ResponseEntity.ok(memberMapper.memberToMemberResponseDto(member));
+        return ResponseEntity.ok(memberMapper.memberToProfile(member));
     }
-    // 회원 정보 수정
-    @PutMapping
-    public ResponseEntity fetchMember(@RequestBody MemberDto.FetchRequest request) {
-        Member member = memberMapper.memberFetchRequestDtoToMember(request);
 
-        Member updatedMember = memberService.updateMember(member);
-
-        MemberDto.FetchResponse response = memberMapper.memberToMemberFetchResponseDto(updatedMember);
-
-        return ResponseEntity.ok(response);
+    // 프로필 edit - profile 정보 수정하기
+    @PutMapping("/profile/edit")
+    public ResponseEntity putMemberProfile(@RequestBody MemberDto.Profile request) {
+        Member member = memberMapper.profileToMember(request);
+        Member updatedMember = memberService.updateMemberProfile(member);
+        return ResponseEntity.ok(memberMapper.memberToProfile(updatedMember));
     }
+
 
     // 회원 정보 삭제
-    @DeleteMapping
+    @DeleteMapping("profile")
     public ResponseEntity deleteMember() {
         // 비밀번호를 전달받아야 하나..?
 
@@ -75,7 +76,4 @@ public class MemberController {
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-
-    // 회원이 작성한 질문글 불러오기
-
 }
