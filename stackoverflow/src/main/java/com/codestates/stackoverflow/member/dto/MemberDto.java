@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.member.dto;
 
+import com.codestates.stackoverflow.Reply.dto.ReplyDto;
 import com.codestates.stackoverflow.answer.dto.AnswerDto;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
@@ -63,7 +64,7 @@ public class MemberDto {
         private LocalDateTime loginDate;
         private List<QuestionDto.Response> questions;
         private List<AnswerDto.Response> answers;
-
+        private List<ReplyDto.response> replies;
     }
 
 }
