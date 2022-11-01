@@ -43,8 +43,16 @@ function PostPage() {
     axios.get(`/question/${id}`).then((res) => setPost(res.data));
   }, []);
   console.log(post);
-  const { questionId, title, content, viewCount, createdAt, modifiedAt, tags } =
-    post;
+  const {
+    questionId,
+    title,
+    content,
+    viewCount,
+    createdAt,
+    modifiedAt,
+    tags,
+    answers,
+  } = post;
   return (
     <PostPageComponent>
       <Header />
@@ -69,8 +77,15 @@ function PostPage() {
                   createdAt={createdAt}
                   modifiedAt={modifiedAt}
                 />
-                <AnswerSorted />
-                <PostBody answer={true} />
+                <AnswerSorted answers={answers.length} />
+                {answers.length ? (
+                  answers.map((answer) => (
+                    <PostBody answer={answer} key={answer.answerId} />
+                  ))
+                ) : (
+                  <></>
+                )}
+
                 <AnswerPost />
               </div>
               <aside></aside>

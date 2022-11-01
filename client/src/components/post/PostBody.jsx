@@ -126,7 +126,12 @@ function PostBody(props) {
   const shareHandler = () => setShareClicked(!shareClicked);
   const contentRef = useRef();
 
-  console.log(shareClicked);
+  const createdAt = new Date(
+    props.answer ? props.answer.answerCreatedAt : props.createdAt
+  );
+  const modifiedAt = new Date(
+    props.answer ? props.answer.answerModifiedAt : props.modifiedAt
+  );
 
   const userimg =
     'https://www.gravatar.com/avatar/088029d211d686a016bcfdc326523d62?s=256&d=identicon&r=PG';
@@ -138,7 +143,9 @@ function PostBody(props) {
         <section
           className="main-content"
           ref={contentRef}
-          dangerouslySetInnerHTML={{ __html: props.content }}
+          dangerouslySetInnerHTML={{
+            __html: props.answer ? props.answer.answerContent : props.content,
+          }}
         >
           {/* {contentRef.innerHTML(props.content)} */}
         </section>
@@ -178,11 +185,12 @@ function PostBody(props) {
             </div>
             <div className="edited-date-wrapper">
               <div className="edited-date" title="Show all edits to this post">
-                edited {props.modifiedAt}
+                edited
+                {createdAt.toLocaleString()}
               </div>
             </div>
             <div className="post-owner-wrapper">
-              <div className="created-date">{props.createdAt}</div>
+              <div className="created-date">{createdAt.toLocaleString()}</div>
               <div className="user-info">
                 <div className="user-avatar">
                   <a href="/user">

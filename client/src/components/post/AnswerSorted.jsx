@@ -39,7 +39,7 @@ const AnswerSortedComponent = styled.div`
   }
 `;
 
-function AnswerSorted() {
+function AnswerSorted({ answers }) {
   const descArr = [
     'Highest score(default)',
     'Trending (recent votes count more)',
@@ -56,7 +56,7 @@ function AnswerSorted() {
 
   return (
     <AnswerSortedComponent>
-      <div className="answers-length">{`1 Answer`}</div>
+      <div className="answers-length">{`${answers} Answer`}</div>
       <div className="answers-sorted">
         <div>
           <span>Sorted by:</span>

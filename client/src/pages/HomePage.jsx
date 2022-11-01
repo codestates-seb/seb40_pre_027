@@ -31,13 +31,15 @@ function HomePage() {
   const [size, setSize] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [watchedTags, setWatchedTags] = useState([]);
+  const [ignoredTags, setIgnoredTags] = useState([]);
+
   const sizeHandler = (per) => setSize(per);
   const currentPageHandler = (p) => setCurrentPage(p);
 
   useEffect(() => {
     axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
       setPosts(res.data);
-      console.log(res.data);
     });
   }, [size, currentPage]);
   return (
@@ -47,7 +49,15 @@ function HomePage() {
         <Nav />
         <article>
           <TopMenu />
-          {posts.length ? <PostList posts={posts} /> : <div>...</div>}
+          {posts.length ? (
+            <PostList
+              posts={posts}
+              watchedTags={watchedTags}
+              ignoredTags={ignoredTags}
+            />
+          ) : (
+            <div>...</div>
+          )}
           <Pagination
             size={size}
             sizeHandler={sizeHandler}
@@ -56,7 +66,16 @@ function HomePage() {
           />
         </article>
         <aside>
-          <TagsBox />
+          <TagsBox
+            setTags={setWatchedTags}
+            tags={watchedTags}
+            name={'Watched Tags'}
+          />
+          <TagsBox
+            setTags={setIgnoredTags}
+            tags={ignoredTags}
+            name={'Ignored Tags'}
+          />
         </aside>
       </section>
       <Footer />

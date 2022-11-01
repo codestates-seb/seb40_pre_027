@@ -76,7 +76,7 @@ function TopMenu() {
   return (
     <TopMenuComponent>
       <TopMenuBoxComponent>
-        <h1>{pathname === '/' ? 'Top Questions' : 'All Questions'}</h1>
+        <h1>{'All Questions'}</h1>
         <Link to="/write">
           <Button>Ask Question</Button>
         </Link>

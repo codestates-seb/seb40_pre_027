@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
 import Button from '../Button';
 import { MdClose } from 'react-icons/md';
 import LinkStyle from '../LinkStyle';
 import SocialLogin from '../SocialLogin';
-
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 const AnswerPostComponent = styled.div`
   padding-left: 2rem;
   h2 {
@@ -65,7 +67,11 @@ const AnswerPostComponent = styled.div`
 
 function AnswerPost({ isLogined }) {
   const [guide, setGuide] = useState(false);
+  const [answer, setAnswer] = useState('');
   const [guideview, setGuideview] = useState(false);
+  const isLogin = useSelector((state) => state.isLogin);
+  const editorRef = useRef();
+  const { id } = useParams();
   const guideHandler = () => {
     if (!guide && !guideview) {
       setGuide(true);
@@ -73,6 +79,14 @@ function AnswerPost({ isLogined }) {
     }
   };
   const guideCloseHandler = () => setGuideview(false);
+  const onChange = () => {
+    //toast ui editor
+    setAnswer(editorRef.current.getInstance().getHTML());
+  };
+  const answerSubmitHandler = () => {
+    if (isLogin) axios.post(`/answer/${id}`, { answerContent: answer });
+    else alert('you need login');
+  };
   return (
     <AnswerPostComponent>
       <h2>Your Answer</h2>
@@ -83,6 +97,8 @@ function AnswerPost({ isLogined }) {
           height="300px"
           initialEditType="markdown"
           useCommandShortcut={true}
+          ref={editorRef}
+          onChange={onChange}
         />
       </div>
 
@@ -114,19 +130,23 @@ function AnswerPost({ isLogined }) {
         </div>
       )}
 
-      <div className="not-logined">
-        <div className="not-logined-status">
-          <span>Sign up or</span>
-          <LinkStyle path="/login">log in</LinkStyle>
+      {isLogin ? (
+        <></>
+      ) : (
+        <div className="not-logined">
+          <div className="not-logined-status">
+            <span>Sign up or</span>
+            <LinkStyle path="/login">log in</LinkStyle>
+          </div>
+          <div className="social">
+            <SocialLogin social="google">Sign up using Google</SocialLogin>
+            <SocialLogin social="stack">
+              Sign up using Email and Password
+            </SocialLogin>
+          </div>
         </div>
-        <div className="social">
-          <SocialLogin social="google">Sign up using Google</SocialLogin>
-          <SocialLogin social="stack">
-            Sign up using Email and Password
-          </SocialLogin>
-        </div>
-      </div>
-      <Button>Post Your Answer</Button>
+      )}
+      <Button onClick={answerSubmitHandler}>Post Your Answer</Button>
     </AnswerPostComponent>
   );
 }

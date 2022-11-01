@@ -1,1 +1,9 @@
-export default ['javascript', 'python', 'json'];
+export default [
+  'javascript',
+  'python',
+  'json',
+  'react',
+  'node.js',
+  'java',
+  'spring',
+];
