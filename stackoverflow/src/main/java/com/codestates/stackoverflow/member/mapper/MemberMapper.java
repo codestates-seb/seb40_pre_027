@@ -15,4 +15,11 @@ public interface MemberMapper {
     Member profileToMember(MemberDto.Profile request);
 
     MemberDto.Profile memberToProfile(Member member);
+
+
+    MemberDto.Activity memberToActivity(Member member);
+
+
+
+
 }

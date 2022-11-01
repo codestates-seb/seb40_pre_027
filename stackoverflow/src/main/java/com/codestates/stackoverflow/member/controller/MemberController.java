@@ -62,6 +62,12 @@ public class MemberController {
         return ResponseEntity.ok(memberMapper.memberToProfile(updatedMember));
     }
 
+    @GetMapping("/profile/activity")
+    public ResponseEntity getMemberActivity() {
+        Member findMember = memberService.findAuthenticatedMember();
+
+        return ResponseEntity.ok(memberMapper.memberToActivity(findMember));
+    }
 
     // 회원 정보 삭제
     @DeleteMapping("profile")

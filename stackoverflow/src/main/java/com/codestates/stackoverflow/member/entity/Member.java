@@ -45,9 +45,6 @@ public class Member extends Auditable {
     // 질문 영역
 //    @OneToMany(mappedBy = "member")
 //    private List<Question> questions;
-//
-//    @OneToMany(mappedBy = "member")
-
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     private List<Answer> answers = new ArrayList<>();
     public void setAnswers(Answer answer) {
