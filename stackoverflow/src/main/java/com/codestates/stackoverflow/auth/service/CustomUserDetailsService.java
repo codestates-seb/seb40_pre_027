@@ -37,7 +37,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member findMember = optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        
+
+        findMember.setLoginDate(LocalDateTime.now());
+        memberRepository.save(findMember);
         Collection<? extends GrantedAuthority> authorities =
                 authorityUtils.createAuthorities(findMember.getEmail());
         log.info("[loadUserByUsername] " + findMember.toString());
