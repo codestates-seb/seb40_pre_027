@@ -7,6 +7,10 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SigninPage = lazy(() => import('./pages/SigninPage'));
 const WritePage = lazy(() => import('./pages/WritePage'));
 const PostPage = lazy(() => import('./pages/PostPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const Profilewrite = lazy(() =>
+  import('../src/components/profile/Profilewrite')
+);
 
 function App() {
   return (
@@ -49,6 +53,16 @@ function App() {
         <Route
           path="/post/:id"
           element={<Suspense fallback={<>...</>}>{<PostPage />}</Suspense>}
+        ></Route>
+
+        <Route
+          path="/profile"
+          element={<Suspense fallback={<>...</>}>{<ProfilePage />}</Suspense>}
+        ></Route>
+
+        <Route
+          path="/Profile/write"
+          element={<Suspense fallback={<>...</>}>{<Profilewrite />}</Suspense>}
         ></Route>
       </Routes>
     </div>
