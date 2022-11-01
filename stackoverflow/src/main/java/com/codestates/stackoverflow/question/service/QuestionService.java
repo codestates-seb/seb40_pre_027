@@ -1,14 +1,14 @@
 package com.codestates.stackoverflow.question.service;
 
-import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
-import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.comment.repository.CommentRepository;
 import com.codestates.stackoverflow.exception.BusinessLogicException;
 import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
+import com.codestates.stackoverflow.question.entity.ActiveInfo;
+import com.codestates.stackoverflow.question.entity.ActiveType;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +34,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final QuestionTagRepository questionTagRepository;
-    private final AnswerRepository answerRepository;
-    private final CommentRepository commentRepository;
+//    private final QuestionTagRepository questionTagRepository;
+//    private final AnswerRepository answerRepository;
+//    private final CommentRepository commentRepository;
     private final TagService tagService;
     private final MemberServiceImpl memberServiceImpl;
     private final MemberRepository memberRepository;
@@ -48,13 +47,13 @@ public class QuestionService {
         mapAndSaveTags(question);
 
         Member authMember = memberServiceImpl.findAuthenticatedMember();
-
         authMember.setQuestions(question); // 수정
         Member writer = memberRepository.save(authMember); // a
-        question.setMember(writer);
+        question.setMember(writer);// cascade 삭제해도 무방
 
-        //question과 tag를 저장한다.
-        log.info("[createQuestion] 매핑 후 태그 : " + question.getQuestionTags());
+        ActiveInfo activeInfo = new ActiveInfo(writer.getMemberId(), question.getCreatedAt(), ActiveType.ASKED);
+        question.setActiveInfo(activeInfo);
+
         return questionRepository.save(question);
     }
 
@@ -68,6 +67,10 @@ public class QuestionService {
         mapAndSaveTags(question);
         findQuestion.setModifiedAt(LocalDateTime.now());
 
+        Member writer = findQuestion.getMember();
+        ActiveInfo activeInfo = new ActiveInfo(writer.getMemberId(), findQuestion.getModifiedAt(), ActiveType.MODIFIED);
+        question.setActiveInfo(activeInfo);
+
         return questionRepository.save(findQuestion);
     }
 
@@ -79,53 +82,63 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> findQuestions(int page, int size) {
-        return questionRepository.findAll(PageRequest.of(page, 15,
-                Sort.by("questionId").descending()));
+    public Page<Question> searchQuestions(String keyword, Integer page, Integer size) {
+        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     }
 
-//    public Page<Question> findQuestionsNewest(int i, int size) {
-//        // question의 구성요소의 modifiedAt 중 가장 빠른 것을 기준으로 정렬
-//
-//    }
-
-    /**
-     * createdAt으로 조회하는 기능 필요한지 확인 후 삭제 가능
-     */
     @Transactional(readOnly = true)
-    public Page<Question> findQuestionsActive(int page, int size) {
-        log.info("[findQuestionsActive] 작동");
-        return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, 15));
+    public Page<Question> findQuestions(String tab, int page, int size) {
+        if (tab == null) tab = "Newest";
+
+        switch (tab) {
+            case "Newest":
+                return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
+                
+            case "Active":
+                Sort sort = Sort.by("activeInfo.lastActiveAt").descending();
+
+                return questionRepository.findAll(PageRequest.of(page, size, sort));
+
+            case "Bountied":
+                return null;
+            case "Unanswered":
+                return null;
+            case "Frequent":
+                return null;
+            case "Score":
+                return null;
+        }
+        return null;
     }
-
-//    public Page<Question> findQuestionsBountied(int i, int size) {
-//
-//    }
-
-//    public Page<Question> findQuestionsUnanswered(int page, int size) {
-//        log.info("[findQuestionsUnanswered] 작동");
-//        return questionRepository.findAllWithNoAnswerOrderByLikes();
-//    }
-
-//    public Page<Question> findQuestionsFrequent(int page, int size) {
-//
-//    }
-//
-//    public Page<Question> findQuestionsScore(int page, int size) {
-//        log.info("[findQuestionsScore] 작동");
-//        return questionRepository.findByOrderByQuestionLikes();
-//    }
 
     /**
      * tag가 null이거나 빈 경우 필요한지 추후 검토 후 수정
      */
     @Transactional(readOnly = true)
-    public List<Question> findQuestionsByTag(String tagName, int page, int size) {
+    public List<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
         //tag의 tagName이 동일한 경우 페이지
-        log.info("[findQuestionsByTag 작동]: Tag = " + tagName);
+        log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
+        if (tab == null) tab = "Newest";
+        if (page == null) page = 0;
+        if(size == null) size = 30;
 
-        return questionRepository.findByTagName(tagName, PageRequest.of(page, 36,
-                Sort.by("questionId").descending())).getContent();
+        switch (tab) {
+            case "Newest":
+                return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
+                        Sort.by("questionId").descending())).getContent();
+            case "Active":
+                return null;
+            case "Bountied":
+                return null;
+            case "Unanswered":
+                return null;
+            case "Frequent":
+                return null;
+            case "Score":
+                return null;
+        }
+        return null;
     }
 
     public void deleteQuestion(long questionId) {
