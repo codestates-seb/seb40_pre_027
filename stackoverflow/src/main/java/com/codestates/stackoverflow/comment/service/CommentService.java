@@ -2,6 +2,8 @@ package com.codestates.stackoverflow.comment.service;
 
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.comment.repository.CommentRepository;
+import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.service.QuestionService;
@@ -22,8 +24,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
     private final QuestionService questionService;
+    private final MemberServiceImpl memberServiceImpl;
 
     public Comment createComment(Long questionId, Comment comment) {
+        Member member = memberServiceImpl.findAuthenticatedMember();
+        //member.set~~~메서드로 넣ㄱ시
         Question question = questionService.findValidQuestion(questionId);
         question.setComments(comment);
         questionRepository.save(question);

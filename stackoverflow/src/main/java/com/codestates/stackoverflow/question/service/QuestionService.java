@@ -157,5 +157,4 @@ public class QuestionService {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         return optionalQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     }
-
 }

@@ -33,9 +33,13 @@ public class Question {
     @Column(nullable = false)
     private int Bounty = 0;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @JsonManagedReference

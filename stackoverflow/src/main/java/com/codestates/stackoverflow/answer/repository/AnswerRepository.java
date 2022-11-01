@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.answer.repository;
 
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
+import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.question.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
