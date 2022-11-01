@@ -1,13 +1,9 @@
 package com.codestates.stackoverflow.answer.controller;
 
-import com.codestates.stackoverflow.PageInfo;
-import com.codestates.stackoverflow.answer.dto.AnswerAllDto;
 import com.codestates.stackoverflow.answer.dto.AnswerDto;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.mapper.AnswerMapper;
-import com.codestates.stackoverflow.answer.service.AnswerService;
 import com.codestates.stackoverflow.answerLikes.service.AnswerLikesService;
-import com.codestates.stackoverflow.comment.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

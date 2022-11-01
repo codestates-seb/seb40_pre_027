@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.member.entity;
 
+import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.comment.entity.Comment;
@@ -46,6 +47,14 @@ public class Member extends Auditable {
 //    private List<Question> questions;
 //
 //    @OneToMany(mappedBy = "member")
+
+    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
+    private List<Answer> answers = new ArrayList<>();
+    public void setAnswers(Answer answer) {
+        this.answers.add(answer);
+        answer.setAnswerWriter(this);
+    }
+
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)

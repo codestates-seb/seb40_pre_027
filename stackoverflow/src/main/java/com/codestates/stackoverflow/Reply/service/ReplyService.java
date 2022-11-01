@@ -3,7 +3,8 @@ package com.codestates.stackoverflow.Reply.service;
 import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.Reply.repository.ReplyRepository;
 import com.codestates.stackoverflow.answer.entity.Answer;
-import com.codestates.stackoverflow.answer.service.AnswerService;
+import com.codestates.stackoverflow.answer.repository.AnswerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,19 +12,16 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final AnswerService answerService;
-
-    public ReplyService(ReplyRepository replyRepository,AnswerService answerService){
-        this.replyRepository = replyRepository;
-        this.answerService = answerService;
-    }
+    private final AnswerRepository answerRepository;
 
     public Reply createReply(Reply reply,long answerId) {
         Answer answer = answerService.findVerifiedAnswer(answerId);
         answer.setReplies(reply);
-        answerService.updateAnswer(answer);
+        answerRepository.save(answer);
         return replyRepository.save(reply);
     }
 
@@ -31,7 +29,7 @@ public class ReplyService {
         Reply findReply = findVerifiedReply(reply.getReplyId());
         Optional.ofNullable(reply.getReplyContent())
                 .ifPresent(content -> findReply.setReplyContent(content));
-        findReply.setReplyCreatedAt(LocalDateTime.now());
+        findReply.setReplyModifiedAt(LocalDateTime.now());
         return replyRepository.save(findReply);
     }
 

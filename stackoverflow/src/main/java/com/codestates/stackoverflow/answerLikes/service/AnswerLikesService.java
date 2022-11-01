@@ -1,27 +1,18 @@
 package com.codestates.stackoverflow.answerLikes.service;
 
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
-import com.codestates.stackoverflow.answer.service.AnswerService;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
 import com.codestates.stackoverflow.answerLikes.repository.AnswerLikesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 @Service
+@RequiredArgsConstructor
 public class AnswerLikesService {
     private final AnswerLikesRepository answerLikesRepository;
     private final AnswerRepository answerRepository;
     private final AnswerService answerService;
-
-    @Autowired
-    public AnswerLikesService(AnswerLikesRepository answerLikesRepository,
-                              AnswerRepository answerRepository,
-                              AnswerService answerService) {
-        this.answerLikesRepository = answerLikesRepository;
-        this.answerRepository = answerRepository;
-        this.answerService = answerService;
-    }
 
     public long saveLike(Long answerId, int val) {
         Optional<AnswerLikes> findAnswerLikes = answerLikesRepository.findByAnswerId(answerId);
