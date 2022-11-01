@@ -8,6 +8,8 @@ import javax.persistence.Id;
 public class TagDto {
     public static class Response {
 
+        private Long tagId;
+
         private String tagName = "";
 
 //    @Column(columnDefinition = "TEXT")

@@ -1,7 +1,6 @@
 package com.codestates.stackoverflow.tag.mapper;
 
 import com.codestates.stackoverflow.tag.dto.TagDto;
-import com.codestates.stackoverflow.tag.dto.TagsResponseDto;
 import com.codestates.stackoverflow.tag.entity.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

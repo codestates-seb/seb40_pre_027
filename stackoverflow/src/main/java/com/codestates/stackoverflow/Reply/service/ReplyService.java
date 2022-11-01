@@ -4,6 +4,7 @@ import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.Reply.repository.ReplyRepository;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
+import com.codestates.stackoverflow.answer.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

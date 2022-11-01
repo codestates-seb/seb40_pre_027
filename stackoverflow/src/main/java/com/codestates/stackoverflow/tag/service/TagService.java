@@ -54,6 +54,9 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    /**
+     * Popular, Name, New 기준별 정렬된 태그 페이지 조회
+     */
     public List<Tag> findTagsPopular(int page) {
         Page<Tag> tagPage = tagRepository.findByOrderByAskedTotal(PageRequest.of(page, 36));
         return tagPage.getContent();

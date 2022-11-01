@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.answerLikes.service;
 
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
+import com.codestates.stackoverflow.answer.service.AnswerService;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
 import com.codestates.stackoverflow.answerLikes.repository.AnswerLikesRepository;
 import lombok.RequiredArgsConstructor;

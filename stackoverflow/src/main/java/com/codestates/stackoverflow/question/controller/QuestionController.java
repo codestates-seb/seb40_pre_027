@@ -86,6 +86,17 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
+//    @GetMapping("/active")
+//    public ResponseEntity getQuestionsNewest(@Positive @RequestParam int page,
+//                                             @Positive @RequestParam int size) {
+//        Page<Question> pageQuestions = questionService.findQuestionsNewest(page - 1, size);
+//        List<Question> questions = pageQuestions.getContent();
+//
+//        return new ResponseEntity<>(
+//                mapper.questionsToQuestionResponses(questions),
+//                HttpStatus.OK);
+//    }
+
     @GetMapping("/active")
     public ResponseEntity getQuestionsActive(@Positive @RequestParam int page,
                                              @Positive @RequestParam int size) {
@@ -100,7 +111,7 @@ public class QuestionController {
     /**
      * 요청의 tag 전달 방식에 따라 추후 변경 가능
      */
-    @GetMapping("/tagged/{tag}/tab={tab}")
+    @GetMapping("/tagged/tab={tab}")
     public ResponseEntity getQuestionsViaTag(
             @PathVariable("tag") String tagName,
             @RequestParam String tab,

@@ -69,9 +69,14 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public Page<Question> findQuestions(int page, int size) {
-        return questionRepository.findAll(PageRequest.of(page, size,
+        return questionRepository.findAll(PageRequest.of(page, 15,
                 Sort.by("questionId").descending()));
     }
+
+//    public Page<Question> findQuestionsNewest(int i, int size) {
+//        // question의 구성요소의 modifiedAt 중 가장 빠른 것을 기준으로 정렬
+//
+//    }
 
     /**
      * createdAt으로 조회하는 기능 필요한지 확인 후 삭제 가능
@@ -79,8 +84,26 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public Page<Question> findQuestionsActive(int page, int size) {
         log.info("[findQuestionsActive] 작동");
-        return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
+        return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, 15));
     }
+
+//    public Page<Question> findQuestionsBountied(int i, int size) {
+//
+//    }
+
+//    public Page<Question> findQuestionsUnanswered(int page, int size) {
+//        log.info("[findQuestionsUnanswered] 작동");
+//        return questionRepository.findAllWithNoAnswerOrderByLikes();
+//    }
+
+//    public Page<Question> findQuestionsFrequent(int page, int size) {
+//
+//    }
+//
+//    public Page<Question> findQuestionsScore(int page, int size) {
+//        log.info("[findQuestionsScore] 작동");
+//        return questionRepository.findByOrderByQuestionLikes();
+//    }
 
     /**
      * tag가 null이거나 빈 경우 필요한지 추후 검토 후 수정
@@ -90,7 +113,7 @@ public class QuestionService {
         //tag의 tagName이 동일한 경우 페이지
         log.info("[findQuestionsByTag 작동]: Tag = " + tagName);
 
-        return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
+        return questionRepository.findByTagName(tagName, PageRequest.of(page, 36,
                 Sort.by("questionId").descending())).getContent();
     }
 
@@ -134,4 +157,5 @@ public class QuestionService {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         return optionalQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     }
+
 }
