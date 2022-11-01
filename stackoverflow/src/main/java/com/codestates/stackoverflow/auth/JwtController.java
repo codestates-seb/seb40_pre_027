@@ -40,6 +40,4 @@ public class JwtController {
 
        return ResponseEntity.ok("로그아웃이 정상적으로 이루어졌습니다.");
     }
-
-
 }

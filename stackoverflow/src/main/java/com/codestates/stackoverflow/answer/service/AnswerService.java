@@ -8,9 +8,7 @@ import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import com.codestates.stackoverflow.question.entity.Question;
-import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.service.QuestionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @Transactional
 @Service
-@RequiredArgsConstructor
 public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
@@ -30,8 +28,6 @@ public class AnswerService {
 
     //10.30 answer<->question mapping add
     public Answer createAnswer(Answer answer, long questionId){
-        Member member = memberServiceImpl.findAuthenticatedMember();
-        member.setAnswers(answer);
         Question question = questionService.findValidQuestion(questionId);
         question.setAnswers(answer);
         memberRepository.save(member);

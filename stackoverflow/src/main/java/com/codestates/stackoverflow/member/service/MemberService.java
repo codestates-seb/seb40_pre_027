@@ -12,11 +12,4 @@ public interface MemberService {
     Member findMemberActivity();
 
     void deleteMember();
-
-
-
-
-
-
-
 }

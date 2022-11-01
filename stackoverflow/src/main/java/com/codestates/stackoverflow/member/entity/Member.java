@@ -21,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -104,6 +103,4 @@ public class Member extends Auditable {
         ROLE_USER,
         ROLE_ADMIN
     }
-
-
 }

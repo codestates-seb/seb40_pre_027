@@ -1,10 +1,8 @@
 package com.codestates.stackoverflow.member.controller;
 
-import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.member.dto.MemberDto;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.mapper.MemberMapper;
-import com.codestates.stackoverflow.member.service.MemberService;
 import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
