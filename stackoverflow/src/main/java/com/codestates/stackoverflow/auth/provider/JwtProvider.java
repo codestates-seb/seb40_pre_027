@@ -14,6 +14,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
@@ -58,6 +59,7 @@ public class JwtProvider {
     }
 
     // Access Token 생성 메서드
+    @Transactional
     public String generateAccessToken(Map<String, Object> claims,
                                       String subject,
                                       Date expiration,

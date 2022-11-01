@@ -45,7 +45,7 @@ public class Answer {
     private long bestAnswer;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "MEMBER_ID")
     private Member answerWriter;
 
     @ManyToOne
