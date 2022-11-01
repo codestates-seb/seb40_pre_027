@@ -14,7 +14,6 @@ const Profilewrite = lazy(() =>
   import('../src/components/profile/Profilewrite')
 );
 
-
 function App() {
   return (
     <div className="App">
@@ -60,9 +59,11 @@ function App() {
 
         <Route
           path="/profile/edit"
-          element={<Suspense fallback={<>...</>}>{<EditProfilePage />}</Suspense>}
+          element={
+            <Suspense fallback={<>...</>}>{<EditProfilePage />}</Suspense>
+          }
         ></Route>
-
+        <Route
           path="/profile"
           element={<Suspense fallback={<>...</>}>{<ProfilePage />}</Suspense>}
         ></Route>
