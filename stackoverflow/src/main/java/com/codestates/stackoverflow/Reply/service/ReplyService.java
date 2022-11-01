@@ -2,25 +2,28 @@ package com.codestates.stackoverflow.Reply.service;
 
 import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.Reply.repository.ReplyRepository;
+import com.codestates.stackoverflow.answer.entity.Answer;
+import com.codestates.stackoverflow.answer.service.AnswerService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class ReplyService {
     private final ReplyRepository replyRepository;
+    private final AnswerService answerService;
 
-    public ReplyService(ReplyRepository replyRepository){
+    public ReplyService(ReplyRepository replyRepository,AnswerService answerService){
         this.replyRepository = replyRepository;
+        this.answerService = answerService;
     }
 
-    public Reply createReply(Reply reply,long ReplyWriterId){
-        //User user = userRepository.findByUserId(answerCommentWriterId);
-        //reply.setReplyWriter(user);
-        reply.setReplyCreatedAt(LocalDateTime.now());
+    public Reply createReply(Reply reply,long answerId) {
+        Answer answer = answerService.findVerifiedAnswer(answerId);
+        answer.setReplies(reply);
+        answerService.updateAnswer(answer);
         return replyRepository.save(reply);
     }
 
@@ -28,13 +31,14 @@ public class ReplyService {
         Reply findReply = findVerifiedReply(reply.getReplyId());
         Optional.ofNullable(reply.getReplyContent())
                 .ifPresent(content -> findReply.setReplyContent(content));
-        findReply.setReplyModifiedAt(LocalDateTime.now());
+        findReply.setReplyCreatedAt(LocalDateTime.now());
         return replyRepository.save(findReply);
     }
 
-    public Page<Reply> getReplies(int page,int size){
-        PageRequest pageRequest = PageRequest.of(page,size);
-        return replyRepository.findAllByOrderByReplyIdDesc(pageRequest);
+    public Page<Reply> getReplies(long answerId , Pageable pageable){
+        Answer findAnswer = answerService.findVerifiedAnswer(answerId);
+        return replyRepository.findByAnswer(findAnswer,pageable);
+        //PageRequest pageRequest = PageRequest.of(page,size);
     }
 
     public void deleteReply(Long replyId){

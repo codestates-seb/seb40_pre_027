@@ -67,8 +67,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             request.setAttribute("Exception ", e);
         }
-
     }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Access");

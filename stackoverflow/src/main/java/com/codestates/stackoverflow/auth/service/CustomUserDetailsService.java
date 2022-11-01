@@ -30,7 +30,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.authorityUtils = authorityUtils;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("[loadUserByUsername] 회원 정보 탐색 시작");

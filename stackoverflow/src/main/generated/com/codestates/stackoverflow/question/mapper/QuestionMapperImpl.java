@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-30T14:56:12+0900",
+    date = "2022-10-31T18:11:19+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -47,6 +47,7 @@ public class QuestionMapperImpl implements QuestionMapper {
         question.setQuestionId( requestBody.getQuestionId() );
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
+        question.setBounty( requestBody.getBounty() );
         String[] tags = requestBody.getTags();
         if ( tags != null ) {
             question.setTags( Arrays.copyOf( tags, tags.length ) );
@@ -68,22 +69,23 @@ public class QuestionMapperImpl implements QuestionMapper {
         }
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
-        List<Answer> list = question.getAnswers();
-        if ( list != null ) {
-            response.setAnswers( new ArrayList<Answer>( list ) );
-        }
-        List<Comment> list1 = question.getComments();
-        if ( list1 != null ) {
-            response.setComments( new ArrayList<Comment>( list1 ) );
-        }
-        String[] tags = question.getTags();
-        if ( tags != null ) {
-            response.setTags( Arrays.copyOf( tags, tags.length ) );
-        }
+        response.setBounty( question.getBounty() );
         response.setViewCount( question.getViewCount() );
         response.setLikeCount( question.getLikeCount() );
         response.setCreatedAt( question.getCreatedAt() );
         response.setModifiedAt( question.getModifiedAt() );
+        String[] tags = question.getTags();
+        if ( tags != null ) {
+            response.setTags( Arrays.copyOf( tags, tags.length ) );
+        }
+        List<Comment> list = question.getComments();
+        if ( list != null ) {
+            response.setComments( new ArrayList<Comment>( list ) );
+        }
+        List<Answer> list1 = question.getAnswers();
+        if ( list1 != null ) {
+            response.setAnswers( new ArrayList<Answer>( list1 ) );
+        }
 
         return response;
     }

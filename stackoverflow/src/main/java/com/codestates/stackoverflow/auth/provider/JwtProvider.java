@@ -124,7 +124,6 @@ public class JwtProvider {
 
     public String getRefreshTokenFromRequest(HttpServletRequest request) {
         String refreshToken = request.getHeader("Refresh");
-
         return refreshToken;
     }
 

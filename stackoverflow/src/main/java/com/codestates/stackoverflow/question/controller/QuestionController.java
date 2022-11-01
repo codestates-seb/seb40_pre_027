@@ -50,18 +50,27 @@ public class QuestionController {
     }
 
     @GetMapping("/{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId,
-                                      @RequestParam int answerPage,
-                                      @RequestParam int answerSize) {
-        System.out.println("[Get Controller(단건)] 동작");
-        Question question = questionService
-                .findQuestion(questionId, PageRequest.of(answerPage - 1, answerSize));
+    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
+        Question question = questionService.findQuestion(questionId);
 
-//        questionService.findLike(questionId);
         return new ResponseEntity<>(
                 mapper.questionToQuestionResponse(question),
                 HttpStatus.OK);
     }
+
+//    @GetMapping("/{question-id}")
+//    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId,
+//                                      @RequestParam int answerPage,
+//                                      @RequestParam int answerSize) {
+//        System.out.println("[Get Controller(단건)] 동작");
+//        Question question = questionService
+//                .findQuestion(questionId, PageRequest.of(answerPage - 1, answerSize));
+//
+////        questionService.findLike(questionId);
+//        return new ResponseEntity<>(
+//                mapper.questionToQuestionResponse(question),
+//                HttpStatus.OK);
+//    }
 
     @GetMapping
     public ResponseEntity getQuestions(@Positive @RequestParam int page,
@@ -88,12 +97,12 @@ public class QuestionController {
     /**
      * 요청의 tag 전달 방식에 따라 추후 변경 가능
      */
-    @GetMapping("/search-tag")
+    @GetMapping("/tagged/{tag}")
     public ResponseEntity getQuestionsViaTag(
-            @RequestParam String tag,
+            @PathVariable("tag") String tagName,
             @RequestParam int page,
             @RequestParam int size) {
-            Page<Question> pageQuestions = questionService.findQuestionsByTag(tag, page - 1, size);
+            Page<Question> pageQuestions = questionService.findQuestionsByTag(tagName, page - 1, size);
             List<Question> questions = pageQuestions.getContent();
         return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
                 HttpStatus.OK);

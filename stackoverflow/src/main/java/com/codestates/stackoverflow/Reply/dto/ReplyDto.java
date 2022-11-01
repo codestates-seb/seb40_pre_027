@@ -17,8 +17,6 @@ public class ReplyDto {
 
         @NotBlank(message = "내용을 필수로 입력해야 합니다.")
         private String replyContent;
-        private Long answerId;
-        private Long replyWriterId;
     }
 
     @Getter
@@ -28,9 +26,13 @@ public class ReplyDto {
     public static class patch{
 
         private Long replyId;
-
         @NotBlank(message = "내용을 필수로 입력해야 합니다.")
         private String replyContent;
+
+//        public void setAnswerId(Long answerId){
+//            this.replyId = replyId;
+//        }
+
     }
 
     @Getter
@@ -41,10 +43,6 @@ public class ReplyDto {
 
         private Long replyId;
         private String replyContent;
-        private Long replyWriterId;
         private LocalDateTime replyCreatedAt;
-        private LocalDateTime replyModifiedAt;
-        private Long answerId;
-
     }
 }

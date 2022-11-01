@@ -22,6 +22,14 @@ public class Tag {
     @Column(length = 35, nullable = false, unique = true)
     private String tagName;
 
+//    @Column
+//    private String tagExplanation;
+    @Column
+    private int questionsAskedToday;
+
+    @Column
+    private int questionsAskedThisWeek;
+
     @OneToMany(mappedBy = "tag")
     private List<QuestionTag> questionTags = new ArrayList<>();
 
