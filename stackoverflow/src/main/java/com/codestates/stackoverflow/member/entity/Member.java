@@ -21,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -46,9 +45,11 @@ public class Member extends Auditable {
     // 질문 영역
 
     @OneToMany(mappedBy = "member")
+    @ToString.Exclude
     private List<Question> questions;
     
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
+    @ToString.Exclude
     private List<Answer> answers = new ArrayList<>();
 
     public void setQuestions(Question question) {
@@ -64,6 +65,7 @@ public class Member extends Auditable {
     }
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "replyWriter")
+    @ToString.Exclude
     private List<Reply> replies = new ArrayList<>();
 
     public void setReplies(Reply reply) {
