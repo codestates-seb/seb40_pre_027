@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.Reply.entity;
 
 import com.codestates.stackoverflow.answer.entity.Answer;
+import com.codestates.stackoverflow.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,5 +38,9 @@ public class Reply {
     @JoinColumn(name = "answer_id")
     @JsonBackReference
     private Answer answer;
+
+    @ManyToOne
+    @JoinColumn(name="MEMBER_ID")
+    private Member replyWriter;
 
 }
