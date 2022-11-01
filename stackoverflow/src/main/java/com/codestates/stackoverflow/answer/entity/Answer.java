@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.answer.entity;
 
 import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
+import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,14 +35,18 @@ public class Answer {
 
     @Column
     @CreatedDate
-    private LocalDateTime answerCreatedAt;
+    private LocalDateTime answerCreatedAt = LocalDateTime.now();
 
     @Column
     @LastModifiedDate
-    private LocalDateTime answerModifiedAt;
+    private LocalDateTime answerModifiedAt = LocalDateTime.now();
 
     @Column
     private long bestAnswer;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Member answerWriter;
 
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")

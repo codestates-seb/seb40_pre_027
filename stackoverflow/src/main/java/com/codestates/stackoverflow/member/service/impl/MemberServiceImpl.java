@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -103,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 멤버 정보 이 메서드 활용할 것!
-    private Member findAuthenticatedMember() {
+    public Member findAuthenticatedMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("[getLoginMemberId] " + principal.toString());
 

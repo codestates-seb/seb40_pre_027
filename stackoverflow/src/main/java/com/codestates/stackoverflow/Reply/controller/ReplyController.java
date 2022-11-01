@@ -8,6 +8,7 @@ import com.codestates.stackoverflow.Reply.mapper.ReplyMapper;
 import com.codestates.stackoverflow.Reply.service.ReplyService;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.service.AnswerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -21,16 +22,11 @@ import java.util.List;
 
 @Validated
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/reply")
 public class ReplyController {
     private final ReplyService replyService;
     private final ReplyMapper mapper;
-
-    public ReplyController(ReplyService replyService,
-                           ReplyMapper mapper){
-        this.replyService = replyService;
-        this.mapper = mapper;
-    }
 
     @PostMapping("/{answer-id}")
     public ResponseEntity postReply(@PathVariable("answer-id") Long answerId,

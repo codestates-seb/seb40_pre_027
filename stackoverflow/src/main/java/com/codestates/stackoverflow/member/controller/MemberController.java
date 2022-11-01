@@ -5,6 +5,7 @@ import com.codestates.stackoverflow.member.dto.MemberDto;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.mapper.MemberMapper;
 import com.codestates.stackoverflow.member.service.MemberService;
+import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,11 @@ import javax.validation.Valid;
 @Validated
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
     private final MemberMapper memberMapper;
 
     @Autowired
-    public MemberController(MemberService memberService, MemberMapper memberMapper) {
+    public MemberController(MemberServiceImpl memberService, MemberMapper memberMapper) {
         this.memberService = memberService;
         this.memberMapper = memberMapper;
     }
