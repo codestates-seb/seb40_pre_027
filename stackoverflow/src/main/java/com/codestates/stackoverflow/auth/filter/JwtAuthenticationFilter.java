@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -59,15 +60,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String refreshToken = delegateRefreshToken(member);
 
         // 생성된 토큰 response 헤더 쪽에 담아 준다.
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresh", refreshToken);
+        response.setHeader("access", "Bearer " + accessToken);
+        response.setHeader("refresh", refreshToken);
         log.info("[successfulAuthentication] Response에 JWT 삽입");
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 
     }
 
-
+    @Transactional
     private String delegateAccessToken(Member member) {
         log.info("[delegateAccessToken] 로그인 Request 정보로 JWT-Access 생성 시작");
         Map<String, Object> claims = new HashMap<>();

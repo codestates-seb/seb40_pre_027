@@ -45,12 +45,11 @@ public class Member extends Auditable {
     private String introduction;
 
     // 질문 영역
-//    @OneToMany(mappedBy = "member")
-//    private List<Question> questions;
-//
-//    @OneToMany(mappedBy = "member")
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "answerWriter" )
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions;
+    
+    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     private List<Answer> answers = new ArrayList<>();
 
     public void setAnswers(Answer answer) {
@@ -64,7 +63,7 @@ public class Member extends Auditable {
     public void setReplies(Reply reply){
         this.replies.add(reply);
         reply.setReplyWriter(this);
-    }
+
 
 
     @Enumerated(value = EnumType.STRING)

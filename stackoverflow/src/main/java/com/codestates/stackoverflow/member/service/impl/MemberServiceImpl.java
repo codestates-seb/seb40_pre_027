@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member createMember(Member member) {
-        verifyExistsNameOrEmail(member.getName(), member.getEmail());
+        verifyExistsEmail(member.getEmail());
 
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findLoginMember() {
+    public Member findMemberProfile() {
 
         Member findMember = findAuthenticatedMember();
 
@@ -51,7 +51,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMember(Member member) {
+    public Member findMemberActivity() {
+        Member authMember = findAuthenticatedMember();
+
+        return authMember;
+    }
+
+    @Override
+    public Member updateMemberProfile(Member member) {
 
         Member findMember = findAuthenticatedMember();
 
@@ -79,17 +86,13 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.deleteById(optionalMember.orElseThrow(() -> new RuntimeException()).getMemberId());
     }
 
-    // 이름 또는 이메일 중복 유무 체크
-//    @Transactional(readOnly = true)
-    private void verifyExistsNameOrEmail(String name, String email) {
-        boolean isExistsName = memberRepository.existsByName(name);
-        log.info("[verifyExistsNameOrEmail] - isExistsName : " + isExistsName);
+    // 이메일 중복 유무 체크
+    @Transactional(readOnly = true)
+    private void verifyExistsEmail(String email) {
+
         boolean isExistsEmail = memberRepository.existsByEmail(email);
         log.info("[verifyExistsNameOrEmail] - isExistsEmail : " + isExistsEmail);
 
-        if(isExistsName) {
-            throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
-        } 
         if (isExistsEmail) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
@@ -104,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
         return findMember;
     }
 
-    // 멤버 정보 이 메서드 활용할 것!
+    // 멤버 정보 이 메서드 활용할 것! (인증된 회원 정보만 이용할 수 있습니다.)
     public Member findAuthenticatedMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("[getLoginMemberId] " + principal.toString());

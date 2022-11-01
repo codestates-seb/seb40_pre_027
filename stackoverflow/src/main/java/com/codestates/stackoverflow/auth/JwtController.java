@@ -27,11 +27,10 @@ public class JwtController {
 
         String newToken = jwtService.reissueAccessToken(request, response);
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Authorization", "Bearer " + newToken);
+        responseHeaders.set("access", "Bearer " + newToken);
 
         return ResponseEntity.ok()
                 .headers(responseHeaders).build();
-
     }
 
     // 로그아웃 기능 구현

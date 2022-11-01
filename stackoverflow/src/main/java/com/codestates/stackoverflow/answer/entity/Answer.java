@@ -44,8 +44,10 @@ public class Answer {
     @Column
     private long bestAnswer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MEMBER_ID" )
+
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
     private Member answerWriter;
 
     @ManyToOne
