@@ -25,7 +25,10 @@ public class MemberDto {
 //        @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
         private String password;
     }
-
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ResponseSignup {
         private long memberId;
         private String name;
@@ -33,6 +36,7 @@ public class MemberDto {
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Profile {
@@ -43,6 +47,10 @@ public class MemberDto {
         private String introduction;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Activity {
 
         private List<Answer> answer;
