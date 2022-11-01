@@ -9,6 +9,7 @@ import Modal from '../components/Modal';
 import InputArea from '../components/write/InputArea';
 import data from '../components/write/data';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const WritePageComponent = styled.div`
   background: rgba(240, 240, 240, 0.6);
@@ -71,23 +72,32 @@ function WritePage() {
   const [step, setStep] = useState('Title'); // 현재 글쓰기 step
   const [stepBtn, setStepBtn] = useState(0); // 각 step의 next 버튼을 눌렀을 때 다음 step으로 이동하기 위한
   const [inputData, setInputData] = useState(initialData); // 글쓰기 상태
+  const isLogin = useSelector((state) => state.isLogin);
   const stepHandler = (title) => setStep(title);
   const stepBtnHandler = () => setStepBtn(stepBtn + 1);
   const navigate = useNavigate();
   const postHandler = () => {
     // post submit button handler
-    axios
-      .post('/question', {
-        title: inputData.title,
-        content: `${inputData.introduce} <br/> ${inputData.expand}`,
-        tags: inputData.tags,
-      })
-      .then((res) => {
+    const newPostData = {
+      title: inputData.title,
+      content: `${inputData.introduce} <br/> ${inputData.expand}`,
+      tags: inputData.tags,
+    };
+    if (
+      newPostData.title.length >= 5 &&
+      newPostData.content.length >= 30 &&
+      newPostData.tags.length >= 1
+    ) {
+      axios.post('/question', newPostData).then((res) => {
         console.log(res);
         navigate('/questions');
       });
+    }
   };
 
+  useEffect(() => {
+    if (!isLogin) navigate('/login');
+  }, []);
   return (
     <WritePageComponent stepBtn={stepBtn}>
       <Modal />

@@ -2,8 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import Tag from '../Tag';
 import LinkStyle from '../LinkStyle';
+import { useNavigate } from 'react-router-dom';
 
 const PostComponent = styled.div`
+  background: ${(props) => (props.watched ? 'rgb(253,247,226)' : '#fff')};
+  color: ${(props) => (props.ignored ? '#9d9e9e' : '#000')};
   width: 100%;
   height: 125px;
   border-top: 1px solid #d9d9d9;
@@ -22,6 +25,7 @@ const PostComponent = styled.div`
       padding: 5px;
     }
   }
+
   .article {
     flex: 8;
     margin-left: 10px;
@@ -37,7 +41,8 @@ const PostComponent = styled.div`
     }
     .title {
       font-size: 20px;
-      color: #3378c7;
+      cursor: pointer;
+      color: ${(props) => (props.ignored ? '#9d9e9e' : '#3378c7')};
     }
     .tags {
       display: flex;
@@ -55,7 +60,7 @@ const PostComponent = styled.div`
         padding: 0.15rem;
       }
       .user-name {
-        color: #3378c7;
+        color: ${(props) => (props.ignored ? '#9d9e9e' : '#3378c7')};
       }
       .user-answers {
         font-weight: 700;
@@ -65,25 +70,43 @@ const PostComponent = styled.div`
   }
 `;
 
-function Post({ post }) {
-  const { questionId, title, content, tags, viewCount, likeCount } = post;
+function Post({ post, watchedTags, ignoredTags }) {
+  const navigate = useNavigate();
+  const { questionId, title, content, tags, viewCount, likeCount, answers } =
+    post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
   const deleteTagContent = content
     .replace(/<[^>]*>?/g, '')
     .replace(/&lt;/g, '')
     .replace(/&gt;/g, '');
+  const tagsEvaluate = (arr) => {
+    // watchedtags, ignoredtags에 tag가 포함되어 있는지 검사하는 함수
+    let result = false;
+    for (let i = 0; i < tags.length; i++) {
+      if (arr.includes(tags[i])) {
+        result = true;
+        break;
+      }
+    }
+    return result;
+  };
+  const watched = tagsEvaluate(watchedTags);
+  const ignored = tagsEvaluate(ignoredTags);
   return (
-    <PostComponent>
+    <PostComponent watched={watched} ignored={ignored}>
       <div className="info-post">
         <div className="vote">{`${likeCount} votes`}</div>
-        <div className="answers">{`0 answers`}</div>
+        <div className="answers">{`${answers.length} answers`}</div>
         <div className="views">{`${viewCount} views`}</div>
       </div>
       <div className="article">
-        <LinkStyle path={`/post/${questionId}`}>
-          <h3 className="title article-status">{title}</h3>
-        </LinkStyle>
+        <h3
+          className="title article-status"
+          onClick={() => navigate(`/post/${questionId}`)}
+        >
+          {title}
+        </h3>
 
         <div className="article-content article-status">
           {deleteTagContent.length <= 160
@@ -92,9 +115,26 @@ function Post({ post }) {
         </div>
         <div className="info-side article-status">
           <div className="tags">
-            {tags.map((v, i) => (
-              <Tag key={i}>{v}</Tag>
-            ))}
+            {tags !== null ? (
+              tags.map((v, i) => (
+                <Tag
+                  key={i}
+                  status={
+                    watchedTags.includes(v) ? (
+                      1
+                    ) : ignoredTags.includes(v) ? (
+                      2
+                    ) : (
+                      <></>
+                    )
+                  }
+                >
+                  {v}
+                </Tag>
+              ))
+            ) : (
+              <div></div>
+            )}
           </div>
           <div className="info-user">
             <img src={imgurl} alt="user-img" />

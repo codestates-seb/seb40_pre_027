@@ -179,7 +179,7 @@ function InputBox({
           {name === 'Tags' && (
             <div className="tag-list">
               {value.tags.map((tag, i) => (
-                <Tag key={i} onClick={() => tagDeleteHandler(tag)}>
+                <Tag key={i} onDelete={() => tagDeleteHandler(tag)}>
                   {tag}
                 </Tag>
               ))}

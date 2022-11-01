@@ -7,9 +7,7 @@ const PostListComponent = styled.div`
   border-left: 1px solid #d9d9d9;
 `;
 
-function PostList({ posts }) {
-  const [data, setData] = useState([]);
-
+function PostList({ posts, watchedTags, ignoredTags }) {
   return (
     <PostListComponent>
       {/* {Array(15)
@@ -18,7 +16,12 @@ function PostList({ posts }) {
           <Post key={`idx${i}`} />
         ))} */}
       {posts.map((v) => (
-        <Post key={v.questionId} post={v} />
+        <Post
+          key={v.questionId}
+          post={v}
+          watchedTags={watchedTags}
+          ignoredTags={ignoredTags}
+        />
       ))}
     </PostListComponent>
   );
