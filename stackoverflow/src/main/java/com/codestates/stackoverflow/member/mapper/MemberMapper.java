@@ -16,7 +16,6 @@ public interface MemberMapper {
 
     MemberDto.Profile memberToProfile(Member member);
 
-
     MemberDto.Activity memberToActivity(Member member);
 
 

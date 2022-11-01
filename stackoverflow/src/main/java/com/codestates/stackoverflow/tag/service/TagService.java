@@ -111,11 +111,11 @@ public class TagService {
                         tagRepository.save(tag);
                     }
                     else if (tag.getQuestionsAskedToday() != currentAskedToday) {
-                        tag.setAskedTotal(currentAskedTotal);
+                        tag.setQuestionsAskedToday(currentAskedToday);
                         tagRepository.save(tag);
                     }
                     else if (tag.getQuestionsAskedThisWeek() != currentAskedThisWeek) {
-                        tag.setAskedTotal(currentAskedTotal);
+                        tag.setQuestionsAskedThisWeek(currentAskedThisWeek);
                         tagRepository.save(tag);
                     }
                     log.info("[모든 Tag의 QuestionCount Update]: ");

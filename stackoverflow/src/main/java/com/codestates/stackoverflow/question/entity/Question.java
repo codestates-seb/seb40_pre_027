@@ -37,10 +37,6 @@ public class Question {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Answer> answers;
@@ -71,6 +67,13 @@ public class Question {
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd : HH:mm:ss")
     private LocalDateTime modifiedAt = LocalDateTime.now();
+
+    @Embedded
+    private ActiveInfo activeInfo;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
