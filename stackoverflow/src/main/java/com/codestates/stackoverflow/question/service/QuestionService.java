@@ -7,6 +7,8 @@ import com.codestates.stackoverflow.comment.repository.CommentRepository;
 import com.codestates.stackoverflow.exception.BusinessLogicException;
 import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.member.repository.MemberRepository;
+import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
@@ -37,11 +39,18 @@ public class QuestionService {
     private final AnswerRepository answerRepository;
     private final CommentRepository commentRepository;
     private final TagService tagService;
+    private final MemberServiceImpl memberServiceImpl;
+    private final MemberRepository memberRepository;
 
     public Question createQuestion(Question question) {
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
         log.info("[createQuestion] 매핑 전 태그 : " + Arrays.toString(question.getTags()));
         mapAndSaveTags(question);
+        Member authMember = memberServiceImpl.findAuthenticatedMember();
+        authMember.setQuestions(question);
+        Member writer = memberRepository.save(authMember);
+        question.setMember(writer);
+        
         //question과 tag를 저장한다.
         log.info("[createQuestion] 매핑 후 태그 : " + question.getQuestionTags());
         return questionRepository.save(question);
