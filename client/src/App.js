@@ -7,10 +7,13 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SigninPage = lazy(() => import('./pages/SigninPage'));
 const WritePage = lazy(() => import('./pages/WritePage'));
 const PostPage = lazy(() => import('./pages/PostPage'));
+
+const EditProfilePage = lazy(() => import('./pages/EditProfilePage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const Profilewrite = lazy(() =>
   import('../src/components/profile/Profilewrite')
 );
+
 
 function App() {
   return (
@@ -56,6 +59,10 @@ function App() {
         ></Route>
 
         <Route
+          path="/profile/edit"
+          element={<Suspense fallback={<>...</>}>{<EditProfilePage />}</Suspense>}
+        ></Route>
+
           path="/profile"
           element={<Suspense fallback={<>...</>}>{<ProfilePage />}</Suspense>}
         ></Route>
