@@ -27,7 +27,11 @@ public class Reply {
 
     @Column
     @CreatedDate
-    private LocalDateTime replyCreatedAt;
+    private LocalDateTime replyCreatedAt=LocalDateTime.now();
+
+    @Column
+    @CreatedDate
+    private LocalDateTime replyModifiedAt=LocalDateTime.now();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "answer_id")
