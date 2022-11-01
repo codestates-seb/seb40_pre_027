@@ -44,6 +44,8 @@ public class Answer {
     @Column
     private long bestAnswer;
 
+
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member answerWriter;
