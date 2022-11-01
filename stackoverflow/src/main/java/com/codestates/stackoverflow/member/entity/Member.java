@@ -48,7 +48,12 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member")
     private List<Question> questions;
-    
+    public void setQuestions(Question question) {
+        this.questions.add(question);
+        question.setMember(this);
+    }
+
+
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     private List<Answer> answers = new ArrayList<>();
 
@@ -60,11 +65,10 @@ public class Member extends Auditable {
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "replyWriter")
     private List<Reply> replies = new ArrayList<>();
 
-    public void setReplies(Reply reply){
+    public void setReplies(Reply reply) {
         this.replies.add(reply);
         reply.setReplyWriter(this);
-
-
+    }
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
