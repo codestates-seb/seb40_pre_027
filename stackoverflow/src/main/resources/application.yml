@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/stackoverflow
     username: root
-    password: ${mysql-password}
+    password: chohs!123
 #    url: jdbc:h2:mem:test
   jpa:
 #    generate-ddl: true
@@ -31,7 +31,7 @@ logging:
 
 # Security ??
 jwt:
-  secret-key: ${jwt-secret}
+  secret-key: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
   access-token-expiration-minutes: 360
   refresh-token-expiration-minutes: 360
 

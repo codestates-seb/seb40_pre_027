@@ -1,26 +1,42 @@
 package com.codestates.stackoverflow.tag.mapper;
 
-import com.codestates.stackoverflow.tag.dto.TagsResponseDto;
+import com.codestates.stackoverflow.tag.dto.TagDto;
 import com.codestates.stackoverflow.tag.entity.Tag;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-31T18:11:19+0900",
+    date = "2022-11-01T14:53:43+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
 public class TagMapperImpl implements TagMapper {
 
     @Override
-    public TagsResponseDto TagToTagResponseDto(Tag tag) {
-        if ( tag == null ) {
+    public TagDto.Response TagToTagResponse(Tag Tag) {
+        if ( Tag == null ) {
             return null;
         }
 
-        TagsResponseDto tagsResponseDto = new TagsResponseDto();
+        TagDto.Response response = new TagDto.Response();
 
-        return tagsResponseDto;
+        return response;
+    }
+
+    @Override
+    public List<TagDto.Response> TagsToTagResponses(List<Tag> tags) {
+        if ( tags == null ) {
+            return null;
+        }
+
+        List<TagDto.Response> list = new ArrayList<TagDto.Response>( tags.size() );
+        for ( Tag tag : tags ) {
+            list.add( TagToTagResponse( tag ) );
+        }
+
+        return list;
     }
 }

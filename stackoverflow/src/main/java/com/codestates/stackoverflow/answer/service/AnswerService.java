@@ -3,7 +3,9 @@ package com.codestates.stackoverflow.answer.service;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.answer.repository.AnswerRepository;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,22 +17,18 @@ import java.util.List;
 import java.util.Optional;
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class AnswerService {
     private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
     private final QuestionService questionService;
-
-    public AnswerService(AnswerRepository answerRepository,
-                         QuestionService questionService){
-        this.answerRepository = answerRepository;
-        this.questionService = questionService;
-    }
 
     //10.30 answer<->question mapping add
     public Answer createAnswer(Answer answer, long questionId){
         Question question = questionService.findValidQuestion(questionId);
         question.setAnswers(answer);
-        questionService.updateQuestion(question);
         answer.setAnswerCreatedAt(LocalDateTime.now());
+        questionRepository.save(question);
         return answerRepository.save(answer);
     }
 

@@ -22,8 +22,12 @@ public class Tag {
     @Column(length = 35, nullable = false, unique = true)
     private String tagName;
 
-//    @Column
-//    private String tagExplanation;
+//    @Column(columnDefinition = "TEXT")
+//    private String tagContent;
+
+    @Column
+    private int askedTotal;
+
     @Column
     private int questionsAskedToday;
 

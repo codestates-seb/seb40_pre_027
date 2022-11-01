@@ -58,6 +58,7 @@ public class AnswerController {
 
         return new ResponseEntity<>(mapper.AnswerToAnswerResponseDtos(answers), HttpStatus.OK);
     }
+
     @DeleteMapping("/{answer-id}")
     public ResponseEntity deleteAnswer(@PathVariable("answer-id") Long answerId){
         answerService.deleteAnswer(answerId);

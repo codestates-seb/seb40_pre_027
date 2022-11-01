@@ -27,7 +27,7 @@ public class JwtController {
 
         String newToken = jwtService.reissueAccessToken(request, response);
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Authorization", "Bearer " + newToken);
+        responseHeaders.set("access", "Bearer " + newToken);
 
         return ResponseEntity.ok()
                 .headers(responseHeaders).build();
@@ -40,6 +40,4 @@ public class JwtController {
 
        return ResponseEntity.ok("로그아웃이 정상적으로 이루어졌습니다.");
     }
-
-
 }

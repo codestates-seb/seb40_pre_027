@@ -118,12 +118,12 @@ public class JwtProvider {
 
     // request에 담겨 있는 토큰 가져오기
     public String getAccessTokenFromRequest(HttpServletRequest request) {
-        String jws = request.getHeader("Access").replace("Bearer ", "");
+        String jws = request.getHeader("access").replace("Bearer ", "");
         return jws;
     }
 
     public String getRefreshTokenFromRequest(HttpServletRequest request) {
-        String refreshToken = request.getHeader("Refresh");
+        String refreshToken = request.getHeader("refresh");
         return refreshToken;
     }
 
@@ -180,6 +180,4 @@ public class JwtProvider {
 
         return key;
     }
-
-
 }
