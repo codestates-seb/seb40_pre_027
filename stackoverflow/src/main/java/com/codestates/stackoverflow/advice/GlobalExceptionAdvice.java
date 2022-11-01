@@ -16,12 +16,12 @@ import org.springframework.web.client.HttpClientErrorException;
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler
+
     public ResponseEntity handleException(BusinessLogicException e) {
 
         final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
 
         log.error(e.getMessage());
-
         return ResponseEntity.status(e.getExceptionCode().getStatus()).body(response);
     }
 

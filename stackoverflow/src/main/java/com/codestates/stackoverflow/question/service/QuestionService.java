@@ -46,11 +46,13 @@ public class QuestionService {
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
         log.info("[createQuestion] 매핑 전 태그 : " + Arrays.toString(question.getTags()));
         mapAndSaveTags(question);
+
         Member authMember = memberServiceImpl.findAuthenticatedMember();
-        authMember.setQuestions(question);
-        Member writer = memberRepository.save(authMember);
+
+        authMember.setQuestions(question); // 수정
+        Member writer = memberRepository.save(authMember); // a
         question.setMember(writer);
-        
+
         //question과 tag를 저장한다.
         log.info("[createQuestion] 매핑 후 태그 : " + question.getQuestionTags());
         return questionRepository.save(question);
