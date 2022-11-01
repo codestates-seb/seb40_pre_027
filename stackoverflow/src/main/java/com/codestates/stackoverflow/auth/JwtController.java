@@ -31,7 +31,6 @@ public class JwtController {
 
         return ResponseEntity.ok()
                 .headers(responseHeaders).build();
-
     }
 
     // 로그아웃 기능 구현

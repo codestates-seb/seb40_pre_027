@@ -118,7 +118,7 @@ public class JwtProvider {
 
     // request에 담겨 있는 토큰 가져오기
     public String getAccessTokenFromRequest(HttpServletRequest request) {
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String jws = request.getHeader("Access").replace("Bearer ", "");
         return jws;
     }
 

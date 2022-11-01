@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String refreshToken = delegateRefreshToken(member);
 
         // 생성된 토큰 response 헤더 쪽에 담아 준다.
-        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Access", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
         log.info("[successfulAuthentication] Response에 JWT 삽입");
 
