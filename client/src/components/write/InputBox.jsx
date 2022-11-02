@@ -174,18 +174,19 @@ function InputBox({
               ? value.title.length <= 5
                 ? 'disabled input-title-tag'
                 : 'input-title-tag'
-              : value.tags.length <= 0
+              : value.tags !== null && value.tags.length <= 0
               ? 'disabled input-title-tag'
               : 'input-title-tag'
           }
         >
           {name === 'Tags' && (
             <div className="tag-list">
-              {value.tags.map((tag, i) => (
-                <Tag key={i} onDelete={() => tagDeleteHandler(tag)}>
-                  {tag}
-                </Tag>
-              ))}
+              {value.tags !== null &&
+                value.tags.map((tag, i) => (
+                  <Tag key={i} onDelete={() => tagDeleteHandler(tag)}>
+                    {tag}
+                  </Tag>
+                ))}
             </div>
           )}
           <input

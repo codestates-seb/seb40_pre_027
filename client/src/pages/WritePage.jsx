@@ -100,9 +100,11 @@ function WritePage() {
 
   const { state } = useLocation();
   useEffect(() => {
-    if (Object.keys(state).length) {
-      setStepBtn(4);
-      setInputData(state);
+    if (state) {
+      if (Object.keys(state).length) {
+        setStepBtn(4);
+        setInputData(state);
+      }
     }
   }, []);
   console.log(state);
