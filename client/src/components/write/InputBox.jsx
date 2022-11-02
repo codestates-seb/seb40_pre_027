@@ -143,7 +143,7 @@ function InputBox({
       stepHandler(data.inputData[3].name);
     }
   };
-
+  console.log(value.introduce, 'value임둥');
   return (
     <InputBoxComponent input={value[title]}>
       <div className={stepBtn >= idx ? '' : 'wall'}></div>
@@ -155,7 +155,10 @@ function InputBox({
           className={value[title].length <= 20 ? 'disabled' : ''}
         >
           <Editor
-            initialValue=" "
+            initialValue={
+              idx === 1 ? value.introduce : idx === 2 ? value.expand : ' '
+            }
+            value={idx === 1 ? value.introduce : idx === 2 ? value.expand : ' '}
             height="300px"
             initialEditType="markdown"
             onChange={(e) => onChange(e, true)}
