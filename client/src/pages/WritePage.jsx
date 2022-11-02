@@ -72,7 +72,6 @@ function WritePage() {
   const [step, setStep] = useState('Title'); // 현재 글쓰기 step
   const [stepBtn, setStepBtn] = useState(0); // 각 step의 next 버튼을 눌렀을 때 다음 step으로 이동하기 위한
   const [inputData, setInputData] = useState(initialData); // 글쓰기 상태
-  const isLogin = useSelector((state) => state.isLogin);
   const stepHandler = (title) => setStep(title);
   const stepBtnHandler = () => setStepBtn(stepBtn + 1);
   const navigate = useNavigate();
@@ -89,12 +88,19 @@ function WritePage() {
       newPostData.content.length >= 30 &&
       newPostData.tags.length >= 1
     ) {
-      axios
-        .post('/question', newPostData, { headers: { access } })
-        .then((res) => {
-          console.log(res);
-          navigate('/questions');
-        });
+      if (inputData.id) {
+        axios
+          .patch(`/question/${inputData.id}`, inputData)
+          .then(() => navigate('/'))
+          .catch(() => alert('글 수정 실패'));
+      } else {
+        axios
+          .post('/question', newPostData, { headers: { access } })
+          .then((res) => {
+            navigate('/');
+          })
+          .catch(() => alert('글 생성 실패'));
+      }
     }
   };
 
@@ -107,7 +113,6 @@ function WritePage() {
       }
     }
   }, []);
-  console.log(state);
   return (
     <WritePageComponent stepBtn={stepBtn}>
       <Modal />
@@ -148,6 +153,7 @@ function WritePage() {
               stepBtn={stepBtn}
               idx={i}
               value={inputData}
+              postData={state}
               stepHandler={stepHandler}
               stepBtnHandler={stepBtnHandler}
               setValue={setInputData}

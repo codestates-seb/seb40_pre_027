@@ -7,7 +7,7 @@ import LinkStyle from '../LinkStyle';
 import SocialLogin from '../SocialLogin';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 const AnswerPostComponent = styled.div`
   padding-left: 2rem;
   h2 {
@@ -69,6 +69,7 @@ function AnswerPost({ isLogined }) {
   const [guide, setGuide] = useState(false);
   const [answer, setAnswer] = useState('');
   const [guideview, setGuideview] = useState(false);
+  const navigate = useNavigate();
   const isLogin = useSelector((state) => state.isLogin);
   const editorRef = useRef();
   const { id } = useParams();
@@ -84,7 +85,16 @@ function AnswerPost({ isLogined }) {
     setAnswer(editorRef.current.getInstance().getHTML());
   };
   const answerSubmitHandler = () => {
-    if (isLogin) axios.post(`/answer/${id}`, { answerContent: answer });
+    const access = localStorage.getItem('accessToken');
+    if (isLogin)
+      axios
+        .post(
+          `/answer/${id}`,
+          { answerContent: answer },
+          { headers: { access } }
+        )
+        .then(() => navigate(`/post/${id}`))
+        .catch(() => alert('답변 생성 실패'));
     else alert('you need login');
   };
   return (

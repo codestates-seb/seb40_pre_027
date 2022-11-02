@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
 import { Editor } from '@toast-ui/react-editor';
@@ -84,6 +84,7 @@ function InputBox({
   stepBtnHandler,
   stepBtn,
   idx,
+  postData,
 }) {
   const [tag, setTag] = useState(''); // tag를 작성하기 위한
   const [tagList, setTagList] = useState([]); // tags 데이터에서 tag와 일치하는 list
@@ -107,7 +108,6 @@ function InputBox({
       const newValue = { ...value, [title]: e.target.value };
       setValue(newValue);
     }
-    console.log(value);
   };
 
   const inputTitleChange = (name) => {
@@ -143,22 +143,28 @@ function InputBox({
       stepHandler(data.inputData[3].name);
     }
   };
-  console.log(value.introduce, 'value임둥');
+  useEffect(() => {
+    if (postData && Object.keys(postData).length) {
+      if (idx === 1) {
+        editorRef.current?.getInstance().setHTML(postData.introduce);
+      } else if (idx === 2) {
+        editorRef.current?.getInstance().setHTML(postData.expand);
+      }
+    }
+  }, []);
+
   return (
     <InputBoxComponent input={value[title]}>
       <div className={stepBtn >= idx ? '' : 'wall'}></div>
       <h3>{name}</h3>
       <div className="disc">{disc}</div>
-      {editor ? (
+      {value && editor ? (
         <div
           onClick={() => inputTitleChange(name)}
           className={value[title].length <= 20 ? 'disabled' : ''}
         >
           <Editor
-            initialValue={
-              idx === 1 ? value.introduce : idx === 2 ? value.expand : ' '
-            }
-            value={idx === 1 ? value.introduce : idx === 2 ? value.expand : ' '}
+            initialValue=" "
             height="300px"
             initialEditType="markdown"
             onChange={(e) => onChange(e, true)}
