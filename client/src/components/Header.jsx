@@ -5,7 +5,6 @@ import { GoSearch } from 'react-icons/go';
 import Logo from '../img/Logo.png';
 import { Link } from 'react-router-dom';
 import UserCard from './UserCard';
-import axios from 'axios';
 
 //redux 관련 import
 import { useSelector, useDispatch } from 'react-redux';
@@ -84,7 +83,7 @@ const Topbar = styled.div`
   margin-bottom: 3px;
 `;
 
-function Header({ getUserProfile }) {
+function Header({ onGetUserProfile }) {
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.isLogin);
@@ -98,7 +97,7 @@ function Header({ getUserProfile }) {
     localStorage.removeItem('refreshToken');
   };
 
-  //usercard 누를 때 작동하는 함수
+  // // usercard 누를 때 작동하는 함수
   // const moveToUserProfile = (getUserProfile) => {
   //   console.log(getUserProfile);
   //   getUserProfile();
@@ -129,8 +128,8 @@ function Header({ getUserProfile }) {
             </form>
             {isLogin ? (
               <>
-                <Link to="/user/profile">
-                  <UserCard getUserProfile={getUserProfile} />
+                <Link to="/myProfile">
+                  <UserCard onGetUserProfile={onGetUserProfile} />
                 </Link>
                 <Button onClick={logoutHandler}>Log out</Button>
               </>

@@ -126,7 +126,7 @@ function profilewrite() {
             <MyProfile />
             <ProfileTab>
               <ul>
-                <LinkStyle path="/Profile" css={{ color: '#000' }}>
+                <LinkStyle path="/myProfile" css={{ color: '#000' }}>
                   Profile
                 </LinkStyle>
                 <li>Write</li>
@@ -168,7 +168,9 @@ function profilewrite() {
                         Your about me section is currently blank. Would you like
                         to add one?
                       </h3>
-                      <h4>write answer</h4>
+                      <Link to="/" style={{ textDecoration: 'none' }}>
+                        <h4>write answer</h4>
+                      </Link>
                     </span>
                   </div>
                 </RightBox>
