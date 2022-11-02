@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from './Button';
 import { GoSearch } from 'react-icons/go';
@@ -98,10 +98,23 @@ function Header() {
     localStorage.removeItem('refreshToken');
   };
 
+  //userprofile에 대한 axios 요청
+  const accessToken = localStorage.getItem('accessToken');
+  async function getUserProfile() {
+    try {
+      const res = await axios.get(`/user/profile`, {
+        headers: { access: accessToken },
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   //usercard 누를 때 작동하는 함수
   const moveToUserProfile = () => {
-    console.log('123')
-  }
+    getUserProfile();
+  };
 
   const searchHandler = () => {};
   return (
@@ -128,8 +141,8 @@ function Header() {
             </form>
             {isLogin ? (
               <>
-                <Link to="/profile">
-                  <UserCard onUserProfile={moveToUserProfile}/>
+                <Link to="/user/profile">
+                  <UserCard onUserProfile={moveToUserProfile} />
                 </Link>
                 <Button onClick={logoutHandler}>Log out</Button>
               </>

@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import SocialLogin from '../components/SocialLogin';
 import LinkStyle from '../components/LinkStyle';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Signpage = styled.main`
   width: 100%;
@@ -154,6 +155,8 @@ const SignHelp = styled.h3`
   }
 `;
 function SigninPage() {
+  const navigate = useNavigate();
+
   const [isCorrect, setIsCorrect] = useState({
     displayCorrect: true,
     emailCorrect: true,
@@ -180,9 +183,18 @@ function SigninPage() {
         email: inputV.email,
         password: inputV.password,
       });
+      if (response.status === 201) {
+        navigate('/login');
+      }
       console.log(response);
     } catch (error) {
-      console.error(error);
+      if (error.response.status === 409) {
+        alert('중복된 이메일 입니다.');
+        console.log(error);
+      } else {
+        alert(error.response.status);
+        console.log(error);
+      }
     }
   }
 
