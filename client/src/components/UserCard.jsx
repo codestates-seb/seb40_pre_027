@@ -25,10 +25,10 @@ const UserCardComponent = styled.div`
   }
 `;
 
-function UserCard({ onUserProfile, reputation }) {
+function UserCard({ getUserProfile, reputation }) {
   const imgurl = 'https://avatars.githubusercontent.com/u/107591946?s=400&v=4';
   return (
-    <UserCardComponent onClick={onUserProfile}>
+    <UserCardComponent onClick={getUserProfile}>
       <div className="user-card-wrapper">
         <div className="user-avatar">
           <img src={imgurl} alt="user-avatar"></img>

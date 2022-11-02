@@ -4,7 +4,13 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Nav from '../components/home/Nav';
 import MyProfile from '../components/profile/MyProfile';
-
+import SmallLogo from '../img/smallLogo.png';
+import { Link } from 'react-router-dom';
+import React from 'react';
+// import { useState } from 'react';
+import axios from 'axios';
+// import { useState } from 'react';
+// import { useParams } from 'react-router-dom';
 const ProfilePages = styled.main`
   width: 100vw;
   section {
@@ -57,6 +63,21 @@ const LeftBox = styled.div`
     border: 1px solid #c6c6c6;
     border-radius: 10px;
     margin-top: 15px;
+    display: flex;
+    .logo {
+      background-image: url(${SmallLogo});
+      background-size: 100% 100%;
+      width: 30px;
+      height: 30px;
+      margin-left: 75px;
+      margin-top: 15px;
+    }
+    & h3 {
+      width: 110px;
+      height: 16px;
+      margin-top: 27px;
+      color: rgb(42, 116, 175);
+    }
   }
   & span {
     display: flex;
@@ -118,9 +139,26 @@ const About = styled.div`
 `;
 
 function ProfilePage() {
+  //userprofile에 대한 axios 요청
+  const accessToken = localStorage.getItem('accessToken');
+  async function getUserProfile() {
+    try {
+      const res = await axios.get(`/user/profile`, {
+        headers: { access: accessToken },
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <ProfilePages>
-      <Header />
+      <Header
+        getUserProfile={() => {
+          getUserProfile();
+        }}
+      />
       <section>
         <Nav />
         <article>
@@ -128,9 +166,11 @@ function ProfilePage() {
           <ProfileTab>
             <ul>
               <li>Profile</li>
-              <LinkStyle path="/Profile/write" css={{ color: 'black' }}>
-                Write
-              </LinkStyle>
+              <li>
+                <LinkStyle path="/Profile/write" css={{ color: 'black' }}>
+                  Write
+                </LinkStyle>
+              </li>
             </ul>
           </ProfileTab>
           <ProfileIn>
@@ -145,7 +185,12 @@ function ProfilePage() {
                   <h4>Edit</h4>
                 </span>
                 <p></p>
-                <div></div>
+                <div>
+                  <span className="logo"></span>
+                  <Link to="/" style={{ textDecoration: 'none' }}>
+                    <h3>Stack Overflow</h3>
+                  </Link>
+                </div>
               </LeftBox>
             </LeftContent>
             <RightContent>
@@ -157,7 +202,9 @@ function ProfilePage() {
                       Your about me section is currently blank. Would you like
                       to add one?
                     </h3>
-                    <h4>Edit profile</h4>
+                    <Link to="/profile/edit" style={{ textDecoration: 'none' }}>
+                      <h4>Edit profile</h4>
+                    </Link>
                   </div>
                 </div>
               </About>

@@ -84,7 +84,7 @@ const Topbar = styled.div`
   margin-bottom: 3px;
 `;
 
-function Header() {
+function Header({ getUserProfile }) {
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.isLogin);
@@ -98,23 +98,11 @@ function Header() {
     localStorage.removeItem('refreshToken');
   };
 
-  //userprofile에 대한 axios 요청
-  const accessToken = localStorage.getItem('accessToken');
-  async function getUserProfile() {
-    try {
-      const res = await axios.get(`/user/profile`, {
-        headers: { access: accessToken },
-      });
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   //usercard 누를 때 작동하는 함수
-  const moveToUserProfile = () => {
-    getUserProfile();
-  };
+  // const moveToUserProfile = (getUserProfile) => {
+  //   console.log(getUserProfile);
+  //   getUserProfile();
+  // };
 
   const searchHandler = () => {};
   return (
@@ -142,7 +130,7 @@ function Header() {
             {isLogin ? (
               <>
                 <Link to="/user/profile">
-                  <UserCard onUserProfile={moveToUserProfile} />
+                  <UserCard getUserProfile={getUserProfile} />
                 </Link>
                 <Button onClick={logoutHandler}>Log out</Button>
               </>
