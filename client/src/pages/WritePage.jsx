@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Header from '../components/Header';
@@ -80,24 +80,34 @@ function WritePage() {
     // post submit button handler
     const newPostData = {
       title: inputData.title,
-      content: `${inputData.introduce} <br/> ${inputData.expand}`,
+      content: `${inputData.introduce} <br calssName="boundary"/> ${inputData.expand}`,
       tags: inputData.tags,
     };
+    const access = localStorage.getItem('accessToken');
     if (
       newPostData.title.length >= 5 &&
       newPostData.content.length >= 30 &&
       newPostData.tags.length >= 1
     ) {
-      axios.post('/question', newPostData).then((res) => {
-        console.log(res);
-        navigate('/questions');
-      });
+      axios
+        .post('/question', newPostData, { headers: { access } })
+        .then((res) => {
+          console.log(res);
+          navigate('/questions');
+        });
     }
   };
 
+  const { state } = useLocation();
   useEffect(() => {
-    if (!isLogin) navigate('/login');
+    if (state) {
+      if (Object.keys(state).length) {
+        setStepBtn(4);
+        setInputData(state);
+      }
+    }
   }, []);
+  console.log(state);
   return (
     <WritePageComponent stepBtn={stepBtn}>
       <Modal />

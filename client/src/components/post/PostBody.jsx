@@ -1,5 +1,7 @@
+import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 import Tag from '../Tag';
 import Recommend from './Recommend';
@@ -121,6 +123,7 @@ const PostBodyComponent = styled.div`
 `;
 
 function PostBody(props) {
+  const navigate = useNavigate();
   const [shareClicked, setShareClicked] = useState(false);
 
   const shareHandler = () => setShareClicked(!shareClicked);
@@ -132,7 +135,26 @@ function PostBody(props) {
   const modifiedAt = new Date(
     props.answer ? props.answer.answerModifiedAt : props.modifiedAt
   );
-
+  const patchHandler = () => {
+    const contentArr = props.content.split(' <br calssName="boundary"/> ');
+    const introduce = contentArr[0];
+    const expand = contentArr[1];
+    const data = {
+      id: props.questionId,
+      title: props.title,
+      introduce,
+      expand,
+      tags: props.tags,
+    };
+    navigate(`/write`, { state: data });
+    console.log(data);
+  };
+  const deleteHandler = () => {
+    axios
+      .delete(`/question/${props.questionId}`)
+      .then(() => navigate('/'))
+      .catch(() => alert('실패'));
+  };
   const userimg =
     'https://www.gravatar.com/avatar/088029d211d686a016bcfdc326523d62?s=256&d=identicon&r=PG';
 
@@ -151,9 +173,8 @@ function PostBody(props) {
         </section>
         {!props.answer && (
           <section className="tags">
-            {props.tags.map((v, i) => (
-              <Tag key={i}>{v}</Tag>
-            ))}
+            {props.tags !== null &&
+              props.tags.map((v, i) => <Tag key={i}>{v}</Tag>)}
           </section>
         )}
         <section className="body-footer">
@@ -173,7 +194,11 @@ function PostBody(props) {
                   )}
                 </div>
               </div>
-              <div className="menu-item" title="Revise and improve this post">
+              <div
+                className="menu-item"
+                title="Revise and improve this post"
+                onClick={patchHandler}
+              >
                 Edit
               </div>
               <div
@@ -181,6 +206,13 @@ function PostBody(props) {
                 title="Follow this question to receive notification"
               >
                 Follow
+              </div>
+              <div
+                className="menu-item"
+                title="Post delete"
+                onClick={deleteHandler}
+              >
+                Delete
               </div>
             </div>
             <div className="edited-date-wrapper">

@@ -10,11 +10,6 @@ const PostListComponent = styled.div`
 function PostList({ posts, watchedTags, ignoredTags }) {
   return (
     <PostListComponent>
-      {/* {Array(15)
-        .fill()
-        .map((v, i) => (
-          <Post key={`idx${i}`} />
-        ))} */}
       {posts.map((v) => (
         <Post
           key={v.questionId}

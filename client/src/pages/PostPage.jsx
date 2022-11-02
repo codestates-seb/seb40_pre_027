@@ -70,6 +70,7 @@ function PostPage() {
             <div className="post-aside">
               <div>
                 <PostBody
+                  title={title}
                   answer={false}
                   questionId={questionId}
                   content={content}
