@@ -8,8 +8,6 @@ import com.codestates.stackoverflow.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,81 +58,51 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-//    @GetMapping("/{question-id}")
-//    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId,
-//                                      @RequestParam int answerPage,
-//                                      @RequestParam int answerSize) {
-//        System.out.println("[Get Controller(단건)] 동작");
-//        Question question = questionService
-//                .findQuestion(questionId, PageRequest.of(answerPage - 1, answerSize));
-//
-////        questionService.findLike(questionId);
-//        return new ResponseEntity<>(
-//                mapper.questionToQuestionResponse(question),
-//                HttpStatus.OK);
-//    }
-
     @GetMapping
-    public ResponseEntity getQuestions(@Positive @RequestParam int page,
-                                       @Positive @RequestParam int size) {
-        Page<Question> pageQuestions = questionService.findQuestions(page - 1, size);
-        List<Question> questions = pageQuestions.getContent();
+    public ResponseEntity getQuestions(@RequestParam(required = false) String tab,
+                                       @RequestParam(required = false) Integer page,
+                                       @RequestParam(required = false) Integer size) {
+        if(page == null) page = 1;
+        if(size == null) size = 30;
 
-        return new ResponseEntity<>(
-                mapper.questionsToQuestionResponses(questions),
-                HttpStatus.OK);
-    }
-
-//    @GetMapping("/active")
-//    public ResponseEntity getQuestionsNewest(@Positive @RequestParam int page,
-//                                             @Positive @RequestParam int size) {
-//        Page<Question> pageQuestions = questionService.findQuestionsNewest(page - 1, size);
-//        List<Question> questions = pageQuestions.getContent();
-//
-//        return new ResponseEntity<>(
-//                mapper.questionsToQuestionResponses(questions),
-//                HttpStatus.OK);
-//    }
-
-    @GetMapping("/active")
-    public ResponseEntity getQuestionsActive(@Positive @RequestParam int page,
-                                             @Positive @RequestParam int size) {
-        Page<Question> pageQuestions = questionService.findQuestionsActive(page - 1, size);
-        List<Question> questions = pageQuestions.getContent();
-
-        return new ResponseEntity<>(
-                mapper.questionsToQuestionResponses(questions),
-                HttpStatus.OK);
-    }
-
-    /**
-     * 요청의 tag 전달 방식에 따라 추후 변경 가능
-     */
-    @GetMapping("/tagged/tab={tab}")
-    public ResponseEntity getQuestionsViaTag(
-            @PathVariable("tag") String tagName,
-            @RequestParam String tab,
-            @RequestParam int page,
-            @RequestParam int size) {
-        List<Question> questions = new ArrayList<>();
-        if (tab.equals("Newest")) {
-            questions = questionService.findQuestionsByTag(tagName, page - 1, size);
-        }
-        else if (tab.equals("Active")){
-            questions = questionService.findQuestionsByTag(tagName, page - 1, size);
-        }
-        else if (tab.equals("Bountied")) {
-
-        }
-        else if (tab.equals("Unanswered")) {
-
-        }
+        List<Question> questions = questionService.findQuestions(tab, page - 1, size).getContent();
 
         return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
                 HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity getQuestionsViaKeyword(@RequestParam(name = "q") String keyword,
+                                                 @RequestParam(required = false) Integer page,
+                                                 @RequestParam(required = false) Integer size) {
+        if(page == null) page = 1;
+        if(size == null) size = 30;
 
+        List<Question> questions = questionService.searchQuestions(keyword, page - 1, size).getContent();
+
+        return new ResponseEntity<>(
+                mapper.questionsToQuestionResponses(questions),
+                HttpStatus.OK
+        );
+    }
+
+    /**
+     * 요청의 tag 전달 방식에 따라 추후 변경 가능
+     */
+    @GetMapping("/tagged/{tag}")
+    public ResponseEntity getQuestionsViaTag(
+            @PathVariable(value = "tag") String tagName,
+            @RequestParam(required = false) String tab,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        if(page == null) page = 1;
+        if(size == null) size = 30;
+
+        List<Question> questions = questionService.findTaggedQuestions(tagName, tab, page - 1, size);
+
+        return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
+                HttpStatus.OK);
+    }
 
     @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(

@@ -15,5 +15,5 @@ public interface AnswerRepository extends JpaRepository<Answer,Long> {
     Answer findByAnswerId(long answerId);
     Page<Answer> findByQuestion(Question question, Pageable pageable);
 
-//    Answer findByQuestionAndBestAnswer(Question question, @Param("BestAnswer")long bestAnswer);
+    Answer findByQuestionAndBestAnswer(Question question, @Param("BestAnswer")long bestAnswer);
 }

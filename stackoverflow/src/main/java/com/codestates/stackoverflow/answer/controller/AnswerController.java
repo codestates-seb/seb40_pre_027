@@ -66,13 +66,14 @@ public class AnswerController {
         return answerLikesService.saveLike(answerId, 1);
     }
 
-    @PostMapping("/dislike")
-    public @ResponseBody long disLike(Long answerId) {
+    @PostMapping("/dislike/{answer-id}")
+    public @ResponseBody long disLike(@PathVariable("answer-id") Long answerId) {
         return answerLikesService.saveLike(answerId, -1);
     }
 
-//    @PatchMapping("/bestAnswer")
-//    public void selectBest(long questionId,long answerId){
-//        answerService.bestAnswer(questionId, answerId);
-//    }
+    @PatchMapping("/bestAnswer/{answer-id}")
+    public void selectBest(@Positive long questionId,
+                           @PathVariable("answer-id") long answerId){
+        answerService.bestAnswer(questionId, answerId);
+    }
 }
