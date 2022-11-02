@@ -30,6 +30,7 @@ function InputArea({
   stepBtnHandler,
   stepBtn,
   idx,
+  postData,
 }) {
   return (
     <InputAreaComponent>
@@ -47,6 +48,7 @@ function InputArea({
           stepBtn={stepBtn}
           idx={idx}
           step={step}
+          postData={postData}
         />
         <InputGuide
           title={data.title}
