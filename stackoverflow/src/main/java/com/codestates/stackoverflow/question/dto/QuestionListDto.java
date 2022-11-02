@@ -12,5 +12,5 @@ public class QuestionListDto {
     private int answerCount;
     private String memberName;
     private Long memberId;
-    private List<TagIconDto> tags;
+
 }

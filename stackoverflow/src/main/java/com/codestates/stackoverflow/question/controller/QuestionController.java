@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.question.controller;
 
 import com.codestates.stackoverflow.question.mapper.QuestionMapper;
+import com.codestates.stackoverflow.question.mapper.QuestionMapperImpl;
 import com.codestates.stackoverflow.questionLikes.service.QuestionLikeService;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
@@ -26,7 +27,7 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
     private final QuestionLikeService questionLikeService;
-    private final QuestionMapper mapper;
+    private final QuestionMapperImpl mapper;
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
@@ -39,7 +40,7 @@ public class QuestionController {
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion (@PathVariable("question-id") @Positive Long questionId,
+    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long questionId,
                                          @Valid @RequestBody QuestionDto.Patch requestBody) {
         requestBody.setQuestionId(questionId);
         Question question = questionService.updateQuestion(mapper.questionPatchToQuestion(requestBody));
@@ -98,7 +99,7 @@ public class QuestionController {
         if(page == null) page = 1;
         if(size == null) size = 30;
 
-        List<Question> questions = questionService.findTaggedQuestions(tagName, tab, page - 1, size);
+        List<Question> questions = questionService.findTaggedQuestions(tagName, tab, page - 1, size).getContent();
 
         return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
                 HttpStatus.OK);
@@ -112,13 +113,13 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/like")
-    public @ResponseBody int like(Long questionId) {
+    @PostMapping("/like/{question-id}")
+    public @ResponseBody int like(@PathVariable("question-id") Long questionId) {
         return questionLikeService.saveLike(questionId, 1);
     }
 
-    @PostMapping("/dislike")
-    public @ResponseBody int disLike(Long questionId) {
+    @PostMapping("/dislike/{question-id}")
+    public @ResponseBody int disLike(@PathVariable("question-id") Long questionId) {
         return questionLikeService.saveLike(questionId, -1);
     }
 }

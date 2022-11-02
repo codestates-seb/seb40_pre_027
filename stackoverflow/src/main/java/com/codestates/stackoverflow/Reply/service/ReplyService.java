@@ -70,5 +70,4 @@ public class ReplyService {
         Reply findReply = optionalReply.orElseThrow(()->new RuntimeException());
         return findReply;
     }
-
 }

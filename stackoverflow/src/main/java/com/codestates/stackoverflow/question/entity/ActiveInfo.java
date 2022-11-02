@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActiveInfo {
-    @Column
+    @Column(name = "LAST_ACTIVE_MEMBER")
     Long memberId;
 
     @Column
     LocalDateTime lastActiveAt;
 
-    @Embedded
+    @Enumerated(EnumType.STRING)
+    @Column
     ActiveType activeType;
 }

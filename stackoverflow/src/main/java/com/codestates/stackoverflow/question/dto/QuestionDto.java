@@ -35,8 +35,6 @@ public class QuestionDto {
 
         private String content;
 
-        private int bounty;
-
         private String[] tags;
 
         public void setQuestionId(Long questionId) {
@@ -53,8 +51,6 @@ public class QuestionDto {
         private String title;
 
         private String content;
-
-        private int bounty;
 
         private int viewCount;
 

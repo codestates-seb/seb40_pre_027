@@ -76,13 +76,13 @@ public class QuestionService {
 
     public Question findQuestion(Long questionId) {
         Question findQuestion = findValidQuestion(questionId);
-
         findQuestion.setViewCount(findQuestion.getViewCount() + 1);
+
         return questionRepository.save(findQuestion);
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> searchQuestions(String keyword, Integer page, Integer size) {
+    public Page<Question> searchQuestions(String keyword, int page, int size) {
         return questionRepository.findByKeyword(keyword, PageRequest.of(page, size))
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     }
@@ -94,7 +94,7 @@ public class QuestionService {
         switch (tab) {
             case "Newest":
                 return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
-                
+
             case "Active":
                 Sort sort = Sort.by("activeInfo.lastActiveAt").descending();
 
@@ -116,7 +116,7 @@ public class QuestionService {
      * tag가 null이거나 빈 경우 필요한지 추후 검토 후 수정
      */
     @Transactional(readOnly = true)
-    public List<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
+    public Page<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
         //tag의 tagName이 동일한 경우 페이지
         log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
         if (tab == null) tab = "Newest";
@@ -126,9 +126,10 @@ public class QuestionService {
         switch (tab) {
             case "Newest":
                 return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
-                        Sort.by("questionId").descending())).getContent();
+                        Sort.by("questionId").descending()));
             case "Active":
-                return null;
+                return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
+                        Sort.by("activeInfo.lastActiveAt").descending()));
             case "Bountied":
                 return null;
             case "Unanswered":
@@ -157,10 +158,10 @@ public class QuestionService {
     /**
      * Bounty 기능 추가시 사용할 메서드
      */
-    public Question addBounty(Question question, int bounty) {
-        question.setBounty(question.getBounty() + bounty);
-        return question;
-    }
+//    public Question addBounty(Question question, int bounty) {
+//        question.setBounty(question.getBounty() + bounty);
+//        return question;
+//    }
 
     public void mapAndSaveTags(Question question) {
         Optional.ofNullable(question.getTags())
