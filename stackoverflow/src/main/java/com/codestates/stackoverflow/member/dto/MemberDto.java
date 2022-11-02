@@ -47,12 +47,13 @@ public class MemberDto {
     public static class Profile {
         // 이미지 url 추가 예정
         private String name;
-        private LocalDateTime createdDate;
         private LocalDateTime loginDate;
+        private LocalDateTime createdDate;
         private String location;
         private String title;
         private String introduction;
     }
+
 
     @Getter
     @Setter
@@ -60,8 +61,8 @@ public class MemberDto {
     @NoArgsConstructor
     public static class Activity {
         private String name;
-        private LocalDateTime createdDate;
         private LocalDateTime loginDate;
+        private LocalDateTime createdDate;
         private List<QuestionDto.Response> questions;
         private List<AnswerDto.Response> answers;
         private List<ReplyDto.response> replies;

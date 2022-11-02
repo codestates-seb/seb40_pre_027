@@ -62,7 +62,7 @@ public class MemberController {
         return ResponseEntity.ok(memberMapper.memberToProfile(updatedMember));
     }
 
-    @GetMapping("/profile/activity")
+    @GetMapping("/profile/write")
     public ResponseEntity getMemberActivity() {
         Member findMember = memberService.findAuthenticatedMember();
 
