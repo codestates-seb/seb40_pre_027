@@ -7,8 +7,7 @@ import MyProfile from '../components/profile/MyProfile';
 import SmallLogo from '../img/smallLogo.png';
 import { Link } from 'react-router-dom';
 import React from 'react';
-// import { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 // import { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 const ProfilePages = styled.main`
@@ -139,26 +138,16 @@ const About = styled.div`
 `;
 
 function ProfilePage() {
-  //userprofile에 대한 axios 요청
-  const accessToken = localStorage.getItem('accessToken');
-  async function getUserProfile() {
-    try {
-      const res = await axios.get(`/user/profile`, {
-        headers: { access: accessToken },
-      });
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [profile, setProfile] = useState();
+
+  const UserDataHandler = (data) => {
+    setProfile(data);
+  };
+  console.log(profile);
 
   return (
     <ProfilePages>
-      <Header
-        getUserProfile={() => {
-          getUserProfile();
-        }}
-      />
+      <Header onGetUserProfile={UserDataHandler} />
       <section>
         <Nav />
         <article>
@@ -167,7 +156,7 @@ function ProfilePage() {
             <ul>
               <li>Profile</li>
               <li>
-                <LinkStyle path="/Profile/write" css={{ color: 'black' }}>
+                <LinkStyle path="/myProfile/write" css={{ color: 'black' }}>
                   Write
                 </LinkStyle>
               </li>
@@ -202,7 +191,10 @@ function ProfilePage() {
                       Your about me section is currently blank. Would you like
                       to add one?
                     </h3>
-                    <Link to="/profile/edit" style={{ textDecoration: 'none' }}>
+                    <Link
+                      to="/myProfile/edit"
+                      style={{ textDecoration: 'none' }}
+                    >
                       <h4>Edit profile</h4>
                     </Link>
                   </div>

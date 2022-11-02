@@ -53,7 +53,11 @@ function App() {
 
         <Route
           path="/write"
-          element={<Suspense fallback={<>...</>}>{isLogin ? <WritePage /> : <LoginPage />}</Suspense>}
+          element={
+            <Suspense fallback={<>...</>}>
+              {isLogin ? <WritePage /> : <LoginPage />}
+            </Suspense>
+          }
         ></Route>
 
         <Route
@@ -62,13 +66,15 @@ function App() {
         ></Route>
 
         <Route
-          path="/user/profile/edit"
+          path="/myProfile/edit"
           element={
-            <Suspense fallback={<>...</>}>{isLogin ? <EditProfilePage /> : <LoginPage />}</Suspense>
+            <Suspense fallback={<>...</>}>
+              {isLogin ? <EditProfilePage /> : <LoginPage />}
+            </Suspense>
           }
         ></Route>
         <Route
-          path="/user/profile"
+          path="/myProfile"
           element={
             <Suspense fallback={<>...</>}>
               {isLogin ? <ProfilePage /> : <LoginPage />}
@@ -77,8 +83,12 @@ function App() {
         ></Route>
 
         <Route
-          path="/user/profile/write"
-          element={<Suspense fallback={<>...</>}>{isLogin ? <Profilewrite /> : <LoginPage />}</Suspense>}
+          path="/myProfile/write"
+          element={
+            <Suspense fallback={<>...</>}>
+              {isLogin ? <Profilewrite /> : <LoginPage />}
+            </Suspense>
+          }
         ></Route>
         <Route path="*" element={<Navigate to="/" />}></Route>
       </Routes>
