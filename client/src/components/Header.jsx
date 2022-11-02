@@ -98,6 +98,11 @@ function Header() {
     localStorage.removeItem('refreshToken');
   };
 
+  //usercard 누를 때 작동하는 함수
+  const moveToUserProfile = () => {
+    console.log('123')
+  }
+
   const searchHandler = () => {};
   return (
     <>
@@ -123,7 +128,9 @@ function Header() {
             </form>
             {isLogin ? (
               <>
-                <UserCard />
+                <Link to="/profile">
+                  <UserCard onUserProfile={moveToUserProfile}/>
+                </Link>
                 <Button onClick={logoutHandler}>Log out</Button>
               </>
             ) : (

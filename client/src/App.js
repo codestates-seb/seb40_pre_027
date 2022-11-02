@@ -1,6 +1,9 @@
 import './App.css';
 import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+
+//redux를 위한 import
+import { useSelector } from 'react-redux';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -15,6 +18,7 @@ const Profilewrite = lazy(() =>
 );
 
 function App() {
+  const isLogin = useSelector((state) => state.isLogin);
   return (
     <div className="App">
       <Routes>
@@ -49,7 +53,7 @@ function App() {
 
         <Route
           path="/write"
-          element={<Suspense fallback={<>...</>}>{<WritePage />}</Suspense>}
+          element={<Suspense fallback={<>...</>}>{isLogin ? <WritePage /> : <LoginPage />}</Suspense>}
         ></Route>
 
         <Route
@@ -60,18 +64,23 @@ function App() {
         <Route
           path="/profile/edit"
           element={
-            <Suspense fallback={<>...</>}>{<EditProfilePage />}</Suspense>
+            <Suspense fallback={<>...</>}>{isLogin ? <EditProfilePage /> : <LoginPage />}</Suspense>
           }
         ></Route>
         <Route
           path="/profile"
-          element={<Suspense fallback={<>...</>}>{<ProfilePage />}</Suspense>}
+          element={
+            <Suspense fallback={<>...</>}>
+              {isLogin ? <ProfilePage /> : <LoginPage />}
+            </Suspense>
+          }
         ></Route>
 
         <Route
           path="/Profile/write"
-          element={<Suspense fallback={<>...</>}>{<Profilewrite />}</Suspense>}
+          element={<Suspense fallback={<>...</>}>{isLogin ? <Profilewrite /> : <LoginPage />}</Suspense>}
         ></Route>
+        <Route path="*" element={<Navigate to="/" />}></Route>
       </Routes>
     </div>
   );
