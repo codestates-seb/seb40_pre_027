@@ -2,100 +2,89 @@ package com.codestates.stackoverflow.member.mapper;
 
 import com.codestates.stackoverflow.member.dto.MemberDto;
 import com.codestates.stackoverflow.member.entity.Member;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-31T18:11:19+0900",
+    date = "2022-11-01T21:51:43+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
 public class MemberMapperImpl implements MemberMapper {
 
     @Override
-    public Member memberLoginPostDtoToMember(MemberDto.LoginPost memberLoginPostDto) {
-        if ( memberLoginPostDto == null ) {
+    public Member requestSignupToMember(MemberDto.RequestSignup request) {
+        if ( request == null ) {
             return null;
         }
 
         Member member = new Member();
 
-        member.setEmail( memberLoginPostDto.getEmail() );
-        member.setPassword( memberLoginPostDto.getPassword() );
+        member.setName( request.getName() );
+        member.setEmail( request.getEmail() );
+        member.setPassword( request.getPassword() );
 
         return member;
     }
 
     @Override
-    public Member memberRegisterPostDtoToMember(MemberDto.RegisterPost memberRegisterPostDto) {
-        if ( memberRegisterPostDto == null ) {
-            return null;
-        }
-
-        Member member = new Member();
-
-        member.setName( memberRegisterPostDto.getName() );
-        member.setEmail( memberRegisterPostDto.getEmail() );
-        member.setPassword( memberRegisterPostDto.getPassword() );
-
-        return member;
-    }
-
-    @Override
-    public Member memberFetchRequestDtoToMember(MemberDto.FetchRequest memberFetchDtoRequest) {
-        if ( memberFetchDtoRequest == null ) {
-            return null;
-        }
-
-        Member member = new Member();
-
-        member.setName( memberFetchDtoRequest.getName() );
-        member.setLocation( memberFetchDtoRequest.getLocation() );
-        member.setTitle( memberFetchDtoRequest.getTitle() );
-        member.setIntroduction( memberFetchDtoRequest.getIntroduction() );
-
-        return member;
-    }
-
-    @Override
-    public MemberDto.FetchResponse memberToMemberFetchResponseDto(Member member) {
+    public MemberDto.ResponseSignup memberToResponseSignup(Member member) {
         if ( member == null ) {
             return null;
         }
 
-        MemberDto.FetchResponse fetchResponse = new MemberDto.FetchResponse();
-
-        fetchResponse.setName( member.getName() );
-        fetchResponse.setLocation( member.getLocation() );
-        fetchResponse.setTitle( member.getTitle() );
-        fetchResponse.setIntroduction( member.getIntroduction() );
-
-        return fetchResponse;
-    }
-
-    @Override
-    public MemberDto.Response memberToMemberResponseDto(Member member) {
-        if ( member == null ) {
-            return null;
-        }
-
-        MemberDto.Response response = new MemberDto.Response();
+        MemberDto.ResponseSignup responseSignup = new MemberDto.ResponseSignup();
 
         if ( member.getMemberId() != null ) {
-            response.setMemberId( member.getMemberId() );
+            responseSignup.setMemberId( member.getMemberId() );
         }
-        response.setName( member.getName() );
-        response.setEmail( member.getEmail() );
-        List<String> list = member.getRoles();
-        if ( list != null ) {
-            response.setRoles( new ArrayList<String>( list ) );
-        }
-        response.setCreatedDate( member.getCreatedDate() );
-        response.setLoginDate( member.getLoginDate() );
+        responseSignup.setName( member.getName() );
+        responseSignup.setEmail( member.getEmail() );
 
-        return response;
+        return responseSignup;
+    }
+
+    @Override
+    public Member profileToMember(MemberDto.Profile request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Member member = new Member();
+
+        member.setName( request.getName() );
+        member.setLocation( request.getLocation() );
+        member.setTitle( request.getTitle() );
+        member.setIntroduction( request.getIntroduction() );
+
+        return member;
+    }
+
+    @Override
+    public MemberDto.Profile memberToProfile(Member member) {
+        if ( member == null ) {
+            return null;
+        }
+
+        MemberDto.Profile profile = new MemberDto.Profile();
+
+        profile.setName( member.getName() );
+        profile.setLocation( member.getLocation() );
+        profile.setTitle( member.getTitle() );
+        profile.setIntroduction( member.getIntroduction() );
+
+        return profile;
+    }
+
+    @Override
+    public MemberDto.Activity memberToActivity(Member member) {
+        if ( member == null ) {
+            return null;
+        }
+
+        MemberDto.Activity activity = new MemberDto.Activity();
+
+        return activity;
     }
 }

@@ -7,6 +7,8 @@ import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
+import com.codestates.stackoverflow.question.entity.ActiveInfo;
+import com.codestates.stackoverflow.question.entity.ActiveType;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.service.QuestionService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -31,10 +34,14 @@ public class AnswerService {
     private final MemberRepository memberRepository;
 
     public Answer createAnswer(Answer answer, long questionId){
-        Member member = memberServiceImpl.findAuthenticatedMember();
-        member.setAnswers(answer);
         Question question = questionService.findValidQuestion(questionId);
         question.setAnswers(answer);
+        Member member = memberServiceImpl.findAuthenticatedMember();
+        member.setAnswers(answer);
+
+        ActiveInfo activeInfo = new ActiveInfo(member.getMemberId(), answer.getAnswerCreatedAt(), ActiveType.ANSWERED);
+        question.setActiveInfo(activeInfo);
+
         memberRepository.save(member);
         questionRepository.save(question);
         return answerRepository.save(answer);

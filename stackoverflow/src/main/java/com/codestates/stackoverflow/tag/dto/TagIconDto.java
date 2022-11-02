@@ -1,5 +1,6 @@
 package com.codestates.stackoverflow.tag.dto;
 
-public class TagsResponseDto {
+public class TagIconDto {
+    Long tagId;
 
 }

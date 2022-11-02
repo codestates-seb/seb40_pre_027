@@ -6,6 +6,9 @@ import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.tag.entity.Tag;
 import com.codestates.stackoverflow.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -14,14 +17,15 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TagService {
     private final TagRepository tagRepository;
     private final QuestionRepository questionRepository;
@@ -50,6 +54,24 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    /**
+     * Popular, Name, New 기준별 정렬된 태그 페이지 조회
+     */
+    public List<Tag> findTagsPopular(int page) {
+        Page<Tag> tagPage = tagRepository.findByOrderByAskedTotal(PageRequest.of(page, 36));
+        return tagPage.getContent();
+    }
+
+    public List<Tag> findTagsName(int page) {
+        Page<Tag> tagPage = tagRepository.findByOrderByTagNameAsc(PageRequest.of(page, 36));
+        return tagPage.getContent();
+    }
+
+    public List<Tag> findTagsNew(int page) {
+        Page<Tag> tagPage = tagRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, 36));
+        return tagPage.getContent();
+    }
+
     public int findNumberOfQuestionsWithTag (String tagName) {
         return questionTagRepository.findNumberOfQuestionsWithTag(tagName);
     }
@@ -72,5 +94,35 @@ public class TagService {
                 .collect(Collectors.toList());
 
         return tags;
+    }
+
+    public void updateTagQuestionsCount() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                List<Tag> tags = tagRepository.findAll();
+                tags.forEach(tag -> {
+                    String tagName = tag.getTagName();
+                    int currentAskedTotal = findNumberOfQuestionsWithTag(tagName);
+                    int currentAskedToday = findNumberOfQuestionsWithTagAskedToday(tagName);
+                    int currentAskedThisWeek = findNumberOfQuestionsWithTagAskedThisWeek(tagName);
+                    if (tag.getAskedTotal() != currentAskedTotal) {
+                        tag.setAskedTotal(currentAskedTotal);
+                        tagRepository.save(tag);
+                    }
+                    else if (tag.getQuestionsAskedToday() != currentAskedToday) {
+                        tag.setQuestionsAskedToday(currentAskedToday);
+                        tagRepository.save(tag);
+                    }
+                    else if (tag.getQuestionsAskedThisWeek() != currentAskedThisWeek) {
+                        tag.setQuestionsAskedThisWeek(currentAskedThisWeek);
+                        tagRepository.save(tag);
+                    }
+                    log.info("[모든 Tag의 QuestionCount Update]: ");
+                });
+            }
+        };
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(runnable, 0, 3600, TimeUnit.SECONDS);
     }
 }
