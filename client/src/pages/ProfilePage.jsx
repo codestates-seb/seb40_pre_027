@@ -1,8 +1,25 @@
 import styled from 'styled-components';
 import LinkStyle from '../components/LinkStyle';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Nav from '../components/home/Nav';
+import MyProfile from '../components/profile/MyProfile';
+
 const ProfilePages = styled.main`
-  width: 1200px;
-  margin: 0 auto;
+  width: 100vw;
+  section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    article {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #d9d9d9;
+      .top-menu {
+        height: 110px;
+      }
+    }
+  }
 `;
 const ProfileTab = styled.div`
   margin: 50px;
@@ -19,8 +36,8 @@ const ProfileTab = styled.div`
 const ProfileIn = styled.div`
   width: 1000px;
   height: auto;
-  border: 1px solid #c6c6c6;
-  margin: 50px;
+  margin-left: 40px;
+  margin-bottom: 40px;
 `;
 const LeftContent = styled.div`
   float: left;
@@ -103,44 +120,52 @@ const About = styled.div`
 function ProfilePage() {
   return (
     <ProfilePages>
-      <ProfileTab>
-        <ul>
-          <li>Profile</li>
-          <LinkStyle path="/Profile/write" css={{ color: 'black' }}>
-            Write
-          </LinkStyle>
-        </ul>
-      </ProfileTab>
-      <ProfileIn>
-        <LeftContent>
-          <LeftBox>
-            <h2>Stats</h2>
-            <div></div>
-          </LeftBox>
-          <LeftBox>
-            <span>
-              <h2>Communities</h2>
-              <h4>Edit</h4>
-            </span>
-            <p></p>
-            <div></div>
-          </LeftBox>
-        </LeftContent>
-        <RightContent>
-          <About>
-            <h2>ABOUT</h2>
-            <div>
-              <div>
-                <h3>
-                  Your about me section is currently blank. Would you like to
-                  add one?
-                </h3>
-                <h4>Edit profile</h4>
-              </div>
-            </div>
-          </About>
-        </RightContent>
-      </ProfileIn>
+      <Header />
+      <section>
+        <Nav />
+        <article>
+          <MyProfile />
+          <ProfileTab>
+            <ul>
+              <li>Profile</li>
+              <LinkStyle path="/Profile/write" css={{ color: 'black' }}>
+                Write
+              </LinkStyle>
+            </ul>
+          </ProfileTab>
+          <ProfileIn>
+            <LeftContent>
+              <LeftBox>
+                <h2>Stats</h2>
+                <div></div>
+              </LeftBox>
+              <LeftBox>
+                <span>
+                  <h2>Communities</h2>
+                  <h4>Edit</h4>
+                </span>
+                <p></p>
+                <div></div>
+              </LeftBox>
+            </LeftContent>
+            <RightContent>
+              <About>
+                <h2>ABOUT</h2>
+                <div>
+                  <div>
+                    <h3>
+                      Your about me section is currently blank. Would you like
+                      to add one?
+                    </h3>
+                    <h4>Edit profile</h4>
+                  </div>
+                </div>
+              </About>
+            </RightContent>
+          </ProfileIn>
+        </article>
+      </section>
+      <Footer />
     </ProfilePages>
   );
 }
