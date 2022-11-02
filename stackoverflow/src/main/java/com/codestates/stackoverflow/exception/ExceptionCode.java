@@ -7,6 +7,8 @@ public enum ExceptionCode {
 
     NOT_WRITER(401,"You are not Writer"),
     LOGIN_FAILED(401, "It's an ID you didn't sign up for, or it's an incorrect password."),
+    ACCESS_TOKEN_NOT_FOUND(404, "Access Token not found"),
+    REFRESH_TOKEN_NOT_FOUND(404, "Refresh Token not found"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     QUESTION_NOT_FOUND(404, "Question not found"),
     QUESTION_COMMENT_NOT_FOUND(404,"Question comment not found"),
