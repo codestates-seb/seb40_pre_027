@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ProfilePicture from '../../img/ProfilePicture.png';
 import { Editor } from '@toast-ui/react-editor';
@@ -82,9 +82,14 @@ function EditProfile() {
     setEdit({
       ...edit,
       [e.target.name]: e.target.value,
+
     });
-  };
   console.log(edit);
+  };
+
+  const editRef = useRef()
+
+
   return (
     <EditProfileComponent>
       <h1>Edit your Profile</h1>
@@ -124,8 +129,10 @@ function EditProfile() {
             initialEditType="markdown"
             useCommandShortcut={true}
             name="introduction"
-            onChange={onChangeEdit}
+            // onChange={onChangeEdit}
+            onChange={(e) => console.log(editRef.current.getInstance().getHTML())}
             value={edit.introduction}
+            ref={editRef}
           ></Editor>
         </EditComponent>
       </ProfileEditInfoComponent>
