@@ -5,6 +5,7 @@ import Header from '../Header';
 import Footer from '../Footer';
 import Nav from '../home/Nav';
 import MyProfile from './MyProfile';
+import { Link } from 'react-router-dom';
 
 const ProfilePages = styled.main`
   width: 100vw;
@@ -153,7 +154,9 @@ function profilewrite() {
                         Your about me section is currently blank. Would you like
                         to add one?
                       </h3>
-                      <h4>write question</h4>
+                      <Link to="/write" style={{ textDecoration: 'none' }}>
+                        <h4>write question</h4>
+                      </Link>
                     </span>
                   </div>
                 </RightBox>
