@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
 import { Link, useLocation } from 'react-router-dom';
@@ -27,52 +27,29 @@ const TopMenuBoxComponent = styled.div`
 `;
 
 const ButtonListsComponent = styled.div`
-  > button {
+  > div {
     width: 80px;
     height: 30px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     border: 0.8px solid black;
-    background-color: white;
-  }
-  > :nth-child(5) {
-    background-color: #e3e6e8;
-    color: #a1a1a1;
-  }
-  > :nth-child(4) {
-    width: 120px;
-    height: 30px;
+    background-color: #fff;
+    cursor: pointer;
     display: flex;
     justify-content: center;
-    padding-top: 4px;
-    line-height: 1.4rem;
-    > div {
-      width: 30px;
-      height: 20px;
-      background-color: #1e98fc;
-      color: white;
-    }
+    align-items: center;
   }
-  > :nth-child(3) {
-    width: 60px;
-    color: #3e3e3e;
+  .select {
+    background: #b6b4b4;
   }
-  > :nth-child(2) {
-    width: 70px;
-    color: #3e3e3e;
-  }
-  > :nth-child(1) {
-    width: 70px;
-    color: #3e3e3e;
-  }
-
   margin-bottom: 10px;
   display: flex;
-  flex-direction: row-reverse;
+  justify-content: flex-end;
 `;
 
 function TopMenu() {
-  const { pathname } = useLocation();
-  console.log(pathname);
+  const [sorted, setSorted] = useState('interesting');
+  const sortedArr = ['interesting', 'Hot', 'Week', 'Month'];
+  const sortBtnHandler = (t) => setSorted(t);
   return (
     <TopMenuComponent>
       <TopMenuBoxComponent>
@@ -81,7 +58,18 @@ function TopMenu() {
           <Button>Ask Question</Button>
         </Link>
       </TopMenuBoxComponent>
-      <ButtonListsComponent>
+
+      <ButtonListsComponent sort={sorted}>
+        {sortedArr.map((v) => (
+          <div
+            className={sorted === v ? 'select' : ''}
+            onClick={() => sortBtnHandler(v)}
+          >
+            {v}
+          </div>
+        ))}
+      </ButtonListsComponent>
+      {/* <ButtonListsComponent>
         <button>Month</button>
         <button>Week</button>
         <button>Hot</button>
@@ -90,7 +78,7 @@ function TopMenu() {
           &nbsp;bountied
         </button>
         <button>interesting</button>
-      </ButtonListsComponent>
+      </ButtonListsComponent> */}
     </TopMenuComponent>
   );
 }
