@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.question.dto;
 
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
+import com.codestates.stackoverflow.tag.dto.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,7 @@ public class QuestionDto {
     @NoArgsConstructor
     @Getter @Setter
     public static class Response {
+
         private long questionId;
 
         private String title;
@@ -65,5 +67,29 @@ public class QuestionDto {
         private List<Comment> comments;
 
         private List<Answer> answers;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter @Setter
+    public static class ResponseQuestionsList {
+
+        private String title;
+
+        private String content;
+
+        private Long memberId;
+
+        private String name;
+
+        private int viewCount;
+
+        private int likeCount;
+
+        private int answerCount;
+
+        private List<TagDto.ResponseIcon> tags;
+
+        private int totalCount;
     }
 }

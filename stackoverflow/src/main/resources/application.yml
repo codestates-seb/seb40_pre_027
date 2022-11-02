@@ -18,6 +18,10 @@ spring:
     properties:
       hibernate:
         format_sql: true  # (3) SQL pretty print
+        search:
+          default:
+            directory_provider: filesystem
+            indexBase: D:/Temporary
   sql:
 
 
@@ -32,7 +36,7 @@ logging:
 # Security ??
 jwt:
   secret-key: ${jwt-secret}
-  access-token-expiration-minutes: 1
+  access-token-expiration-minutes: 360
   refresh-token-expiration-minutes: 360
 
 # Test

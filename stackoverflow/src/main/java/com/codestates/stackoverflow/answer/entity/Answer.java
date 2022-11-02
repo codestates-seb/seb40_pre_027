@@ -44,10 +44,9 @@ public class Answer {
     @Column
     private long bestAnswer;
 
-
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
+    @JsonBackReference
     private Member answerWriter;
 
     @ManyToOne

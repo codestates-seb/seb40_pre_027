@@ -13,6 +13,7 @@ import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Transactional
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
@@ -31,7 +33,6 @@ public class AnswerService {
     private final MemberServiceImpl memberServiceImpl;
     private final MemberRepository memberRepository;
 
-    //10.30 answer<->question mapping add
     public Answer createAnswer(Answer answer, long questionId){
         Question question = questionService.findValidQuestion(questionId);
         question.setAnswers(answer);
@@ -47,12 +48,14 @@ public class AnswerService {
     }
 
     public Answer updateAnswer(Answer answer){
-        long writerId = answer.getAnswerWriter().getMemberId();
-        long patchMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
 
-        if(writerId != patchMemberId) {
-            new BusinessLogicException(ExceptionCode.NOT_WRITER);
-        }
+//        [주석 처리된 code 는 댓글수정 / 글쓴이 권한 로직]
+//        long writerId = answer.getAnswerWriter().getMemberId();
+//        long patchMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
+//
+//        if(writerId != patchMemberId) {
+//            new BusinessLogicException(ExceptionCode.NOT_WRITER);
+//        }
 
         Answer findAnswer = findVerifiedAnswer(answer.getAnswerId());
 
@@ -71,14 +74,16 @@ public class AnswerService {
     }
 
     public void deleteAnswer(Long answerId){
+
+//        [주석 처리된 code 는 댓글 삭제 / 글쓴이 권한 로직]
+//        long writerId = findAnswer.getAnswerWriter().getMemberId();
+//        long deleteMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
+//
+//        if(writerId != deleteMemberId){
+//            new BusinessLogicException(ExceptionCode.NOT_WRITER);
+//        }
+
         Answer findAnswer = findVerifiedAnswer(answerId);
-
-        long writerId = findAnswer.getAnswerWriter().getMemberId();
-        long deleteMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
-
-        if(writerId != deleteMemberId){
-            new BusinessLogicException(ExceptionCode.NOT_WRITER);
-        }
 
         answerRepository.delete(findAnswer);
     }
@@ -99,15 +104,18 @@ public class AnswerService {
         return answerRepository.save(findAnswer).getAnswerLikesCount();
     }
 
-//    public void bestAnswer(long questionId, long answerId){
-//        Question question = questionService.findValidQuestion(questionId);
-//        if(answerRepository.findByQuestionAndBestAnswer(question,1) == null){
-//            new RuntimeException();
-//        }
-//        else{
-//            Answer findAnswer = findVerifiedAnswer(answerId);
-//            findAnswer.setBestAnswer(1);
-//            answerRepository.save(findAnswer);
-//        }
-//    }
+    public void bestAnswer(long questionId, long answerId){
+        Question question = questionService.findValidQuestion(questionId);
+        Answer findAnswer = findVerifiedAnswer(answerId);
+        if(answerRepository.findByQuestionIdAndBestAnswer(questionId,1L) == null){
+            findAnswer.setBestAnswer(1);
+            answerRepository.save(findAnswer);
+        }
+        else{
+            Answer best = answerRepository.findByQuestionIdAndBestAnswer(questionId,1L);
+            best.setBestAnswer(0);
+            findAnswer.setBestAnswer(1);
+            //맨 윗 댓글로 올려주는 정렬 필요.
+        }
+    }
 }

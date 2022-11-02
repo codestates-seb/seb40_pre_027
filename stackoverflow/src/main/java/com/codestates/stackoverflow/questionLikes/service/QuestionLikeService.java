@@ -61,11 +61,4 @@ public class QuestionLikeService {
                 return questionService.modifyLikeCount(questionId, -2);
         }
     }
-
-    //like를 늘리고 줄이는 메서드
-//    @Transactional
-//    public boolean LikeExists(Long questionId) {
-//        Optional<QuestionLike> findLike = likeRepository.findByQuestion_Id(questionId);
-//        return findLike.isPresent();
-//    }
 }

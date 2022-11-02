@@ -4,10 +4,14 @@ package com.codestates.stackoverflow.question.entity;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,6 +22,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter @Setter
+@Indexed
 @Entity
 public class Question {
     @Id
@@ -25,13 +30,16 @@ public class Question {
     private Long questionId;
 
     @Column(length = 150, nullable = false)
+    @Field
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
+    @Field
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
+    @JsonBackReference
     private Member member;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
@@ -42,7 +50,8 @@ public class Question {
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private List<QuestionTag> questionTags = new ArrayList<>();
 
     private String[] tags;

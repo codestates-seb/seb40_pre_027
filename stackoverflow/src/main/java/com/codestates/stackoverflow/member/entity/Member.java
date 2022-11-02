@@ -4,7 +4,9 @@ import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
+import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,26 +48,36 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Question> questions;
-    
+    public void setQuestions(Question question) {
+        this.questions.add(question);
+        question.setMember(this);
+    }
+
+
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
 
-    public void setQuestions(Question question) {
-        if (question.getMember() != this) {
-            question.setMember(this);
-        }
-        questions.add(question);
-    }
+
+    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "member")
+    @JsonManagedReference
+    private List<Comment> comments = new ArrayList<>();
 
     public void setAnswers(Answer answer) {
         this.answers.add(answer);
         answer.setAnswerWriter(this);
     }
+    public void setComments(Comment comment) {
+        this.comments.add(comment);
+        comment.setMember(this);
+    }
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "replyWriter")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Reply> replies = new ArrayList<>();
 
     public void setReplies(Reply reply) {

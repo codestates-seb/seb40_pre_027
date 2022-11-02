@@ -7,13 +7,11 @@ import com.codestates.stackoverflow.question.entity.Question;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Component
-public class QuestionMapperImpl implements QuestionMapper {
+public class QuestionMapperImpl {
 
-    @Override
     public Question questionPostToQuestion(QuestionDto.Post requestBody) {
         if ( requestBody == null ) {
             return null;
@@ -31,7 +29,6 @@ public class QuestionMapperImpl implements QuestionMapper {
         return question;
     }
 
-    @Override
     public Question questionPatchToQuestion(QuestionDto.Patch requestBody) {
         if ( requestBody == null ) {
             return null;
@@ -50,7 +47,6 @@ public class QuestionMapperImpl implements QuestionMapper {
         return question;
     }
 
-    @Override
     public QuestionDto.Response questionToQuestionResponse(Question question) {
         if ( question == null ) {
             return null;
@@ -83,7 +79,6 @@ public class QuestionMapperImpl implements QuestionMapper {
         return response;
     }
 
-    @Override
     public List<QuestionDto.Response> questionsToQuestionResponses(List<Question> questions) {
         if ( questions == null ) {
             return null;

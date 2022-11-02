@@ -1,6 +1,6 @@
 package com.codestates.stackoverflow.question.controller;
 
-import com.codestates.stackoverflow.question.mapper.QuestionMapper;
+//import com.codestates.stackoverflow.question.mapper.QuestionMapper;
 import com.codestates.stackoverflow.question.mapper.QuestionMapperImpl;
 import com.codestates.stackoverflow.questionLikes.service.QuestionLikeService;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
@@ -60,7 +60,7 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity getQuestions(@RequestParam(required = false) String tab,
+    public ResponseEntity getQuestionsSorted(@RequestParam(required = false) String tab,
                                        @RequestParam(required = false) Integer page,
                                        @RequestParam(required = false) Integer size) {
         if(page == null) page = 1;
@@ -79,7 +79,7 @@ public class QuestionController {
         if(page == null) page = 1;
         if(size == null) size = 30;
 
-        List<Question> questions = questionService.searchQuestions(keyword, page - 1, size).getContent();
+        List<Question> questions = questionService.searchQuestions(keyword, page - 1, size);
 
         return new ResponseEntity<>(
                 mapper.questionsToQuestionResponses(questions),
@@ -113,13 +113,9 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/like/{question-id}")
-    public @ResponseBody int like(@PathVariable("question-id") Long questionId) {
-        return questionLikeService.saveLike(questionId, 1);
-    }
-
-    @PostMapping("/dislike/{question-id}")
-    public @ResponseBody int disLike(@PathVariable("question-id") Long questionId) {
-        return questionLikeService.saveLike(questionId, -1);
+    @PostMapping("/{question-id}/vote")
+    public @ResponseBody int like(@PathVariable("question-id") Long questionId,
+                                  @RequestParam int val) {
+        return questionLikeService.saveLike(questionId, val);
     }
 }

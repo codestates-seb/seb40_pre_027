@@ -39,7 +39,7 @@ public class ReplyController {
         Reply reply = replyService.updateReply(mapper.ReplyPatchDtoToReply(patch));
         return new ResponseEntity<>(mapper.ReplyToReplyResponseDto(reply),HttpStatus.OK);
     }
-
+//  조회용 GetMapping
     @GetMapping("/{answer-id}")
     public ResponseEntity getReply(@PathVariable("answer-id") Long answerId,
                                 @Positive @RequestParam int page ,

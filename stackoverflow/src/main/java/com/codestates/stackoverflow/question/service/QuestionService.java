@@ -22,6 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -40,6 +42,7 @@ public class QuestionService {
     private final TagService tagService;
     private final MemberServiceImpl memberServiceImpl;
     private final MemberRepository memberRepository;
+    private final HibernateSearchService searchService;
 
     public Question createQuestion(Question question) {
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
@@ -82,9 +85,18 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> searchQuestions(String keyword, int page, int size) {
-        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size))
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+    public List<Question> searchQuestions(@PathVariable("keyword") String keyword,
+                                          @RequestParam int page,
+                                          @RequestParam int size) throws BusinessLogicException {
+        log.info("[searchQuestions] keyword = " + keyword);
+//        if(keyword.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*") && keyword.startsWith("\"") && keyword.endsWith("\"")) {
+//            keyword = keyword.substring(1, keyword.length() - 1);
+//        }
+
+//        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size, Sort.by("questionId").descending()))
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+
+        return searchService.searchQuestions(keyword);
     }
 
     @Transactional(readOnly = true)

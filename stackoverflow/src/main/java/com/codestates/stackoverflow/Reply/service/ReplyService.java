@@ -37,11 +37,13 @@ public class ReplyService {
     }
 
     public Reply updateReply(Reply reply){
-        long writerId = reply.getReplyWriter().getMemberId();
-        long patchMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
-        if(writerId != patchMemberId){
-            new BusinessLogicException(ExceptionCode.NOT_WRITER);
-        }
+//        [주석 처리된 code 는 대댓글수정 / 글쓴이 권한 로직]
+//        long writerId = reply.getReplyWriter().getMemberId();
+//        long patchMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
+//        if(writerId != patchMemberId){
+//            new BusinessLogicException(ExceptionCode.NOT_WRITER);
+//        }
+
         Reply findReply = findVerifiedReply(reply.getReplyId());
         Optional.ofNullable(reply.getReplyContent())
                 .ifPresent(content -> findReply.setReplyContent(content));
@@ -52,22 +54,23 @@ public class ReplyService {
     public Page<Reply> getReplies(long answerId , Pageable pageable){
         Answer findAnswer = answerService.findVerifiedAnswer(answerId);
         return replyRepository.findByAnswer(findAnswer,pageable);
-        //PageRequest pageRequest = PageRequest.of(page,size);
     }
 
     public void deleteReply(Long replyId){
+//        [주석 처리된 code 는 대댓글삭제 / 글쓴이 권한 로직]
+//        long writerId = findReply.getReplyWriter().getMemberId();
+//        long deleteMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
+//        if(writerId != deleteMemberId){
+//            new BusinessLogicException(ExceptionCode.NOT_WRITER);
+//        }
+
         Reply findReply = findVerifiedReply(replyId);
-        long writerId = findReply.getReplyWriter().getMemberId();
-        long deleteMemberId = memberServiceImpl.findAuthenticatedMember().getMemberId();
-        if(writerId != deleteMemberId){
-            new BusinessLogicException(ExceptionCode.NOT_WRITER);
-        }
         replyRepository.delete(findReply);
     }
 
     public Reply findVerifiedReply(Long replyId){
         Optional<Reply> optionalReply = replyRepository.findById(replyId);
-        Reply findReply = optionalReply.orElseThrow(()->new RuntimeException());
+        Reply findReply = optionalReply.orElseThrow(()->new BusinessLogicException(ExceptionCode.ANSWER_COMMENT_NOT_FOUND));
         return findReply;
     }
 }
