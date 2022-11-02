@@ -109,7 +109,6 @@ public class AnswerService {
             best.setBestAnswer(0);
             findAnswer.setBestAnswer(1);
             //맨 윗 댓글로 올려주는 정렬 필요.
-            
         }
     }
 }

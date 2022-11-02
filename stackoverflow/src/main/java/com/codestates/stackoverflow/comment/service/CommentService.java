@@ -28,7 +28,7 @@ public class CommentService {
 
     public Comment createComment(Long questionId, Comment comment) {
         Member member = memberServiceImpl.findAuthenticatedMember();
-        //member.set~~~메서드로 넣ㄱ시
+        member.setComments(comment);
         Question question = questionService.findValidQuestion(questionId);
         question.setComments(comment);
         questionRepository.save(question);
