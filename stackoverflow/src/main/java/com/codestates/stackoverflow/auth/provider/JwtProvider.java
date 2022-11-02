@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.auth.provider;
 
 import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.exception.BusinessLogicException;
+import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
@@ -105,27 +106,23 @@ public class JwtProvider {
         return token;
     }
 
-    // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
-//    public String reissueAccessToken(Map<String, Object> claims , String refreshToken, String base64EncodedSecretKey) {
-//        String username = claims.get("username").toString();
-//        Member member = memberRepository.findByEmail(username).get();
-//
-//        String verifiedRefreshToken = member.getRefreshToken();
-//
-//        if (!(refreshToken == verifiedRefreshToken)) {
-//            throw new RuntimeException("토큰 이상함");
-//        }
-//
-//    }
-
-    // request에 담겨 있는 토큰 가져오기
+    // request에 담겨 있는 Access Token 가져오기
     public String getAccessTokenFromRequest(HttpServletRequest request) {
-        String jws = request.getHeader("access").replace("Bearer ", "");
-        return jws;
+        String access = request.getHeader("access");
+        if (access.isEmpty()) {
+            log.error("Headers에서 access를 찾을 수 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.ACCESS_TOKEN_NOT_FOUND);
+        }
+        String token = access.replace("Bearer ", "");
+        return token;
     }
 
     public String getRefreshTokenFromRequest(HttpServletRequest request) {
         String refreshToken = request.getHeader("refresh");
+        if (refreshToken.isEmpty()) {
+            log.error("Headers에서 refresh를 찾을 수 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
+        }
         return refreshToken;
     }
 

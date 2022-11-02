@@ -1,6 +1,6 @@
 package com.codestates.stackoverflow.auth.filter;
 
-import com.codestates.stackoverflow.auth.dto.LoginDto;
+import com.codestates.stackoverflow.auth.dto.AuthDto;
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         log.info("[attemptAuthentication] 로그인 요청 시작");
         ObjectMapper objectMapper = new ObjectMapper();
-        LoginDto loginRequest = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+        AuthDto.LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), AuthDto.LoginRequest.class);
 
         log.info("[attemptAuthentication] " + loginRequest.getEmail());
 
@@ -74,7 +74,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
-
+        log.info("member = {}", member.toString());
         String subject = member.getEmail();
         Date expiration = jwtProvider.getTokenExpiration(jwtProvider.getAccessTokenExpirationMinutes());
 
