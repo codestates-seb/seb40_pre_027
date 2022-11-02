@@ -130,7 +130,13 @@ function LoginPage() {
           console.log(data);
         });
     } catch (error) {
-      console.error(error);
+      if (error.response.status === 401) {
+        alert('이메일 혹은 비밀번호가 일치하지 않습니다.');
+        console.log(error);
+      } else {
+        alert(error.response.status);
+        console.log(error);
+      }
     }
   }
 

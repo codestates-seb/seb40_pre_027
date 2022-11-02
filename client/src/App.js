@@ -62,13 +62,13 @@ function App() {
         ></Route>
 
         <Route
-          path="/profile/edit"
+          path="/user/profile/edit"
           element={
             <Suspense fallback={<>...</>}>{isLogin ? <EditProfilePage /> : <LoginPage />}</Suspense>
           }
         ></Route>
         <Route
-          path="/profile"
+          path="/user/profile"
           element={
             <Suspense fallback={<>...</>}>
               {isLogin ? <ProfilePage /> : <LoginPage />}
@@ -77,7 +77,7 @@ function App() {
         ></Route>
 
         <Route
-          path="/Profile/write"
+          path="/user/profile/write"
           element={<Suspense fallback={<>...</>}>{isLogin ? <Profilewrite /> : <LoginPage />}</Suspense>}
         ></Route>
         <Route path="*" element={<Navigate to="/" />}></Route>
