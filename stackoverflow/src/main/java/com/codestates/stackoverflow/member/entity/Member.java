@@ -4,6 +4,7 @@ import com.codestates.stackoverflow.Reply.entity.Reply;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
+import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
