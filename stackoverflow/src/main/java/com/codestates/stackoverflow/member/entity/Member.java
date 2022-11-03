@@ -6,6 +6,7 @@ import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
@@ -45,8 +45,9 @@ public class Member extends Auditable {
 
     // 질문 영역
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
     @ToString.Exclude
+    @JsonManagedReference
     private List<Question> questions;
     public void setQuestions(Question question) {
         this.questions.add(question);
@@ -56,10 +57,12 @@ public class Member extends Auditable {
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
 
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "member")
+    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     public void setAnswers(Answer answer) {
@@ -73,6 +76,7 @@ public class Member extends Auditable {
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "replyWriter")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Reply> replies = new ArrayList<>();
 
     public void setReplies(Reply reply) {

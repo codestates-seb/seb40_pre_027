@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-@Service
 @Slf4j
+@Service
 public class JwtService {
 
     private final MemberRepository memberRepository;

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActiveInfo {
-    @Column
+    @Column(name = "writerId")
     Long memberId;
 
     @Column

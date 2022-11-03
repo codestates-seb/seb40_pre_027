@@ -22,13 +22,17 @@ import java.util.Map;
 
 /* 토큰 검증 */
 @Slf4j
-@RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
 
     // JWT 검증 및 토큰의 정보
     private final JwtProvider jwtProvider;
     // 사용자 권한 생성용
     private final CustomAuthorityUtils authorityUtils;
+
+    public JwtVerificationFilter(JwtProvider jwtProvider, CustomAuthorityUtils authorityUtils) {
+        this.jwtProvider = jwtProvider;
+        this.authorityUtils = authorityUtils;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
