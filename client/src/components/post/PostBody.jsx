@@ -163,7 +163,6 @@ function PostBody({
   idx,
   setAnswersArray,
   answersArray,
-  profile,
 }) {
   const {
     title,
@@ -174,6 +173,7 @@ function PostBody({
     likeCount,
     content,
     memberId,
+    profile,
   } = post;
   const navigate = useNavigate();
   const [shareClicked, setShareClicked] = useState(false);
@@ -328,6 +328,7 @@ function PostBody({
         questionId={questionId}
         questionLikeCount={likeCount}
         answerId={answer.answerId}
+        answerLikeCount={answer.answerLikesCount}
       />
       <div className="post-body-container">
         <section className="main-content" ref={contentRef}>
@@ -405,8 +406,7 @@ function PostBody({
             </div>
             <div className="edited-date-wrapper">
               <div className="edited-date" title="Show all edits to this post">
-                edited
-                {createdAtForDate.toLocaleString()}
+                {`edited ${modifiedAtForDate.toLocaleString()}`}
               </div>
             </div>
             <div className="post-owner-wrapper">
@@ -420,7 +420,7 @@ function PostBody({
                   </a>
                 </div>
                 <div className="user-details">
-                  <a href="/user">Happygoluck</a>
+                  <a href="/user">{profile.name}</a>
                   <div className="flair">
                     <span className="reputation-score">51</span>
                   </div>
