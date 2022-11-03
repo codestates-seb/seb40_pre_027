@@ -69,8 +69,16 @@ const PaginationComponent = styled.div`
   }
 `;
 
-function Pagination({ size, sizeHandler, currentPage, currentPageHandler }) {
-  const pagination = [1, 2, 3];
+function Pagination({
+  size,
+  sizeHandler,
+  currentPage,
+  currentPageHandler,
+  paginationLength,
+}) {
+  const pagination = Array(Math.ceil(paginationLength / size))
+    .fill()
+    .map((v, i) => i + 1);
   const pers = [15, 30, 50];
   return (
     <PaginationComponent>

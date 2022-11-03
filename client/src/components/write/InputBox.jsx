@@ -15,6 +15,7 @@ const InputBoxComponent = styled.div`
   border-radius: 5px;
   margin-right: 2rem;
   position: relative;
+
   .wall {
     position: absolute;
     top: 0;
@@ -43,6 +44,9 @@ const InputBoxComponent = styled.div`
   > button {
     margin: 1rem 0 0 0;
     display: none;
+  }
+  form {
+    width: 100%;
   }
   .input-title-tag {
     border: 1px solid #d9d9d9;
@@ -152,7 +156,15 @@ function InputBox({
       }
     }
   }, []);
-
+  const tagInputSubmit = (e) => {
+    e.preventDefault();
+    if (title === 'tags') {
+      const newValue = { ...value };
+      newValue.tags.push(tag);
+      setValue(newValue);
+      setTag('');
+    }
+  };
   return (
     <InputBoxComponent input={value[title]}>
       <div className={stepBtn >= idx ? '' : 'wall'}></div>
@@ -195,14 +207,16 @@ function InputBox({
                 ))}
             </div>
           )}
-          <input
-            type="text"
-            placeholder={placeholder}
-            className={value.title.length <= 5 ? 'disabled' : ''}
-            onClick={() => inputTitleChange(name)}
-            onChange={(e) => onChange(e)}
-            value={name === 'Tags' ? tag : value.title}
-          />
+          <form onSubmit={tagInputSubmit}>
+            <input
+              type="text"
+              placeholder={placeholder}
+              className={value.title.length <= 5 ? 'disabled' : ''}
+              onClick={() => inputTitleChange(name)}
+              onChange={(e) => onChange(e)}
+              value={name === 'Tags' ? tag : value.title}
+            />
+          </form>
           {name === 'Tags' && tagList.length ? (
             <div className="select-tag">
               {tagList.map((tag, i) => (
