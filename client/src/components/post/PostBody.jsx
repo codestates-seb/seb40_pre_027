@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import Button from '../Button';
+import timeForToday from '../util/timeForToday';
 
 import Tag from '../Tag';
 import Recommend from './Recommend';
@@ -192,12 +193,6 @@ function PostBody({
   const contentRef = useRef();
   const editorRef = useRef();
 
-  const createdAtForDate = new Date(
-    answer ? answer.answerCreatedAt : createdAt
-  );
-  const modifiedAtForDate = new Date(
-    answer ? answer.answerModifiedAt : modifiedAt
-  );
   useEffect(() => {
     if (answerIsPatch) {
       editorRef.current?.getInstance().setHTML(answer.answerContent);
@@ -327,6 +322,7 @@ function PostBody({
         questionId={questionId}
         questionLikeCount={likeCount}
         answerId={answer.answerId}
+        answerLikeCount={answer.answerLikesCount}
       />
       <div className="post-body-container">
         <section className="main-content" ref={contentRef}>
@@ -399,10 +395,9 @@ function PostBody({
               )}
             </div>
             <div className="edited-date-wrapper">
-              {/* <div className="edited-date" title="Show all edits to this post">
-                edited
-                {createdAtForDate.toLocaleString()}
-              </div> */}
+              <div className="edited-date" title="Show all edits to this post">
+                {`edited ${timeForToday(modifiedAt)}`}
+              </div>
             </div>
             <div className="post-owner-wrapper">
               <div className="created-date">

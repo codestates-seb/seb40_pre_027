@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from './Button';
 import { GoSearch } from 'react-icons/go';
 import Logo from '../img/Logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserCard from './UserCard';
 
 //redux 관련 import
 import { useSelector, useDispatch } from 'react-redux';
-import { loginActions } from '../store/reduxIndex';
+import { loginActions } from '../store/login';
+import { searchActions } from '../store/search';
 
 const HeaderComponent = styled.header`
   border-bottom: 2px solid #d9d9d9;
@@ -84,11 +85,13 @@ const Topbar = styled.div`
 `;
 
 function Header({ getSearchInput }) {
-  const [searchInput, setSearchInput] = useState('');
+  const navigate = useNavigate();
+  //const [searchInput, setSearchInput] = useState('');
 
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.isLogin);
+  const isLogin = useSelector((state) => state.login.isLogin);
+  const searchInput = useSelector((state) => state.search.searchInput);
   console.log(searchInput);
 
   //로그아웃 axios 요청
@@ -114,14 +117,15 @@ function Header({ getSearchInput }) {
 
   //searchInput에서 현재 값 받아오기
   const searchInputHandler = (e) => {
-    setSearchInput(e.target.value);
+    dispatch(searchActions.searchPost(e.target.value));
   };
 
   //검색 핸들러
   const searchHandler = (e) => {
     e.preventDefault();
+    navigate('/', { state: { searchInput } });
     getSearchInput(searchInput);
-    setSearchInput('')
+    dispatch(searchActions.searchPost(''))
   };
 
   return (

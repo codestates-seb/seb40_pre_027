@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineCaretUp } from 'react-icons/ai';
 import { AiOutlineCaretDown } from 'react-icons/ai';
@@ -25,26 +25,36 @@ const Container = styled.div`
   width: 40px;
 `;
 
-function Recommend({ questionId, questionLikeCount, answerId }) {
+function Recommend({
+  questionId,
+  questionLikeCount,
+  answerId,
+  answerLikeCount,
+}) {
   //질문의 추천 비추천 상태
-  const [questionLike, setQuestionLike] = useState(0);
+  const [questionLike, setQuestionLike] = useState(questionLikeCount);
   //답변의 추천 비추천 상태
-  const [answerLike, setAnswerLike] = useState(0);
-
-  //첫 post화면 렌더링 시, 글이 기존에 갖고 있는 추천 수 반영
-  useEffect(() => {
-    setQuestionLike(questionLikeCount);
-  }, [questionLikeCount]);
+  const [answerLike, setAnswerLike] = useState(answerLikeCount);
 
   //추천비추천 axios 요청 endpoint를 위한 변수 val
   let val;
 
   //추천비추천 axios 요청
   //질문의 추천비추천 버튼이 눌리는지, 답변의 추천비추천 버튼이 눌리는지 여부는
-  //props로 내려오는 questionId와 anwerId의 유무로 판단
+  //props로 내려오는 anwerId의 유무로 판단
   async function likeDislikeRequest() {
-    if (questionId) {
-      try {
+    try {
+      if (answerId) {
+        const res = await axios.post(
+          `/answer/${answerId}/vote?val=${val}`,
+          {},
+          {
+            headers: { access: localStorage.getItem('accessToken') },
+          }
+        );
+        setAnswerLike(res.data);
+        console.log('답글추천비추천', res);
+      } else if (questionId) {
         const res = await axios.post(
           `/question/${questionId}/vote?val=${val}`,
           {},
@@ -53,14 +63,14 @@ function Recommend({ questionId, questionLikeCount, answerId }) {
           }
         );
         setQuestionLike(res.data);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-        if (error.response.status === 408) {
-          alert(error.response.data.message);
-        } else {
-          alert(error);
-        }
+        console.log('질문글추천비추천', res);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 408) {
+        alert(error.response.data.message);
+      } else {
+        alert(error);
       }
     }
   }
@@ -81,14 +91,11 @@ function Recommend({ questionId, questionLikeCount, answerId }) {
     <Container>
       <RecommendComponent>
         <AiOutlineCaretUp size={36} onClick={likeHandler} />
-        {questionId ? (
-          <span className="likeNumbers">{questionLike}</span>
-        ) : answerId ? (
+        {answerId ? (
           <span className="likeNumbers">{answerLike}</span>
         ) : (
-          <></>
+          <span className="likeNumbers">{questionLike}</span>
         )}
-
         <AiOutlineCaretDown size={36} onClick={dislikeHandler} />
         <BsBookmark size={15} />
         <GiBackwardTime size={20} />

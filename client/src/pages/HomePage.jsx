@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import PostList from '../components/home/PostList';
@@ -26,14 +27,21 @@ const HomepageComponent = styled.div`
   }
 `;
 function HomePage() {
+  const location = useLocation();
   const [posts, setPosts] = useState([]);
   const [size, setSize] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchedInput, setSearchedInput] = useState('');
   const [paginationLength, setPaginationLength] = useState(1);
+  const [searchedInput, setSearchedInput] = useState(
+    location.state !== null && location.state.searchInput
+  );
 
   const [watchedTags, setWatchedTags] = useState([]);
   const [ignoredTags, setIgnoredTags] = useState([]);
+
+  if (location.state !== null) {
+    console.log(location.state.searchInput);
+  }
 
   const sizeHandler = (per) => setSize(per);
   const currentPageHandler = (p) => setCurrentPage(p);

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Tag from '../Tag';
-import LinkStyle from '../LinkStyle';
 import { useNavigate } from 'react-router-dom';
+import timeForToday from '../util/timeForToday';
 
 const PostComponent = styled.div`
   background: ${(props) => (props.watched ? 'rgb(253,247,226)' : '#fff')};
@@ -105,30 +105,7 @@ function Post({ post, watchedTags, ignoredTags }) {
   };
   const watched = tagsEvaluate(watchedTags);
   const ignored = tagsEvaluate(ignoredTags);
-  function timeForToday(value) {
-    const today = new Date();
-    const timeValue = new Date(value);
 
-    const betweenTime = Math.floor(
-      (today.getTime() - timeValue.getTime()) / 1000 / 60
-    );
-    if (betweenTime < 1) return '방금전';
-    if (betweenTime < 60) {
-      return `${betweenTime} min ago`;
-    }
-
-    const betweenTimeHour = Math.floor(betweenTime / 60);
-    if (betweenTimeHour < 24) {
-      return `${betweenTimeHour} hour ago`;
-    }
-
-    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
-    if (betweenTimeDay < 365) {
-      return `${betweenTimeDay} day ago`;
-    }
-
-    return `${Math.floor(betweenTimeDay / 365)} year ago`;
-  }
   return (
     <PostComponent watched={watched} ignored={ignored}>
       <div className="info-post">
