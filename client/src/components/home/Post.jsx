@@ -175,7 +175,7 @@ function Post({ post, watchedTags, ignoredTags }) {
           <div className="info-user">
             <img src={imgurl} alt="user-img" />
             <span className="user-name">{profile.name}</span>
-            <span className="user-answers">{15}</span>
+            {/* <span className="user-answers">{15}</span> */}
             <span>{`asked at ${timeForToday(createdAt)}`}</span>
           </div>
         </div>

@@ -30,6 +30,7 @@ function HomePage() {
   const [size, setSize] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchedInput, setSearchedInput] = useState('');
+  const [paginationLength, setPaginationLength] = useState(1);
 
   const [watchedTags, setWatchedTags] = useState([]);
   const [ignoredTags, setIgnoredTags] = useState([]);
@@ -43,7 +44,8 @@ function HomePage() {
   useEffect(() => {
     if (!searchedInput) {
       axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
-        setPosts(res.data);
+        setPosts(res.data.data);
+        setPaginationLength(res.data.totalCount);
       });
     }
     if (searchedInput) {
@@ -55,6 +57,7 @@ function HomePage() {
           setPosts(res.data);
         });
     }
+    axios.get('/question').then((res) => console.log(res));
   }, [size, currentPage, searchedInput]);
   return (
     <HomepageComponent>
@@ -77,6 +80,7 @@ function HomePage() {
             sizeHandler={sizeHandler}
             currentPage={currentPage}
             currentPageHandler={currentPageHandler}
+            paginationLength={paginationLength}
           />
         </article>
         <aside>
