@@ -5,6 +5,7 @@ const AnswerSortedComponent = styled.div`
   display: flex;
   justify-content: space-between;
   padding-left: 2rem;
+  margin-top: 1rem;
   .answers-length {
     font-size: 1.25rem;
     line-height: 1rem;

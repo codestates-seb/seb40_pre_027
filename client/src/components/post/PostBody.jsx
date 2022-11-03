@@ -14,6 +14,8 @@ const PostBodyComponent = styled.div`
   margin-top: 2rem;
   padding-left: 2rem;
   line-height: 1.25rem;
+  border-bottom: 1px solid #d9d9d9;
+  margin-bottom: 0.5rem;
   button {
     margin: 1rem 0 0 0;
   }
@@ -21,7 +23,7 @@ const PostBodyComponent = styled.div`
     /* border: 1px solid black; */
     padding: 0.3rem;
     border-radius: 5px;
-    background: #c9d4df;
+    background: #dde1e6;
   }
   .post-body-container {
     width: 100%;
@@ -153,103 +155,127 @@ const PostBodyComponent = styled.div`
   }
 `;
 
-function PostBody(props) {
+function PostBody({
+  post,
+  answer,
+  commentsArray,
+  setCommentsArray,
+  idx,
+  setAnswersArray,
+  answersArray,
+}) {
+  const {
+    title,
+    createdAt,
+    modifiedAt,
+    questionId,
+    tags,
+    likeCount,
+    content,
+    memberId,
+  } = post;
   const navigate = useNavigate();
   const [shareClicked, setShareClicked] = useState(false);
   const [newAnswer, setNewAnswer] = useState('');
   const [comment, setComment] = useState('');
   const [answerIsPatch, setAnswerIsPatch] = useState(false);
   const [replyArray, setReplyArray] = useState([]);
+  const [isComment, setIsComment] = useState(false);
+  const userId = localStorage.getItem('memberId');
+  const [viewComment, setViewComment] = useState([]);
+  const [viewMore, setViewMore] = useState(false);
 
   const shareHandler = () => setShareClicked(!shareClicked);
   const contentRef = useRef();
   const editorRef = useRef();
 
-  const createdAt = new Date(
-    props.answer ? props.answer.answerCreatedAt : props.createdAt
+  const createdAtForDate = new Date(
+    answer ? answer.answerCreatedAt : createdAt
   );
-  const modifiedAt = new Date(
-    props.answer ? props.answer.answerModifiedAt : props.modifiedAt
+  const modifiedAtForDate = new Date(
+    answer ? answer.answerModifiedAt : modifiedAt
   );
   useEffect(() => {
     if (answerIsPatch) {
-      editorRef.current?.getInstance().setHTML(props.answer.answerContent);
-    } else if (props.answer.answerId) {
-      setReplyArray(props.answer.replies);
+      editorRef.current?.getInstance().setHTML(answer.answerContent);
+    } else if (answer.answerId) {
+      setReplyArray(answer.replies);
     }
-  }, [answerIsPatch]);
+    if (!viewMore && commentsArray && commentsArray.length > 3) {
+      setViewComment(commentsArray.slice(0, 3));
+    } else setViewComment(commentsArray);
+  }, [answerIsPatch, viewMore]);
   const patchHandler = () => {
-    if (props.answer.answerId) {
+    if (answer.answerId) {
       setAnswerIsPatch(true);
     } else {
-      const contentArr = props.content.split(' <br calssName="boundary"/> ');
+      const contentArr = content.split(' <br calssName="boundary"/> ');
       const introduce = contentArr[0];
       const expand = contentArr[1];
       const data = {
-        id: props.questionId,
-        title: props.title,
+        id: questionId,
+        title,
         introduce,
         expand,
-        tags: props.tags,
+        tags: tags,
       };
       navigate(`/write`, { state: data });
     }
   };
-  const onChange = () => {
+  const editorOnChange = () => {
     setNewAnswer(editorRef.current.getInstance().getHTML());
   };
   const deleteHandler = () => {
-    if (props.answer.answerId) {
+    if (answer.answerId) {
       axios
-        .delete(`/answer/${props.answer.answerId}`)
+        .delete(`/answer/${answer.answerId}`)
         .then(() => {
-          const newAnswersArray = props.answersArray.filter(
-            (v) => v.answerId !== props.answer.answerId
+          const newAnswersArray = answersArray.filter(
+            (v) => v.answerId !== answer.answerId
           );
-          props.setAnswersArray(newAnswersArray);
+          setAnswersArray(newAnswersArray);
         })
         .catch(() => alert('답변 삭제 실패'));
     } else {
       axios
-        .delete(`/question/${props.questionId}`)
+        .delete(`/question/${questionId}`)
         .then(() => navigate('/'))
         .catch(() => alert('실패'));
     }
   };
   const answerPatchHandler = () => {
     axios
-      .patch(`/answer/${props.answer.answerId}`, {
+      .patch(`/answer/${answer.answerId}`, {
         answerContent: newAnswer,
       })
       .then(() => {
         setAnswerIsPatch(false);
-        const newAnswersArray = [...props.answersArray];
-        newAnswersArray[props.idx].answerContent = newAnswer;
-        props.setAnswersArray(newAnswersArray);
+        const newAnswersArray = [...answersArray];
+        newAnswersArray[idx].answerContent = newAnswer;
+        setAnswersArray(newAnswersArray);
       });
   };
   const commentSubmitHandler = async () => {
     try {
       const access = localStorage.getItem('accessToken');
-      if (props.answer.answerId) {
+      if (answer.answerId) {
         await axios.post(
-          `/reply/${props.answer.answerId}`,
+          `/reply/${answer.answerId}`,
           {
             replyContent: comment,
           },
           { headers: { access } }
         );
-        // const newPostData = await axios.get(`/question/${props.questionId}`);
-        // console.log(newPostData);
-        // await setReplyArray(newPostData.data.answer.replies);
+        const newPostData = await axios.get(`/question/${questionId}`);
+        await setReplyArray(newPostData.data.answers[idx].replies);
       } else {
         await axios.post(
-          `/comment/${props.questionId}`,
+          `/comment/${questionId}`,
           { content: comment },
           { headers: { access } }
         );
-        const newPostData = await axios.get(`/question/${props.questionId}`);
-        await props.setCommentsArray(newPostData.data.comments);
+        const newPostData = await axios.get(`/question/${questionId}`);
+        await setCommentsArray(newPostData.data.comments);
       }
       setComment('');
     } catch (err) {
@@ -258,16 +284,16 @@ function PostBody(props) {
   };
   const commentOnDeleteHandler = async (id) => {
     try {
-      if (props.answer.answerId) {
+      if (answer.answerId) {
         await axios.delete(`/reply/${id}`);
         const newReplysArray = [...replyArray].filter((v) => v.replyId !== id);
         setReplyArray(newReplysArray);
       } else {
         await axios.delete(`/comment/${id}`);
-        const newCommentsArray = props.commentsArray.filter(
+        const newCommentsArray = commentsArray.filter(
           (v) => v.commentId !== id
         );
-        props.setCommentsArray(newCommentsArray);
+        setCommentsArray(newCommentsArray);
       }
     } catch (err) {
       alert('삭제 실패');
@@ -276,16 +302,16 @@ function PostBody(props) {
   };
   const commentOnPatchHandler = async (id, content, idx) => {
     try {
-      if (props.answer.answerId) {
+      if (answer.answerId) {
         await axios.patch(`/reply/${id}`, { replyContent: content });
         const newReplysArray = [...replyArray];
         newReplysArray[idx].replyContent = content;
         setReplyArray(newReplysArray);
       } else {
         await axios.patch(`/comment/${id}`, { content });
-        const newCommentsArray = [...props.commentsArray];
+        const newCommentsArray = [...commentsArray];
         newCommentsArray[idx].content = content;
-        props.setCommentsArray(newCommentsArray);
+        setCommentsArray(newCommentsArray);
       }
     } catch (err) {
       alert('코멘트 수정 실패');
@@ -297,16 +323,20 @@ function PostBody(props) {
 
   return (
     <PostBodyComponent>
-      <Recommend questionId={props.questionId} />
+      <Recommend
+        questionId={questionId}
+        questionLikeCount={likeCount}
+        answerId={answer.answerId}
+      />
       <div className="post-body-container">
         <section className="main-content" ref={contentRef}>
           {answerIsPatch ? (
             <div>
               <Editor
-                initialValue={props.answer.answerContent}
+                initialValue={answer.answerContent}
                 height="300px"
                 initialEditType="markdown"
-                onChange={(e) => onChange(e, true)}
+                onChange={(e) => editorOnChange()}
                 useCommandShortcut={true}
                 ref={editorRef}
                 autofocus={true}
@@ -316,19 +346,14 @@ function PostBody(props) {
           ) : (
             <div
               dangerouslySetInnerHTML={{
-                __html: props.answer
-                  ? props.answer.answerContent
-                  : props.content,
+                __html: answer ? answer.answerContent : content,
               }}
             ></div>
           )}
-
-          {/* {contentRef.innerHTML(props.content)} */}
         </section>
-        {!props.answer && (
+        {!answer && (
           <section className="tags">
-            {props.tags !== null &&
-              props.tags.map((v, i) => <Tag key={i}>{v}</Tag>)}
+            {tags !== null && tags.map((v, i) => <Tag key={v}>{v}</Tag>)}
           </section>
         )}
         <section className="body-footer">
@@ -348,35 +373,45 @@ function PostBody(props) {
                   )}
                 </div>
               </div>
-              <div
-                className="menu-item"
-                title="Revise and improve this post"
-                onClick={patchHandler}
-              >
-                Edit
-              </div>
+              {memberId === +userId ? (
+                <div
+                  className="menu-item"
+                  title="Revise and improve this post"
+                  onClick={patchHandler}
+                >
+                  Edit
+                </div>
+              ) : (
+                <></>
+              )}
               <div
                 className="menu-item"
                 title="Follow this question to receive notification"
               >
                 Follow
               </div>
-              <div
-                className="menu-item"
-                title="Post delete"
-                onClick={deleteHandler}
-              >
-                Delete
-              </div>
+              {memberId === +userId ? (
+                <div
+                  className="menu-item"
+                  title="Post delete"
+                  onClick={deleteHandler}
+                >
+                  Delete
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="edited-date-wrapper">
               <div className="edited-date" title="Show all edits to this post">
                 edited
-                {createdAt.toLocaleString()}
+                {createdAtForDate.toLocaleString()}
               </div>
             </div>
             <div className="post-owner-wrapper">
-              <div className="created-date">{createdAt.toLocaleString()}</div>
+              <div className="created-date">
+                {createdAtForDate.toLocaleString()}
+              </div>
               <div className="user-info">
                 <div className="user-avatar">
                   <a href="/user">
@@ -384,11 +419,9 @@ function PostBody(props) {
                   </a>
                 </div>
                 <div className="user-details">
-                  <a href="/user">Happygoluck{props.user}</a>
+                  <a href="/user">Happygoluck</a>
                   <div className="flair">
-                    <span className="reputation-score">
-                      51{props.reputation}
-                    </span>
+                    <span className="reputation-score">51</span>
                   </div>
                 </div>
               </div>
@@ -396,11 +429,10 @@ function PostBody(props) {
           </div>
         </section>
 
-        <div className="comments">
-          {props.commentsArray && props.commentsArray.length ? (
-            props.commentsArray.map((comment, i) => (
+        {viewComment && viewComment.length ? (
+          viewComment.map((comment, i) => (
+            <div className="comments" key={comment.commentId}>
               <Comment
-                key={comment.commentId}
                 onDelete={commentOnDeleteHandler}
                 onPatch={commentOnPatchHandler}
                 id={comment.commentId}
@@ -408,11 +440,12 @@ function PostBody(props) {
               >
                 {comment.content}
               </Comment>
-            ))
-          ) : replyArray.length ? (
-            replyArray.map((v, i) => (
+            </div>
+          ))
+        ) : replyArray.length ? (
+          replyArray.map((v, i) => (
+            <div className="comments" key={v.replyId}>
               <Comment
-                key={v.replyId}
                 onDelete={commentOnDeleteHandler}
                 onPatch={commentOnPatchHandler}
                 id={v.replyId}
@@ -420,20 +453,36 @@ function PostBody(props) {
               >
                 {v.replyContent}
               </Comment>
-            ))
-          ) : (
-            <></>
-          )}
-        </div>
-        <section className="add-comment">Add a comment</section>
-        <div className="comment-input">
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <Button onClick={commentSubmitHandler}>submit</Button>
-        </div>
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
+        {commentsArray && commentsArray.length > 3 ? (
+          <div onClick={() => setViewMore(!viewMore)}>
+            {viewMore ? 'view less' : 'view More'}
+          </div>
+        ) : (
+          <></>
+        )}
+        <section
+          className="add-comment"
+          onClick={() => setIsComment(!isComment)}
+        >
+          Add a comment
+        </section>
+        {isComment ? (
+          <div className="comment-input">
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <Button onClick={commentSubmitHandler}>submit</Button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </PostBodyComponent>
   );

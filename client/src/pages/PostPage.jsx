@@ -48,34 +48,20 @@ function PostPage() {
       setCommentsArray(res.data.comments);
     });
   }, []);
-  const { questionId, title, content, viewCount, createdAt, modifiedAt, tags } =
-    post;
 
-  console.log(commentsArray, 'comments');
   return (
     <PostPageComponent>
       <Header />
-
       {Object.keys(post).length ? (
         <div className="section">
           <Nav />
           <article>
-            <Title
-              title={title}
-              viewCount={viewCount}
-              createdAt={createdAt}
-              modifiedAt={modifiedAt}
-            />
+            <Title post={post} />
             <div className="post-aside">
               <div>
                 <PostBody
-                  title={title}
                   answer={false}
-                  questionId={questionId}
-                  content={content}
-                  tags={tags}
-                  createdAt={createdAt}
-                  modifiedAt={modifiedAt}
+                  post={post}
                   setCommentsArray={setCommentsArray}
                   commentsArray={commentsArray}
                 />
@@ -83,13 +69,12 @@ function PostPage() {
                 {answersArray.length ? (
                   answersArray.map((answer, i) => (
                     <PostBody
+                      post={post}
                       answer={answer}
                       idx={i}
                       key={answer.answerId}
                       setAnswersArray={setAnswersArray}
                       answersArray={answersArray}
-                      // setCommentsArray={setCommentsArray}
-                      // commentsArray={commentsArray}
                     />
                   ))
                 ) : (
