@@ -4,6 +4,7 @@ package com.codestates.stackoverflow.question.entity;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.tag.entity.Tag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -54,7 +55,13 @@ public class Question {
     @JsonManagedReference
     private List<QuestionTag> questionTags = new ArrayList<>();
 
+
     private String[] tags;
+
+//    public void setTags(Tag tag) {
+//        this.tags.add(tag);
+//        tag.setQuestion(this);
+//    }
 
 //    @OneToMany(mappedBy = "question")
 //    private List<QuestionLike> likes = new ArrayList<>();

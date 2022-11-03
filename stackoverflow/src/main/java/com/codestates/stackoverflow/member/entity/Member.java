@@ -19,6 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
