@@ -53,6 +53,7 @@ function PostPage() {
     tags,
     answers,
     likeCount,
+    profile,
   } = post;
   return (
     <PostPageComponent>
@@ -79,6 +80,7 @@ function PostPage() {
                   createdAt={createdAt}
                   modifiedAt={modifiedAt}
                   questionLikeCount={likeCount}
+                  profile={profile}
                 />
                 <AnswerSorted answers={answers.length} />
                 {answers.length ? (

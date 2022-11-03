@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Button from './Button';
 import { GoSearch } from 'react-icons/go';
 import Logo from '../img/Logo.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UserCard from './UserCard';
 
 //redux 관련 import
@@ -84,7 +84,6 @@ const Topbar = styled.div`
 `;
 
 function Header({ getSearchInput }) {
-  const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState('');
 
   //dispatch 변수 할당, isLogin 상태 할당
@@ -121,9 +120,8 @@ function Header({ getSearchInput }) {
   //검색 핸들러
   const searchHandler = (e) => {
     e.preventDefault();
-    console.log(getSearchInput);
     getSearchInput(searchInput);
-    navigate(`/search/${searchInput}`);
+    setSearchInput('')
   };
 
   return (
@@ -146,6 +144,7 @@ function Header({ getSearchInput }) {
                   type="text"
                   placeholder="Search..."
                   onChange={searchInputHandler}
+                  value={searchInput}
                 />
               </div>
             </form>
