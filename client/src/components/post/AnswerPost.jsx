@@ -70,7 +70,7 @@ function AnswerPost({ answersArray, setAnswersArray }) {
   const [answer, setAnswer] = useState('');
   const [guideview, setGuideview] = useState(false);
   const navigate = useNavigate();
-  const isLogin = useSelector((state) => state.isLogin);
+  const isLogin = useSelector((state) => state.login.isLogin);
   const editorRef = useRef();
   const { id } = useParams();
   const guideHandler = () => {

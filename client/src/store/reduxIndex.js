@@ -1,25 +1,9 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit';
-
-const initialToken = localStorage.getItem('accessToken')
-const initialState = { isLogin: initialToken ? true : false, accessToken: initialToken };
-
-const loginStore = createSlice({
-  name: 'isLogin',
-  initialState,
-  reducers: {
-    login(state) {
-      state.isLogin = true;
-    },
-    logout(state) {
-      state.isLogin = false;
-    },
-  },
-});
+import { configureStore } from '@reduxjs/toolkit';
+import loginSlice from './login';
+import searchSlice from './search';
 
 const store = configureStore({
-  reducer: loginStore.reducer,
+  reducer: { login: loginSlice.reducer, search: searchSlice.reducer },
 });
-
-export const loginActions = loginStore.actions;
 
 export default store;
