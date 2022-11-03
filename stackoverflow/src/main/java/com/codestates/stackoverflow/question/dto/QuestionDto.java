@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.question.dto;
 
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
+import com.codestates.stackoverflow.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,5 +70,6 @@ public class QuestionDto {
         private List<Comment> comments;
 
         private List<Answer> answers;
+
     }
 }
