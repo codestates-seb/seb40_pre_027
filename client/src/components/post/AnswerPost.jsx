@@ -65,7 +65,7 @@ const AnswerPostComponent = styled.div`
   }
 `;
 
-function AnswerPost({ isLogined }) {
+function AnswerPost({ answersArray, setAnswersArray }) {
   const [guide, setGuide] = useState(false);
   const [answer, setAnswer] = useState('');
   const [guideview, setGuideview] = useState(false);
@@ -84,18 +84,23 @@ function AnswerPost({ isLogined }) {
     //toast ui editor
     setAnswer(editorRef.current.getInstance().getHTML());
   };
-  const answerSubmitHandler = () => {
-    const access = localStorage.getItem('accessToken');
-    if (isLogin)
-      axios
-        .post(
+  const answerSubmitHandler = async () => {
+    try {
+      if (isLogin) {
+        const access = localStorage.getItem('accessToken');
+        await axios.post(
           `/answer/${id}`,
           { answerContent: answer },
           { headers: { access } }
-        )
-        .then(() => navigate(`/post/${id}`))
-        .catch(() => alert('답변 생성 실패'));
-    else alert('you need login');
+        );
+        const newPostData = await axios.get(`/question/${id}`);
+        await setAnswersArray(newPostData.data.answers);
+        await editorRef.current.getInstance().setHTML(' ');
+      } else alert('you need login');
+    } catch (err) {
+      alert('답변 생성 실패');
+      console.log(err);
+    }
   };
   return (
     <AnswerPostComponent>
@@ -109,6 +114,7 @@ function AnswerPost({ isLogined }) {
           useCommandShortcut={true}
           ref={editorRef}
           onChange={onChange}
+          autofocus={false}
         />
       </div>
 

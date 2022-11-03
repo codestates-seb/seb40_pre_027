@@ -42,7 +42,7 @@ function Recommend({ questionId, questionLikeCount, answerId }) {
   //추천비추천 axios 요청
   //질문의 추천비추천 버튼이 눌리는지, 답변의 추천비추천 버튼이 눌리는지 여부는
   //props로 내려오는 questionId와 anwerId의 유무로 판단
-  async function likeDislikeRequest () {
+  async function likeDislikeRequest() {
     if (questionId) {
       try {
         const res = await axios.post(
@@ -81,8 +81,14 @@ function Recommend({ questionId, questionLikeCount, answerId }) {
     <Container>
       <RecommendComponent>
         <AiOutlineCaretUp size={36} onClick={likeHandler} />
-        {questionId && <span className="likeNumbers">{questionLike}</span>}
-        {answerId && <span className="likeNumbers">{answerLike}</span>}
+        {questionId ? (
+          <span className="likeNumbers">{questionLike}</span>
+        ) : answerId ? (
+          <span className="likeNumbers">{answerLike}</span>
+        ) : (
+          <></>
+        )}
+
         <AiOutlineCaretDown size={36} onClick={dislikeHandler} />
         <BsBookmark size={15} />
         <GiBackwardTime size={20} />

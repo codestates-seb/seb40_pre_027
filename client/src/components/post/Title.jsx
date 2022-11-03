@@ -46,7 +46,8 @@ const SubTxt = styled.div`
     margin-right: 10px;
   }
 `;
-function Title({ title, viewCount, createdAt, modifiedAt }) {
+function Title({ post }) {
+  const { title, viewCount, createdAt, modifiedAt } = post;
   const navigate = useNavigate();
   return (
     <Titlemain>

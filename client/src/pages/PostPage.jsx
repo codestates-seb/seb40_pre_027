@@ -38,60 +38,52 @@ const PostPageComponent = styled.div`
 
 function PostPage() {
   const [post, setPost] = useState([]);
+  const [answersArray, setAnswersArray] = useState([]);
+  const [commentsArray, setCommentsArray] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`/question/${id}`).then((res) => setPost(res.data));
+    axios.get(`/question/${id}`).then((res) => {
+      setPost(res.data);
+      setAnswersArray(res.data.answers);
+      setCommentsArray(res.data.comments);
+    });
   }, []);
-  console.log(post);
-  const {
-    questionId,
-    title,
-    content,
-    viewCount,
-    createdAt,
-    modifiedAt,
-    tags,
-    answers,
-    likeCount,
-    profile,
-  } = post;
   return (
     <PostPageComponent>
       <Header />
-
       {Object.keys(post).length ? (
         <div className="section">
           <Nav />
           <article>
-            <Title
-              title={title}
-              viewCount={viewCount}
-              createdAt={createdAt}
-              modifiedAt={modifiedAt}
-            />
+            <Title post={post} />
             <div className="post-aside">
               <div>
                 <PostBody
-                  title={title}
                   answer={false}
-                  questionId={questionId}
-                  content={content}
-                  tags={tags}
-                  createdAt={createdAt}
-                  modifiedAt={modifiedAt}
-                  questionLikeCount={likeCount}
-                  profile={profile}
+                  post={post}
+                  setCommentsArray={setCommentsArray}
+                  commentsArray={commentsArray}
                 />
-                <AnswerSorted answers={answers.length} />
-                {answers.length ? (
-                  answers.map((answer) => (
-                    <PostBody answer={answer} key={answer.answerId} />
+                <AnswerSorted answers={answersArray.length} />
+                {answersArray.length ? (
+                  answersArray.map((answer, i) => (
+                    <PostBody
+                      post={post}
+                      answer={answer}
+                      idx={i}
+                      key={answer.answerId}
+                      setAnswersArray={setAnswersArray}
+                      answersArray={answersArray}
+                    />
                   ))
                 ) : (
                   <></>
                 )}
 
-                <AnswerPost />
+                <AnswerPost
+                  setAnswersArray={setAnswersArray}
+                  answersArray={answersArray}
+                />
               </div>
               <aside></aside>
             </div>

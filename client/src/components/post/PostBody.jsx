@@ -1,20 +1,29 @@
 import axios from 'axios';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { Editor } from '@toast-ui/react-editor';
+import Button from '../Button';
 
 import Tag from '../Tag';
 import Recommend from './Recommend';
+import Comment from './Comment';
 
 const PostBodyComponent = styled.div`
   display: flex;
   margin-top: 2rem;
   padding-left: 2rem;
+  line-height: 1.25rem;
+  border-bottom: 1px solid #d9d9d9;
+  margin-bottom: 0.5rem;
+  button {
+    margin: 1rem 0 0 0;
+  }
   code {
     /* border: 1px solid black; */
     padding: 0.3rem;
     border-radius: 5px;
-    background: #c9d4df;
+    background: #dde1e6;
   }
   .post-body-container {
     width: 100%;
@@ -53,6 +62,7 @@ const PostBodyComponent = styled.div`
         .menu-item {
           margin: 5px;
           color: #51565d;
+          cursor: pointer;
           :hover {
             color: #828c98;
           }
@@ -120,40 +130,194 @@ const PostBodyComponent = styled.div`
       }
     }
   }
+  .comments {
+    border-top: 1px solid #d9d9d9;
+    margin: 1.25rem 0;
+    padding: 0.8rem 0;
+  }
+  .comment-input {
+    width: 100%;
+    display: flex;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    input {
+      width: 100%;
+      margin-right: 1rem;
+      border-radius: 5px;
+      box-shadow: 0;
+      border: 1px solid #d9d9d9;
+      padding: 1rem;
+    }
+    button {
+      height: 100%;
+      margin: 0;
+    }
+  }
 `;
 
-function PostBody(props) {
+function PostBody({
+  post,
+  answer,
+  commentsArray,
+  setCommentsArray,
+  idx,
+  setAnswersArray,
+  answersArray,
+  profile,
+}) {
+  const {
+    title,
+    createdAt,
+    modifiedAt,
+    questionId,
+    tags,
+    likeCount,
+    content,
+    memberId,
+  } = post;
   const navigate = useNavigate();
   const [shareClicked, setShareClicked] = useState(false);
+  const [newAnswer, setNewAnswer] = useState('');
+  const [comment, setComment] = useState('');
+  const [answerIsPatch, setAnswerIsPatch] = useState(false);
+  const [replyArray, setReplyArray] = useState([]);
+  const [isComment, setIsComment] = useState(false);
+  const userId = localStorage.getItem('memberId');
+  const [viewComment, setViewComment] = useState([]);
+  const [viewMore, setViewMore] = useState(false);
 
   const shareHandler = () => setShareClicked(!shareClicked);
   const contentRef = useRef();
+  const editorRef = useRef();
 
-  const createdAt = new Date(
-    props.answer ? props.answer.answerCreatedAt : props.createdAt
+  const createdAtForDate = new Date(
+    answer ? answer.answerCreatedAt : createdAt
   );
-  const modifiedAt = new Date(
-    props.answer ? props.answer.answerModifiedAt : props.modifiedAt
+  const modifiedAtForDate = new Date(
+    answer ? answer.answerModifiedAt : modifiedAt
   );
+  useEffect(() => {
+    if (answerIsPatch) {
+      editorRef.current?.getInstance().setHTML(answer.answerContent);
+    } else if (answer.answerId) {
+      setReplyArray(answer.replies);
+    }
+    if (!viewMore && commentsArray && commentsArray.length > 3) {
+      setViewComment(commentsArray.slice(0, 3));
+    } else setViewComment(commentsArray);
+  }, [answerIsPatch, viewMore]);
   const patchHandler = () => {
-    const contentArr = props.content.split(' <br calssName="boundary"/> ');
-    const introduce = contentArr[0];
-    const expand = contentArr[1];
-    const data = {
-      id: props.questionId,
-      title: props.title,
-      introduce,
-      expand,
-      tags: props.tags,
-    };
-    navigate(`/write`, { state: data });
-    console.log(data);
+    if (answer.answerId) {
+      setAnswerIsPatch(true);
+    } else {
+      const contentArr = content.split(' <br calssName="boundary"/> ');
+      const introduce = contentArr[0];
+      const expand = contentArr[1];
+      const data = {
+        id: questionId,
+        title,
+        introduce,
+        expand,
+        tags: tags,
+      };
+      navigate(`/write`, { state: data });
+    }
+  };
+  const editorOnChange = () => {
+    setNewAnswer(editorRef.current.getInstance().getHTML());
   };
   const deleteHandler = () => {
+    if (answer.answerId) {
+      axios
+        .delete(`/answer/${answer.answerId}`)
+        .then(() => {
+          const newAnswersArray = answersArray.filter(
+            (v) => v.answerId !== answer.answerId
+          );
+          setAnswersArray(newAnswersArray);
+        })
+        .catch(() => alert('답변 삭제 실패'));
+    } else {
+      axios
+        .delete(`/question/${questionId}`)
+        .then(() => navigate('/'))
+        .catch(() => alert('실패'));
+    }
+  };
+  const answerPatchHandler = () => {
     axios
-      .delete(`/question/${props.questionId}`)
-      .then(() => navigate('/'))
-      .catch(() => alert('실패'));
+      .patch(`/answer/${answer.answerId}`, {
+        answerContent: newAnswer,
+      })
+      .then(() => {
+        setAnswerIsPatch(false);
+        const newAnswersArray = [...answersArray];
+        newAnswersArray[idx].answerContent = newAnswer;
+        setAnswersArray(newAnswersArray);
+      });
+  };
+  const commentSubmitHandler = async () => {
+    try {
+      const access = localStorage.getItem('accessToken');
+      if (answer.answerId) {
+        await axios.post(
+          `/reply/${answer.answerId}`,
+          {
+            replyContent: comment,
+          },
+          { headers: { access } }
+        );
+        const newPostData = await axios.get(`/question/${questionId}`);
+        await setReplyArray(newPostData.data.answers[idx].replies);
+      } else {
+        await axios.post(
+          `/comment/${questionId}`,
+          { content: comment },
+          { headers: { access } }
+        );
+        const newPostData = await axios.get(`/question/${questionId}`);
+        await setCommentsArray(newPostData.data.comments);
+      }
+      setComment('');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const commentOnDeleteHandler = async (id) => {
+    try {
+      if (answer.answerId) {
+        await axios.delete(`/reply/${id}`);
+        const newReplysArray = [...replyArray].filter((v) => v.replyId !== id);
+        setReplyArray(newReplysArray);
+      } else {
+        await axios.delete(`/comment/${id}`);
+        const newCommentsArray = commentsArray.filter(
+          (v) => v.commentId !== id
+        );
+        setCommentsArray(newCommentsArray);
+      }
+    } catch (err) {
+      alert('삭제 실패');
+      console.log(err);
+    }
+  };
+  const commentOnPatchHandler = async (id, content, idx) => {
+    try {
+      if (answer.answerId) {
+        await axios.patch(`/reply/${id}`, { replyContent: content });
+        const newReplysArray = [...replyArray];
+        newReplysArray[idx].replyContent = content;
+        setReplyArray(newReplysArray);
+      } else {
+        await axios.patch(`/comment/${id}`, { content });
+        const newCommentsArray = [...commentsArray];
+        newCommentsArray[idx].content = content;
+        setCommentsArray(newCommentsArray);
+      }
+    } catch (err) {
+      alert('코멘트 수정 실패');
+      console.log(err);
+    }
   };
   const userimg =
     'https://www.gravatar.com/avatar/088029d211d686a016bcfdc326523d62?s=256&d=identicon&r=PG';
@@ -161,24 +325,36 @@ function PostBody(props) {
   return (
     <PostBodyComponent>
       <Recommend
-        questionId={props.questionId}
-        questionLikeCount={props.questionLikeCount}
-        answerId={props.answer.answerId}
+        questionId={questionId}
+        questionLikeCount={likeCount}
+        answerId={answer.answerId}
       />
       <div className="post-body-container">
-        <section
-          className="main-content"
-          ref={contentRef}
-          dangerouslySetInnerHTML={{
-            __html: props.answer ? props.answer.answerContent : props.content,
-          }}
-        >
-          {/* {contentRef.innerHTML(props.content)} */}
+        <section className="main-content" ref={contentRef}>
+          {answerIsPatch ? (
+            <div>
+              <Editor
+                initialValue={answer.answerContent}
+                height="300px"
+                initialEditType="markdown"
+                onChange={(e) => editorOnChange()}
+                useCommandShortcut={true}
+                ref={editorRef}
+                autofocus={true}
+              />
+              <Button onClick={answerPatchHandler}>수정</Button>
+            </div>
+          ) : (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: answer ? answer.answerContent : content,
+              }}
+            ></div>
+          )}
         </section>
-        {!props.answer && (
+        {!answer && (
           <section className="tags">
-            {props.tags !== null &&
-              props.tags.map((v, i) => <Tag key={i}>{v}</Tag>)}
+            {tags !== null && tags.map((v, i) => <Tag key={v}>{v}</Tag>)}
           </section>
         )}
         <section className="body-footer">
@@ -198,35 +374,45 @@ function PostBody(props) {
                   )}
                 </div>
               </div>
-              <div
-                className="menu-item"
-                title="Revise and improve this post"
-                onClick={patchHandler}
-              >
-                Edit
-              </div>
+              {memberId === +userId ? (
+                <div
+                  className="menu-item"
+                  title="Revise and improve this post"
+                  onClick={patchHandler}
+                >
+                  Edit
+                </div>
+              ) : (
+                <></>
+              )}
               <div
                 className="menu-item"
                 title="Follow this question to receive notification"
               >
                 Follow
               </div>
-              <div
-                className="menu-item"
-                title="Post delete"
-                onClick={deleteHandler}
-              >
-                Delete
-              </div>
+              {memberId === +userId ? (
+                <div
+                  className="menu-item"
+                  title="Post delete"
+                  onClick={deleteHandler}
+                >
+                  Delete
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="edited-date-wrapper">
               <div className="edited-date" title="Show all edits to this post">
                 edited
-                {createdAt.toLocaleString()}
+                {createdAtForDate.toLocaleString()}
               </div>
             </div>
             <div className="post-owner-wrapper">
-              <div className="created-date">{createdAt.toLocaleString()}</div>
+              <div className="created-date">
+                {createdAtForDate.toLocaleString()}
+              </div>
               <div className="user-info">
                 <div className="user-avatar">
                   <a href="/user">
@@ -234,18 +420,70 @@ function PostBody(props) {
                   </a>
                 </div>
                 <div className="user-details">
-                  <a href="/user">Happygoluck{props.user}</a>
+                  <a href="/user">Happygoluck</a>
                   <div className="flair">
-                    <span className="reputation-score">
-                      51{props.reputation}
-                    </span>
+                    <span className="reputation-score">51</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <section className="add-comment">Add a comment</section>
+
+        {viewComment && viewComment.length ? (
+          viewComment.map((comment, i) => (
+            <div className="comments" key={comment.commentId}>
+              <Comment
+                onDelete={commentOnDeleteHandler}
+                onPatch={commentOnPatchHandler}
+                id={comment.commentId}
+                idx={i}
+              >
+                {comment.content}
+              </Comment>
+            </div>
+          ))
+        ) : replyArray.length ? (
+          replyArray.map((v, i) => (
+            <div className="comments" key={v.replyId}>
+              <Comment
+                onDelete={commentOnDeleteHandler}
+                onPatch={commentOnPatchHandler}
+                id={v.replyId}
+                idx={i}
+              >
+                {v.replyContent}
+              </Comment>
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
+        {commentsArray && commentsArray.length > 3 ? (
+          <div onClick={() => setViewMore(!viewMore)}>
+            {viewMore ? 'view less' : 'view More'}
+          </div>
+        ) : (
+          <></>
+        )}
+        <section
+          className="add-comment"
+          onClick={() => setIsComment(!isComment)}
+        >
+          Add a comment
+        </section>
+        {isComment ? (
+          <div className="comment-input">
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <Button onClick={commentSubmitHandler}>submit</Button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </PostBodyComponent>
   );
