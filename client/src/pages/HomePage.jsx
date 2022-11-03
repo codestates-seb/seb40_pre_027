@@ -7,7 +7,6 @@ import Footer from '../components/Footer';
 import TagsBox from '../components/home/TagsBox';
 import TopMenu from '../components/home/TopMenu';
 import Pagination from '../components/home/Pagination';
-import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const HomepageComponent = styled.div`
@@ -30,21 +29,36 @@ function HomePage() {
   const [posts, setPosts] = useState([]);
   const [size, setSize] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchedInput, setSearchedInput] = useState('');
 
   const [watchedTags, setWatchedTags] = useState([]);
   const [ignoredTags, setIgnoredTags] = useState([]);
 
   const sizeHandler = (per) => setSize(per);
   const currentPageHandler = (p) => setCurrentPage(p);
+  const getSearchInput = (searchInputValue) => {
+    setSearchedInput(searchInputValue);
+  };
 
   useEffect(() => {
-    axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
-      setPosts(res.data);
-    });
-  }, [size, currentPage]);
+    if (!searchedInput) {
+      axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
+        setPosts(res.data);
+      });
+    }
+    if (searchedInput) {
+      axios
+        .get(
+          `/question/search?q=${searchedInput}&page=${currentPage}&size=${size}`
+        )
+        .then((res) => {
+          setPosts(res.data);
+        });
+    }
+  }, [size, currentPage, searchedInput]);
   return (
     <HomepageComponent>
-      <Header />
+      <Header getSearchInput={getSearchInput} />
       <section>
         <Nav />
         <article>

@@ -7,8 +7,9 @@ import MyProfile from '../components/profile/MyProfile';
 import SmallLogo from '../img/smallLogo.png';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { useState } from 'react';
-// import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import AboutRender from '../components/profile/AboutRender';
 // import { useParams } from 'react-router-dom';
 const ProfilePages = styled.main`
   width: 100vw;
@@ -114,6 +115,8 @@ const About = styled.div`
     margin-top: 15px;
     position: relative;
     & div {
+      width: 100%;
+      height: 100%;
       border: 1px solid white;
       height: 4vh;
       position: absolute;
@@ -130,6 +133,9 @@ const About = styled.div`
       font-size: 0.9rem;
       text-align: center;
     }
+    .about-txt {
+      border: 1px solid red;
+    }
   }
   & span {
     display: flex;
@@ -137,17 +143,21 @@ const About = styled.div`
   }
 `;
 
-function ProfilePage() {
-  const [profile, setProfile] = useState();
-
-  const UserDataHandler = (data) => {
-    setProfile(data);
-  };
+function ProfilePage({ profiles }) {
+  const accessToken = localStorage.getItem('accessToken');
+  const [profile, setProfile] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`/user/profile`, {
+        headers: { access: accessToken },
+      })
+      .then((res) => setProfile(res.data));
+  }, [accessToken]);
   console.log(profile);
 
   return (
     <ProfilePages>
-      <Header onGetUserProfile={UserDataHandler} />
+      <Header />
       <section>
         <Nav />
         <article>
@@ -186,6 +196,12 @@ function ProfilePage() {
               <About>
                 <h2>ABOUT</h2>
                 <div>
+                  <AboutRender className="ProfileList" profiles={profiles}>
+                    {profiles &&
+                      profiles.map((user) => {
+                        return <div key={user.id}>{user.name}</div>;
+                      })}
+                  </AboutRender>
                   <div>
                     <h3>
                       Your about me section is currently blank. Would you like

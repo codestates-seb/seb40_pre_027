@@ -163,6 +163,7 @@ function PostBody({
   idx,
   setAnswersArray,
   answersArray,
+  profile,
 }) {
   const {
     title,

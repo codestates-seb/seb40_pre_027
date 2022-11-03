@@ -48,7 +48,6 @@ function PostPage() {
       setCommentsArray(res.data.comments);
     });
   }, []);
-
   return (
     <PostPageComponent>
       <Header />
