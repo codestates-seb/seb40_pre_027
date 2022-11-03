@@ -44,6 +44,7 @@ public class Answer {
     @Column
     private long bestAnswer;
 
+    //연관관계 매핑 정리 ->
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     @JsonBackReference

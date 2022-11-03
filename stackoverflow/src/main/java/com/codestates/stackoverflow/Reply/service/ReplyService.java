@@ -24,7 +24,6 @@ public class ReplyService {
     private final AnswerService answerService;
     private final AnswerRepository answerRepository;
     private final MemberServiceImpl memberServiceImpl;
-    private final MemberRepository memberRepository;
 
     public Reply createReply(Reply reply,long answerId) {
         Answer answer = answerService.findVerifiedAnswer(answerId);
