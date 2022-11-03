@@ -19,7 +19,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
@@ -46,7 +45,7 @@ public class Member extends Auditable {
 
     // 질문 영역
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
     @ToString.Exclude
     @JsonManagedReference
     private List<Question> questions;

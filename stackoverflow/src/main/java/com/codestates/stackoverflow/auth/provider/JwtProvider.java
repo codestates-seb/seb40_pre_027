@@ -28,7 +28,6 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class JwtProvider {
 
     @Getter
@@ -47,6 +46,10 @@ public class JwtProvider {
 
     // refresh Token 저장용
     private final MemberRepository memberRepository;
+
+    public JwtProvider(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));

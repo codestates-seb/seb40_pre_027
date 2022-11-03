@@ -72,6 +72,7 @@ public class QuestionDto {
         private List<Comment> comments;
 
         private List<Answer> answers;
+
     }
 
     @AllArgsConstructor
