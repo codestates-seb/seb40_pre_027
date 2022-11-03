@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import PostList from '../components/home/PostList';
@@ -27,49 +27,43 @@ const HomepageComponent = styled.div`
   }
 `;
 function HomePage() {
-  const location = useLocation();
   const [posts, setPosts] = useState([]);
   const [size, setSize] = useState(15);
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationLength, setPaginationLength] = useState(1);
-  const [searchedInput, setSearchedInput] = useState(
-    location.state !== null && location.state.searchInput
-  );
 
   const [watchedTags, setWatchedTags] = useState([]);
   const [ignoredTags, setIgnoredTags] = useState([]);
 
-  if (location.state !== null) {
-    console.log(location.state.searchInput);
-  }
+  //redux에서 searchInput 값 받아오기
+  const searchInput = useSelector((state) => state.search.searchInput);
 
   const sizeHandler = (per) => setSize(per);
   const currentPageHandler = (p) => setCurrentPage(p);
-  const getSearchInput = (searchInputValue) => {
-    setSearchedInput(searchInputValue);
-  };
 
   useEffect(() => {
-    if (!searchedInput) {
+    //searchInput값이 존재하지 않으면 모든 게시글 가져오기
+    if (!searchInput) {
       axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
         setPosts(res.data.data);
         setPaginationLength(res.data.totalCount);
       });
     }
-    if (searchedInput) {
+    //searchInput값이 존재하면 해당 값으로 검색
+    if (searchInput) {
       axios
         .get(
-          `/question/search?q=${searchedInput}&page=${currentPage}&size=${size}`
+          `/question/search?q=${searchInput}&page=${currentPage}&size=${size}`
         )
         .then((res) => {
-          setPosts(res.data);
+          setPosts(res.data.data);
         });
     }
     axios.get('/question').then((res) => console.log(res));
-  }, [size, currentPage, searchedInput]);
+  }, [size, currentPage, searchInput]);
   return (
     <HomepageComponent>
-      <Header getSearchInput={getSearchInput} />
+      <Header />
       <section>
         <Nav />
         <article>
