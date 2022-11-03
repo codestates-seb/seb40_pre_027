@@ -37,6 +37,7 @@ function Comment({ children, onPatch, onDelete, id, idx }) {
   const [commentIsPatch, setCommentIsPatch] = useState(false);
   const [newComment, setNewComment] = useState(children);
   const patchHandler = () => {
+    // comment 수정 함수
     onPatch(id, newComment, idx);
     setCommentIsPatch(false);
   };

@@ -70,16 +70,6 @@ function TopMenu() {
           </div>
         ))}
       </ButtonListsComponent>
-      {/* <ButtonListsComponent>
-        <button>Month</button>
-        <button>Week</button>
-        <button>Hot</button>
-        <button>
-          <div>297</div>
-          &nbsp;bountied
-        </button>
-        <button>interesting</button>
-      </ButtonListsComponent> */}
     </TopMenuComponent>
   );
 }
