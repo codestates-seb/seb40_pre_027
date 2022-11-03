@@ -59,6 +59,7 @@ public class TagService {
      */
     public List<Tag> findTagsPopular(int page) {
         Page<Tag> tagPage = tagRepository.findByOrderByAskedTotal(PageRequest.of(page, 36));
+        log.info("[findTagsPopular]: " + tagPage.getContent());
         return tagPage.getContent();
     }
 
@@ -123,6 +124,6 @@ public class TagService {
             }
         };
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(runnable, 0, 3600, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(runnable, 0, 60, TimeUnit.SECONDS);
     }
 }

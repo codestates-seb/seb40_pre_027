@@ -31,7 +31,7 @@ public class Answer {
     private String answerContent;
 
     @Column
-    private Long answerLikesCount = 0L;
+    private int answerLikesCount = 0;
 
     @Column
     @CreatedDate
@@ -44,10 +44,9 @@ public class Answer {
     @Column
     private long bestAnswer;
 
-
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
+    @JsonBackReference
     private Member answerWriter;
 
     @ManyToOne

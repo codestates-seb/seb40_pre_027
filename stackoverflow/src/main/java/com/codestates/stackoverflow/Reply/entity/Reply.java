@@ -41,6 +41,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name="MEMBER_ID")
+    @JsonBackReference
     private Member replyWriter;
 
 }

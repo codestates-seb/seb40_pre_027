@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +22,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter @Setter
+@Indexed
 @Entity
 public class Question {
     @Id
@@ -26,13 +30,12 @@ public class Question {
     private Long questionId;
 
     @Column(length = 150, nullable = false)
+    @Field
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
+    @Field
     private String content;
-
-    @Column(nullable = false)
-    private int Bounty = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -92,10 +95,6 @@ public class Question {
     public void setAnswers(Answer answer) {
         this.answers.add(answer);
         answer.setQuestion(this);
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
     }
 
     public void setQuestionTags(QuestionTag questionTag) {

@@ -96,9 +96,9 @@ public class AnswerService {
         return findAnswer;
     }
 
-    public long modifyLikeCount(Long answerId, int val) {
+    public int modifyLikeCount(Long answerId, int val) {
         Answer findAnswer = findVerifiedAnswer(answerId);
-        long newLikeCount = findAnswer.getAnswerLikesCount() + val;
+        int newLikeCount = findAnswer.getAnswerLikesCount() + val;
         findAnswer.setAnswerLikesCount(newLikeCount);
 
         return answerRepository.save(findAnswer).getAnswerLikesCount();
@@ -107,12 +107,12 @@ public class AnswerService {
     public void bestAnswer(long questionId, long answerId){
         Question question = questionService.findValidQuestion(questionId);
         Answer findAnswer = findVerifiedAnswer(answerId);
-        if(answerRepository.findByQuestionAndBestAnswer(question,1) == null){
+        if(answerRepository.findByQuestionIdAndBestAnswer(questionId,1L) == null){
             findAnswer.setBestAnswer(1);
             answerRepository.save(findAnswer);
         }
         else{
-            Answer best = answerRepository.findByQuestionAndBestAnswer(question,1);
+            Answer best = answerRepository.findByQuestionIdAndBestAnswer(questionId,1L);
             best.setBestAnswer(0);
             findAnswer.setBestAnswer(1);
             //맨 윗 댓글로 올려주는 정렬 필요.

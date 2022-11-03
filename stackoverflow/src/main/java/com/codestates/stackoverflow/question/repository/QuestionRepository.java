@@ -11,10 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    //    @Modifying
-//    @Query(value = "UPDATE Question q set q.likeCount = q.likeCount + :val where q.questionId = :questionId")
-//    public void modifyLikeCount(@Param("questionId") Long questionId, @Param("val") int val);
-    @Query("SELECT q FROM Question q WHERE q.title like :keyword OR q.content like :keyword")
+    @Query("SELECT q FROM Question q WHERE lower(q.title) like lower(CONCAT('%', :keyword, '%')) OR q.content like lower(CONCAT('%', :keyword, '%'))")
     Optional<Page<Question>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT q FROM Question q INNER JOIN q.questionTags qt INNER JOIN qt.tag t WHERE t.tagName = :tagName")
@@ -22,10 +19,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findByOrderByCreatedAtDesc(Pageable pageable);
 
-//    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
-//            "WHERE t.tagName = :tagName " +
-//            "ORDER BY qt.createdAt DESC")
-//    Page<Question> findAllWithTag(@Param(("tagName")) String tagName, Pageable pageable);
+    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
+            "WHERE t.tagName = :tagName " +
+            "ORDER BY qt.createdAt DESC")
+    Page<Question> findAllWithTag(@Param(("tagName")) String tagName, Pageable pageable);
 
     @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
             "WHERE t.tagName = :tagName AND qt.createdAt >= :since " +
@@ -41,6 +38,4 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 //            "WHERE " +
 //            "ORDER BY ")
 //    Page<Question> findAllWithNoAnswerOrderByLikes(Pageable pageable);
-
-
 }

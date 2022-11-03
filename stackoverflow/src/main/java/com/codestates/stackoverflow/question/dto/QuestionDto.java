@@ -3,6 +3,7 @@ package com.codestates.stackoverflow.question.dto;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.member.dto.MemberDto;
+import com.codestates.stackoverflow.tag.dto.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,8 +37,6 @@ public class QuestionDto {
 
         private String content;
 
-        private int bounty;
-
         private String[] tags;
 
         public void setQuestionId(Long questionId) {
@@ -49,13 +48,12 @@ public class QuestionDto {
     @NoArgsConstructor
     @Getter @Setter
     public static class Response {
+
         private long questionId;
 
         private String title;
 
         private String content;
-
-        private int bounty;
 
         private int viewCount;
 
@@ -65,11 +63,39 @@ public class QuestionDto {
 
         private LocalDateTime modifiedAt;
 
-        private String[] tags;
+        private List<TagDto.Response> tags;
+
+        private Long memberId;
+
+        private MemberDto.Profile profile;
 
         private List<Comment> comments;
 
         private List<Answer> answers;
 
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter @Setter
+    public static class ListedResponse {
+
+        private String title;
+
+        private String content;
+
+        private Long memberId;
+
+        private String name;
+
+        private int viewCount;
+
+        private int likeCount;
+
+        private int answerCount;
+
+        private List<TagDto.Response> tags;
+
+        private int totalCount;
     }
 }

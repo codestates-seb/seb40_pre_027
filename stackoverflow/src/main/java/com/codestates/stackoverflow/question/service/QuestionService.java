@@ -11,6 +11,7 @@ import com.codestates.stackoverflow.question.entity.ActiveInfo;
 import com.codestates.stackoverflow.question.entity.ActiveType;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
+import com.codestates.stackoverflow.question.mapper.QuestionMapperImpl;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.tag.entity.Tag;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -34,12 +37,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
-//    private final QuestionTagRepository questionTagRepository;
-//    private final AnswerRepository answerRepository;
-//    private final CommentRepository commentRepository;
+    private final QuestionMapperImpl mapper;
     private final TagService tagService;
     private final MemberServiceImpl memberServiceImpl;
     private final MemberRepository memberRepository;
+    private final HibernateSearchService searchService;
 
     public Question createQuestion(Question question) {
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
@@ -47,9 +49,9 @@ public class QuestionService {
         mapAndSaveTags(question);
 
         Member authMember = memberServiceImpl.findAuthenticatedMember();
-        authMember.setQuestions(question); // 수정
-        Member writer = memberRepository.save(authMember); // a
-        question.setMember(writer);// cascade 삭제해도 무방
+        authMember.setQuestions(question);
+        Member writer = memberRepository.save(authMember);
+        question.setMember(writer);
 
         ActiveInfo activeInfo = new ActiveInfo(writer.getMemberId(), question.getCreatedAt(), ActiveType.ASKED);
         question.setActiveInfo(activeInfo);
@@ -76,15 +78,27 @@ public class QuestionService {
 
     public Question findQuestion(Long questionId) {
         Question findQuestion = findValidQuestion(questionId);
-
+        //조회수 1 증가
         findQuestion.setViewCount(findQuestion.getViewCount() + 1);
+
+        mapper.questionToQuestionResponse(findQuestion);
+
         return questionRepository.save(findQuestion);
     }
 
     @Transactional(readOnly = true)
-    public Page<Question> searchQuestions(String keyword, Integer page, Integer size) {
-        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size))
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+    public List<Question> searchQuestions(@PathVariable("keyword") String keyword,
+                                          @RequestParam int page,
+                                          @RequestParam int size) throws BusinessLogicException {
+        log.info("[searchQuestions] keyword = " + keyword);
+        if(keyword.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*") && keyword.startsWith("\"") && keyword.endsWith("\"")) {
+            keyword = keyword.substring(1, keyword.length() - 1);
+        }
+
+        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size, Sort.by("questionId").descending()))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND)).getContent();
+
+//        return searchService.searchQuestions(keyword);
     }
 
     @Transactional(readOnly = true)
@@ -92,16 +106,14 @@ public class QuestionService {
         if (tab == null) tab = "Newest";
 
         switch (tab) {
-            case "Newest":
+            case "newest":
                 return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
-                
-            case "Active":
+
+            case "active":
                 Sort sort = Sort.by("activeInfo.lastActiveAt").descending();
 
                 return questionRepository.findAll(PageRequest.of(page, size, sort));
 
-            case "Bountied":
-                return null;
             case "Unanswered":
                 return null;
             case "Frequent":
@@ -116,7 +128,7 @@ public class QuestionService {
      * tag가 null이거나 빈 경우 필요한지 추후 검토 후 수정
      */
     @Transactional(readOnly = true)
-    public List<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
+    public Page<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
         //tag의 tagName이 동일한 경우 페이지
         log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
         if (tab == null) tab = "Newest";
@@ -126,9 +138,10 @@ public class QuestionService {
         switch (tab) {
             case "Newest":
                 return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
-                        Sort.by("questionId").descending())).getContent();
+                        Sort.by("questionId").descending()));
             case "Active":
-                return null;
+                return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
+                        Sort.by("activeInfo.lastActiveAt").descending()));
             case "Bountied":
                 return null;
             case "Unanswered":
@@ -152,14 +165,6 @@ public class QuestionService {
         findQuestion.setLikeCount(newLikeCount);
 
         return questionRepository.save(findQuestion).getLikeCount();
-    }
-
-    /**
-     * Bounty 기능 추가시 사용할 메서드
-     */
-    public Question addBounty(Question question, int bounty) {
-        question.setBounty(question.getBounty() + bounty);
-        return question;
     }
 
     public void mapAndSaveTags(Question question) {

@@ -1,4 +1,3 @@
-
 package com.codestates.stackoverflow.exception;
 
 import lombok.Getter;
@@ -16,7 +15,9 @@ public enum ExceptionCode {
     EMAIL_EXISTS(409, "Email exists"),
     NAME_EXISTS(409, "Name exists"),
     ANSWER_NOT_FOUND(404,"Answer not found"),
-    ANSWER_COMMENT_NOT_FOUND(404,"Answer comment not found");
+    ANSWER_COMMENT_NOT_FOUND(404,"Answer comment not found"),
+    COMMENT_UPDATE_NOT_POSSIBLE(408, "Can't modify comments after 5 minutes"),
+    ALREADY_VOTED(408, "Already voted up or down");
 
     @Getter
     private int status;
@@ -29,4 +30,3 @@ public enum ExceptionCode {
         this.message = message;
     }
 }
-

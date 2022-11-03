@@ -22,9 +22,10 @@ public class QuestionLikes {
     @Column(nullable = false)
     private int val;
 
-    public static QuestionLikes of(Long questionId, int val) {
+    public static QuestionLikes of(Long questionId, Long memberId, int val) {
         QuestionLikes questionLikes = new QuestionLikes();
         questionLikes.setQuestionId(questionId);
+        questionLikes.setMemberId(memberId);
         questionLikes.setVal(val);
         return questionLikes;
     }

@@ -2,6 +2,7 @@ package com.codestates.stackoverflow.tag.entity;
 
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +23,8 @@ public class Tag {
     @Column(length = 35, nullable = false, unique = true)
     private String tagName;
 
-//    @Column(columnDefinition = "TEXT")
-//    private String tagContent;
+    @Column(columnDefinition = "TEXT")
+    private String tagContent;
 
     @Column
     private int askedTotal;
@@ -34,7 +35,8 @@ public class Tag {
     @Column
     private int questionsAskedThisWeek;
 
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(mappedBy = "tag", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JsonManagedReference
     private List<QuestionTag> questionTags = new ArrayList<>();
 
     private LocalDateTime createdAt = LocalDateTime.now();

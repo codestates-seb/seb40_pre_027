@@ -17,6 +17,7 @@ public class ActiveInfo {
     @Column
     LocalDateTime lastActiveAt;
 
-    @Embedded
+    @Enumerated(EnumType.STRING)
+    @Column
     ActiveType activeType;
 }

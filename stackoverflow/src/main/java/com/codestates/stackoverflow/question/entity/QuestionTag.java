@@ -1,6 +1,7 @@
 package com.codestates.stackoverflow.question.entity;
 
 import com.codestates.stackoverflow.tag.entity.Tag;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,10 +17,12 @@ public class QuestionTag {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUESTION_ID")
+    @JsonBackReference
     private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "TAG_ID")
+    @JsonBackReference
     private Tag tag;
 
     private LocalDateTime createdAt;

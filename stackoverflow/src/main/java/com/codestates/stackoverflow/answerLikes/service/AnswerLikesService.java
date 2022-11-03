@@ -4,6 +4,10 @@ import com.codestates.stackoverflow.answer.repository.AnswerRepository;
 import com.codestates.stackoverflow.answer.service.AnswerService;
 import com.codestates.stackoverflow.answerLikes.entity.AnswerLikes;
 import com.codestates.stackoverflow.answerLikes.repository.AnswerLikesRepository;
+import com.codestates.stackoverflow.exception.BusinessLogicException;
+import com.codestates.stackoverflow.exception.ExceptionCode;
+import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,37 +18,47 @@ public class AnswerLikesService {
     private final AnswerLikesRepository answerLikesRepository;
     private final AnswerRepository answerRepository;
     private final AnswerService answerService;
+    private final MemberServiceImpl memberServiceImpl;
 
-    public long saveLike(Long answerId, int val) {
-        Optional<AnswerLikes> findAnswerLikes = answerLikesRepository.findByAnswerId(answerId);
+    public int saveLike(Long answerId, int val) {
+        Member authMember = memberServiceImpl.findAuthenticatedMember();
+        Long memberId = authMember.getMemberId();
+        Optional<AnswerLikes> findAnswerLikes = answerLikesRepository.findByAnswerIdAndMemberId(answerId, memberId);
         if (findAnswerLikes.isEmpty()) {
-            return createLike(answerId, val);
+            return createLike(answerId, memberId, val);
         } else {
             return updateLike(findAnswerLikes.get(), answerId, val);
         }
     }
 
-    public long createLike(Long answerId, int val) {
-        answerRepository.findById(answerId).orElseThrow(RuntimeException::new);
+    public int createLike(Long questionId, Long memberId, int val) throws BusinessLogicException {
+        answerRepository.findById(questionId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
 
-        AnswerLikes answerLikes = AnswerLikes.of(answerId, val);
+        AnswerLikes answerLikes = AnswerLikes.of(questionId, memberId, val);
         answerLikesRepository.save(answerLikes);
 
-        return answerService.modifyLikeCount(answerId, val);
+        return answerService.modifyLikeCount(questionId, val);
     }
 
-    public long updateLike(AnswerLikes answerLikes, Long answerId, int val) {
-        if(answerLikes.getVal() == val) {
-            answerLikesRepository.deleteByAnswer_Id(answerId);
+    public int updateLike(AnswerLikes answerLikes, Long answerId, int val) throws BusinessLogicException{
+        int originalVal = answerLikes.getVal();
+        if(originalVal == 0) {
+            answerLikes.setVal(val);
+            answerLikesRepository.save(answerLikes);
 
-            return answerService.modifyLikeCount(answerId, -1);
+            return answerService.modifyLikeCount(answerId, val);
+
+        } else if (originalVal == val) {
+
+            throw new BusinessLogicException(ExceptionCode.ALREADY_VOTED);
+
         } else {
-            answerLikesRepository.changeLikeVal(answerId, val);
 
-            if (val == 1)
-                return answerService.modifyLikeCount(answerId, 2);
-            else
-                return answerService.modifyLikeCount(answerId, -2);
+            answerLikes.setVal(0);
+            answerLikesRepository.save(answerLikes);
+
+            return answerService.modifyLikeCount(answerId, val);
         }
     }
 }
