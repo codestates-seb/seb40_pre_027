@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from './Button';
 import { GoSearch } from 'react-icons/go';
@@ -38,6 +38,7 @@ const HeaderComponent = styled.header`
       display: flex;
       align-items: center;
       background-color: transparent;
+      cursor: pointer;
     }
 
     & .logo {
@@ -84,9 +85,9 @@ const Topbar = styled.div`
   margin-bottom: 3px;
 `;
 
-function Header({ getSearchInput }) {
+function Header() {
   const navigate = useNavigate();
-  //const [searchInput, setSearchInput] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
@@ -117,15 +118,22 @@ function Header({ getSearchInput }) {
 
   //searchInput에서 현재 값 받아오기
   const searchInputHandler = (e) => {
-    dispatch(searchActions.searchPost(e.target.value));
+    setInputValue(e.target.value);
   };
 
   //검색 핸들러
   const searchHandler = (e) => {
     e.preventDefault();
-    navigate('/', { state: { searchInput } });
-    getSearchInput(searchInput);
-    dispatch(searchActions.searchPost(''))
+    //redux에 searchInput 값 저장
+    dispatch(searchActions.searchPost(inputValue));
+    navigate('/');
+    setInputValue('');
+  };
+
+  const logoClick = () => {
+    setInputValue('');
+    dispatch(searchActions.searchPost(inputValue));
+    navigate('/');
   };
 
   return (
@@ -134,11 +142,9 @@ function Header({ getSearchInput }) {
       <HeaderComponent>
         <div>
           <div className="header-container">
-            <Link to="/">
-              <div className="logo-anchor">
-                <span className="logo"></span>
-              </div>
-            </Link>
+            <div className="logo-anchor" onClick={logoClick}>
+              <span className="logo"></span>
+            </div>
 
             <form className="search-form" onSubmit={searchHandler}>
               <div className="search-group">
@@ -148,7 +154,7 @@ function Header({ getSearchInput }) {
                   type="text"
                   placeholder="Search..."
                   onChange={searchInputHandler}
-                  value={searchInput}
+                  value={inputValue}
                 />
               </div>
             </form>
