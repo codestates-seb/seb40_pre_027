@@ -38,9 +38,6 @@ import java.util.Optional;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionMapperImpl mapper;
-//    private final QuestionTagRepository questionTagRepository;
-//    private final AnswerRepository answerRepository;
-//    private final CommentRepository commentRepository;
     private final TagService tagService;
     private final MemberServiceImpl memberServiceImpl;
     private final MemberRepository memberRepository;
@@ -52,9 +49,9 @@ public class QuestionService {
         mapAndSaveTags(question);
 
         Member authMember = memberServiceImpl.findAuthenticatedMember();
-        authMember.setQuestions(question); // 수정
-        Member writer = memberRepository.save(authMember); // a
-        question.setMember(writer);// cascade 삭제해도 무방
+        authMember.setQuestions(question);
+        Member writer = memberRepository.save(authMember);
+        question.setMember(writer);
 
         ActiveInfo activeInfo = new ActiveInfo(writer.getMemberId(), question.getCreatedAt(), ActiveType.ASKED);
         question.setActiveInfo(activeInfo);
@@ -81,8 +78,10 @@ public class QuestionService {
 
     public Question findQuestion(Long questionId) {
         Question findQuestion = findValidQuestion(questionId);
-        mapper.questionToQuestionResponse(findQuestion);
+        //조회수 1 증가
         findQuestion.setViewCount(findQuestion.getViewCount() + 1);
+
+        mapper.questionToQuestionResponse(findQuestion);
 
         return questionRepository.save(findQuestion);
     }
@@ -92,14 +91,14 @@ public class QuestionService {
                                           @RequestParam int page,
                                           @RequestParam int size) throws BusinessLogicException {
         log.info("[searchQuestions] keyword = " + keyword);
-//        if(keyword.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*") && keyword.startsWith("\"") && keyword.endsWith("\"")) {
-//            keyword = keyword.substring(1, keyword.length() - 1);
-//        }
+        if(keyword.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*") && keyword.startsWith("\"") && keyword.endsWith("\"")) {
+            keyword = keyword.substring(1, keyword.length() - 1);
+        }
 
-//        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size, Sort.by("questionId").descending()))
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+        return questionRepository.findByKeyword(keyword, PageRequest.of(page, size, Sort.by("questionId").descending()))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND)).getContent();
 
-        return searchService.searchQuestions(keyword);
+//        return searchService.searchQuestions(keyword);
     }
 
     @Transactional(readOnly = true)
@@ -107,16 +106,14 @@ public class QuestionService {
         if (tab == null) tab = "Newest";
 
         switch (tab) {
-            case "Newest":
+            case "newest":
                 return questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, size));
 
-            case "Active":
+            case "active":
                 Sort sort = Sort.by("activeInfo.lastActiveAt").descending();
 
                 return questionRepository.findAll(PageRequest.of(page, size, sort));
 
-            case "Bountied":
-                return null;
             case "Unanswered":
                 return null;
             case "Frequent":
@@ -169,14 +166,6 @@ public class QuestionService {
 
         return questionRepository.save(findQuestion).getLikeCount();
     }
-
-    /**
-     * Bounty 기능 추가시 사용할 메서드
-     */
-//    public Question addBounty(Question question, int bounty) {
-//        question.setBounty(question.getBounty() + bounty);
-//        return question;
-//    }
 
     public void mapAndSaveTags(Question question) {
         Optional.ofNullable(question.getTags())

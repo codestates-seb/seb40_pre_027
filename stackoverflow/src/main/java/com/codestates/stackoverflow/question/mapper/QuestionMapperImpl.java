@@ -2,15 +2,24 @@ package com.codestates.stackoverflow.question.mapper;
 
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
+import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.member.mapper.MemberMapper;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.codestates.stackoverflow.tag.mapper.TagMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class QuestionMapperImpl {
+
+    private final MemberMapper memberMapper;
+    private final TagMapper tagMapper;
 
     public Question questionPostToQuestion(QuestionDto.Post requestBody) {
         if ( requestBody == null ) {
@@ -54,8 +63,8 @@ public class QuestionMapperImpl {
 
         QuestionDto.Response response = new QuestionDto.Response();
 
-        if ( question.getQuestionId() != null ) {
-            response.setQuestionId( question.getQuestionId() );
+        if (question.getQuestionTags() != null) {
+            response.setQuestionId(question.getQuestionId());
         }
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
@@ -63,18 +72,12 @@ public class QuestionMapperImpl {
         response.setLikeCount( question.getLikeCount() );
         response.setCreatedAt( question.getCreatedAt() );
         response.setModifiedAt( question.getModifiedAt() );
-        String[] tags = question.getTags();
-        if ( tags != null ) {
-            response.setTags( Arrays.copyOf( tags, tags.length ) );
-        }
-        List<Comment> list = question.getComments();
-        if ( list != null ) {
-            response.setComments( new ArrayList<Comment>( list ) );
-        }
-        List<Answer> list1 = question.getAnswers();
-        if ( list1 != null ) {
-            response.setAnswers( new ArrayList<Answer>( list1 ) );
-        }
+
+        Member member = question.getMember();
+        response.setMemberId(member.getMemberId());
+        response.setProfile(memberMapper.memberToProfile(member));
+        response.setComments(question.getComments());
+        response.setAnswers(question.getAnswers());
 
         return response;
     }

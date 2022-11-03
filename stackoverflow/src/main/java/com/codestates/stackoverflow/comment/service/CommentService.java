@@ -2,6 +2,8 @@ package com.codestates.stackoverflow.comment.service;
 
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.comment.repository.CommentRepository;
+import com.codestates.stackoverflow.exception.BusinessLogicException;
+import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import com.codestates.stackoverflow.question.entity.Question;
@@ -40,14 +42,14 @@ public class CommentService {
      * 댓글 내용 공백 처리 어떻게 할 것인지 추후 논의 필요
      * 작성한 지 5분이 지나지 않은 경우 수정 가능
      */
-    public Comment updateComment(Comment comment) {
+    public Comment updateComment(Comment comment) throws BusinessLogicException{
         Comment findComment = findValidComment(comment.getCommentId());
 
         LocalDateTime createdAt = findComment.getCreatedAt();
         LocalDateTime modifiedAt = LocalDateTime.now();
 
         if (Duration.between(createdAt, modifiedAt).getSeconds() > 300) {
-            throw new RuntimeException();
+            throw new BusinessLogicException(ExceptionCode.COMMENT_UPDATE_NOT_POSSIBLE);
         } else {
             Optional.ofNullable(comment.getContent())
                     .ifPresent(findComment::setContent);

@@ -97,10 +97,6 @@ public class Question {
         answer.setQuestion(this);
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
     public void setQuestionTags(QuestionTag questionTag) {
         this.questionTags.add(questionTag);
         questionTag.setQuestion(this);

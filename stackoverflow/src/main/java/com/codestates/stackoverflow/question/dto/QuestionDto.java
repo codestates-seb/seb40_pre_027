@@ -55,10 +55,6 @@ public class QuestionDto {
 
         private String content;
 
-        private Long writerId;
-
-        private MemberDto.Profile profile;
-
         private int viewCount;
 
         private int likeCount;
@@ -67,7 +63,11 @@ public class QuestionDto {
 
         private LocalDateTime modifiedAt;
 
-        private String[] tags;
+        private List<TagDto.Response> tags;
+
+        private Long memberId;
+
+        private MemberDto.Profile profile;
 
         private List<Comment> comments;
 
@@ -77,7 +77,7 @@ public class QuestionDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter @Setter
-    public static class ResponseQuestionsList {
+    public static class ListedResponse {
 
         private String title;
 

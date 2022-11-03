@@ -33,6 +33,7 @@ public class QuestionController {
         log.info("[postQuestion] 태그 : " + Arrays.toString(requestBody.getTags()));
         Question question = questionService.createQuestion(mapper.questionPostToQuestion(requestBody));
         question.setTags(requestBody.getTags());
+
         return new ResponseEntity<>(
                 mapper.questionToQuestionResponse(question),
                 HttpStatus.CREATED);
@@ -62,8 +63,10 @@ public class QuestionController {
     public ResponseEntity getQuestionsSorted(@RequestParam(required = false) String tab,
                                        @RequestParam(required = false) Integer page,
                                        @RequestParam(required = false) Integer size) {
+        if(tab == null) tab = "Newest";
         if(page == null) page = 1;
         if(size == null) size = 30;
+        tab = tab.toLowerCase();
 
         List<Question> questions = questionService.findQuestions(tab, page - 1, size).getContent();
 
@@ -113,7 +116,7 @@ public class QuestionController {
     }
 
     @PostMapping("/{question-id}/vote")
-    public @ResponseBody int like(@PathVariable("question-id") Long questionId,
+    public @ResponseBody int like(@PathVariable("question-id") @Positive Long questionId,
                                   @RequestParam int val) {
         return questionLikesService.saveLike(questionId, val);
     }

@@ -9,12 +9,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface QuestionTagRepository extends JpaRepository<QuestionTag, Long> {
-    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
+    @Query("SELECT count(*) FROM QuestionTag qt INNER JOIN qt.tag t " +
             "WHERE t.tagName = :tagName " +
             "ORDER BY qt.createdAt DESC")
     int findNumberOfQuestionsWithTag(@Param(("tagName")) String tagName);
 
-    @Query("select count(*) FROM QuestionTag qt INNER JOIN Tag t " +
+    @Query("select count(*) FROM QuestionTag qt INNER JOIN qt.tag t " +
             "WHERE t.tagName = :tagName AND qt.createdAt >= :since " +
             "ORDER BY qt.createdAt DESC")
     int findNumberOfQuestionsWithTagSince(@Param(("tagName")) String tagName, @Param("since") LocalDateTime since);

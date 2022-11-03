@@ -23,8 +23,8 @@ public class Tag {
     @Column(length = 35, nullable = false, unique = true)
     private String tagName;
 
-//    @Column(columnDefinition = "TEXT")
-//    private String tagContent;
+    @Column(columnDefinition = "TEXT")
+    private String tagContent;
 
     @Column
     private int askedTotal;

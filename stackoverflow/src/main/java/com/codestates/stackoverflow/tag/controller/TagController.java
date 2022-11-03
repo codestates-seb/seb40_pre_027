@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/tags")
@@ -22,9 +23,13 @@ public class TagController {
     private final TagMapper mapper;
 
     @GetMapping
-    public ResponseEntity getTags(@RequestParam int page,
-                                  @RequestParam String tab) {
+    public ResponseEntity getTags(@RequestParam(required = false) Integer page,
+                                  @RequestParam(required = false) String tab) {
+        if (page == null) page = 1;
+        if (tab == null) tab = "popular";
+        tab = tab.toLowerCase();
         List<Tag> tags = new ArrayList<>();
+
         if (tab.equals("popular")) {
             tags = tagService.findTagsPopular(page - 1);
         }

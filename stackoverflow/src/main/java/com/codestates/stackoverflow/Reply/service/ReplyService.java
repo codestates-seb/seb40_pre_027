@@ -31,7 +31,6 @@ public class ReplyService {
         answer.setReplies(reply);
         Member member = memberServiceImpl.findAuthenticatedMember();
         member.setReplies(reply);
-        memberRepository.save(member);
         answerRepository.save(answer);
         return replyRepository.save(reply);
     }
