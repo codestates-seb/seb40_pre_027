@@ -72,10 +72,11 @@ const PostComponent = styled.div`
 
 function Post({ post, watchedTags, ignoredTags }) {
   const navigate = useNavigate();
-  const { questionId, title, content, tags, viewCount, likeCount, answers } =
+  const { questionId, title, content, tags, viewCount, likeCount, answers, profile, createdAt } =
     post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
+  const date = new Date(createdAt).toLocaleString();
   const deleteTagContent = content
     .replace(/<[^>]*>?/g, '')
     .replace(/&lt;/g, '')
@@ -95,6 +96,7 @@ function Post({ post, watchedTags, ignoredTags }) {
   };
   const watched = tagsEvaluate(watchedTags);
   const ignored = tagsEvaluate(ignoredTags);
+
   return (
     <PostComponent watched={watched} ignored={ignored}>
       <div className="info-post">
@@ -140,9 +142,9 @@ function Post({ post, watchedTags, ignoredTags }) {
           </div>
           <div className="info-user">
             <img src={imgurl} alt="user-img" />
-            <span className="user-name">{`PieCharmer`}</span>
+            <span className="user-name">{profile.name}</span>
             <span className="user-answers">{15}</span>
-            <span>{`asked 58 sec ago`}</span>
+            <span>{`asked at ${date}`}</span>
           </div>
         </div>
       </div>
