@@ -72,12 +72,13 @@ function TagsBox({ setTags, tags, name }) {
     if (localTagsData) setTags(localTagsData);
   }, []);
   const onChange = (e) => {
+    // tag관련 onChange
     setTag(e.target.value);
     const newTagList = tagsData.filter((v) => v.includes(e.target.value));
     setTagList(newTagList);
-    console.log(tagList);
   };
   const autoComplete = (tag) => {
+    // 추천 리스트에서 값을 누르면 자동완성
     setTag(tag);
     setTagList([]);
   };
@@ -91,11 +92,15 @@ function TagsBox({ setTags, tags, name }) {
   };
 
   const tagDeleteHandler = (tag) => {
+    // 태그 컴포넌트의 x를 누르면 해당 태그가 list에서 삭제
     const newtags = tags.filter((v) => tag !== v);
     setTags(newtags);
     localStorage.setItem(name, JSON.stringify(newtags));
   };
-  const editHandler = () => setIsEdit(!isEdit);
+  const editHandler = () => {
+    // edit 보여짐/ 숨김
+    setIsEdit(!isEdit);
+  };
 
   return (
     <Boxs>

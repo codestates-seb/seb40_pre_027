@@ -51,6 +51,7 @@ function AnswerSorted({ answers }) {
   const [desc, setDesc] = useState(descArr[0]);
   const selectHandler = (value) => setDesc(value);
   const resetHandler = () => {
+    // sorted select를 처음 상태로 돌림
     setDesc(descArr[0]);
     selectRef.current.value = descArr[0];
   };

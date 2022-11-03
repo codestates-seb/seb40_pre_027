@@ -170,7 +170,6 @@ function PostBody({
 }) {
   const {
     title,
-    createdAt,
     modifiedAt,
     questionId,
     tags,
@@ -193,15 +192,19 @@ function PostBody({
 
   useEffect(() => {
     if (answerIsPatch) {
+      // 답변 edit 버튼을 눌렀을시 editor가 보여짐
       editorRef.current?.getInstance().setHTML(answer.answerContent);
     } else if (answer.answerId) {
+      // answer - comment
       setReplyArray(answer.replies);
     }
   }, [answerIsPatch, viewMore]);
   const patchHandler = () => {
     if (answer.answerId) {
+      // answer - isPatch, editor on
       setAnswerIsPatch(true);
     } else {
+      // question - patch
       const contentArr = content.split(' <br calssName="boundary"/> ');
       const introduce = contentArr[0];
       const expand = contentArr[1];
@@ -216,10 +219,12 @@ function PostBody({
     }
   };
   const editorOnChange = () => {
+    // editor - onChange
     setNewAnswer(editorRef.current.getInstance().getHTML());
   };
   const deleteHandler = () => {
     if (answer.answerId) {
+      // answer - delete
       axios
         .delete(`/answer/${answer.answerId}`)
         .then(() => {
@@ -230,6 +235,7 @@ function PostBody({
         })
         .catch(() => alert('답변 삭제 실패'));
     } else {
+      // question - delete
       axios
         .delete(`/question/${questionId}`)
         .then(() => navigate('/'))
@@ -237,6 +243,7 @@ function PostBody({
     }
   };
   const answerPatchHandler = () => {
+    // answer - patch
     axios
       .patch(`/answer/${answer.answerId}`, {
         answerContent: newAnswer,
@@ -252,6 +259,7 @@ function PostBody({
     try {
       const access = localStorage.getItem('accessToken');
       if (answer.answerId) {
+        // answer - comment - post
         await axios.post(
           `/reply/${answer.answerId}`,
           {
@@ -262,6 +270,7 @@ function PostBody({
         const newPostData = await axios.get(`/question/${questionId}`);
         await setReplyArray(newPostData.data.answers[idx].replies);
       } else {
+        // question - comment - post
         await axios.post(
           `/comment/${questionId}`,
           { content: comment },
@@ -278,10 +287,12 @@ function PostBody({
   const commentOnDeleteHandler = async (id) => {
     try {
       if (answer.answerId) {
+        // answer - comment - delete
         await axios.delete(`/reply/${id}`);
         const newReplysArray = [...replyArray].filter((v) => v.replyId !== id);
         setReplyArray(newReplysArray);
       } else {
+        // question - comment - delete
         await axios.delete(`/comment/${id}`);
         const newCommentsArray = commentsArray.filter(
           (v) => v.commentId !== id
@@ -296,11 +307,13 @@ function PostBody({
   const commentOnPatchHandler = async (id, content, idx) => {
     try {
       if (answer.answerId) {
+        // answer - comment - patch
         await axios.patch(`/reply/${id}`, { replyContent: content });
         const newReplysArray = [...replyArray];
         newReplysArray[idx].replyContent = content;
         setReplyArray(newReplysArray);
       } else {
+        // question - comment - patch
         await axios.patch(`/comment/${id}`, { content });
         const newCommentsArray = [...commentsArray];
         newCommentsArray[idx].content = content;

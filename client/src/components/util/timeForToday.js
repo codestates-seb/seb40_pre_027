@@ -1,4 +1,5 @@
 export default function timeForToday(value) {
+  // ex) value값에 들어온 시간을 현재시간과 비교해서 차이를 나타내는 함수
   const today = new Date();
   const timeValue = new Date(value);
 
