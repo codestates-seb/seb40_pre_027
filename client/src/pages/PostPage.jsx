@@ -96,7 +96,10 @@ function PostPage() {
                   <></>
                 )}
 
-                <AnswerPost />
+                <AnswerPost
+                  setAnswersArray={setAnswersArray}
+                  answersArray={answersArray}
+                />
               </div>
               <aside></aside>
             </div>
