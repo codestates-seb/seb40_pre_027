@@ -86,16 +86,16 @@ function AnswerPost({ isLogined }) {
   };
   const answerSubmitHandler = () => {
     const access = localStorage.getItem('accessToken');
-    if (isLogin)
+    if (isLogin) {
       axios
         .post(
           `/answer/${id}`,
           { answerContent: answer },
           { headers: { access } }
         )
-        .then(() => navigate(`/post/${id}`))
         .catch(() => alert('답변 생성 실패'));
-    else alert('you need login');
+    } else alert('you need login');
+    console.log('answer');
   };
   return (
     <AnswerPostComponent>
@@ -109,6 +109,7 @@ function AnswerPost({ isLogined }) {
           useCommandShortcut={true}
           ref={editorRef}
           onChange={onChange}
+          autofocus={false}
         />
       </div>
 

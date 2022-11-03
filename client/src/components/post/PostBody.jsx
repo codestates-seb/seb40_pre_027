@@ -1,7 +1,9 @@
 import axios from 'axios';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { Editor } from '@toast-ui/react-editor';
+import Button from '../Button';
 
 import Tag from '../Tag';
 import Recommend from './Recommend';
@@ -10,6 +12,10 @@ const PostBodyComponent = styled.div`
   display: flex;
   margin-top: 2rem;
   padding-left: 2rem;
+  line-height: 1.25rem;
+  button {
+    margin: 1rem 0 0 0;
+  }
   code {
     /* border: 1px solid black; */
     padding: 0.3rem;
@@ -53,6 +59,7 @@ const PostBodyComponent = styled.div`
         .menu-item {
           margin: 5px;
           color: #51565d;
+          cursor: pointer;
           :hover {
             color: #828c98;
           }
@@ -120,14 +127,27 @@ const PostBodyComponent = styled.div`
       }
     }
   }
+  .comment-input {
+    width: 100%;
+    display: flex;
+    input {
+      width: 100%;
+      margin-right: 1rem;
+      height: 2.5rem;
+    }
+  }
 `;
 
 function PostBody(props) {
   const navigate = useNavigate();
   const [shareClicked, setShareClicked] = useState(false);
+  const [newAnswer, setNewAnswer] = useState('');
+  const [comment, setComment] = useState('');
+  const [isPatch, setIsPatch] = useState(false);
 
   const shareHandler = () => setShareClicked(!shareClicked);
   const contentRef = useRef();
+  const editorRef = useRef();
 
   const createdAt = new Date(
     props.answer ? props.answer.answerCreatedAt : props.createdAt
@@ -135,25 +155,60 @@ function PostBody(props) {
   const modifiedAt = new Date(
     props.answer ? props.answer.answerModifiedAt : props.modifiedAt
   );
+  useEffect(() => {
+    if (isPatch) {
+      editorRef.current?.getInstance().setHTML(props.answer.answerContent);
+    }
+  }, [isPatch]);
   const patchHandler = () => {
-    const contentArr = props.content.split(' <br calssName="boundary"/> ');
-    const introduce = contentArr[0];
-    const expand = contentArr[1];
-    const data = {
-      id: props.questionId,
-      title: props.title,
-      introduce,
-      expand,
-      tags: props.tags,
-    };
-    navigate(`/write`, { state: data });
-    console.log(data);
+    if (props.answer.answerId) {
+      setIsPatch(true);
+    } else {
+      const contentArr = props.content.split(' <br calssName="boundary"/> ');
+      const introduce = contentArr[0];
+      const expand = contentArr[1];
+      const data = {
+        id: props.questionId,
+        title: props.title,
+        introduce,
+        expand,
+        tags: props.tags,
+      };
+      navigate(`/write`, { state: data });
+    }
+  };
+  const onChange = () => {
+    setNewAnswer(editorRef.current.getInstance().getHTML());
   };
   const deleteHandler = () => {
+    if (props.answer.answerId) {
+      axios
+        .delete(`/answer/${props.answer.answerId}`)
+        .then(() => {
+          const newAnswersArray = props.answersArray.filter(
+            (v) => v.answerId !== props.answer.answerId
+          );
+          props.setAnswersArray(newAnswersArray);
+        })
+        .catch(() => alert('답변 삭제 실패'));
+    } else {
+      axios
+        .delete(`/question/${props.questionId}`)
+        .then(() => navigate('/'))
+        .catch(() => alert('실패'));
+    }
+  };
+  const answerPatchHandler = () => {
     axios
-      .delete(`/question/${props.questionId}`)
-      .then(() => navigate('/'))
-      .catch(() => alert('실패'));
+      .patch(`/answer/${props.answer.answerId}`, {
+        answerContent: newAnswer,
+      })
+      .then(() => {
+        setIsPatch(false);
+        const newAnswersArray = [...props.answersArray];
+        newAnswersArray[props.idx].answerContent = newAnswer;
+        props.setAnswersArray(newAnswersArray);
+      });
   };
   const userimg =
     'https://www.gravatar.com/avatar/088029d211d686a016bcfdc326523d62?s=256&d=identicon&r=PG';
@@ -162,13 +217,30 @@ function PostBody(props) {
     <PostBodyComponent>
       <Recommend />
       <div className="post-body-container">
-        <section
-          className="main-content"
-          ref={contentRef}
-          dangerouslySetInnerHTML={{
-            __html: props.answer ? props.answer.answerContent : props.content,
-          }}
-        >
+        <section className="main-content" ref={contentRef}>
+          {isPatch ? (
+            <div>
+              <Editor
+                initialValue={props.answer.answerContent}
+                height="300px"
+                initialEditType="markdown"
+                onChange={(e) => onChange(e, true)}
+                useCommandShortcut={true}
+                ref={editorRef}
+                autofocus={true}
+              />
+              <Button onClick={answerPatchHandler}>수정</Button>
+            </div>
+          ) : (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: props.answer
+                  ? props.answer.answerContent
+                  : props.content,
+              }}
+            ></div>
+          )}
+
           {/* {contentRef.innerHTML(props.content)} */}
         </section>
         {!props.answer && (
@@ -242,6 +314,16 @@ function PostBody(props) {
           </div>
         </section>
         <section className="add-comment">Add a comment</section>
+
+        <div>
+          {props.commentsArray.map((comment) => (
+            <div>{comment.content}</div>
+          ))}
+        </div>
+        <div className="comment-input">
+          <input type="text" onChange={(e) => setComment(e.target.value)} />
+          <Button>submit</Button>
+        </div>
       </div>
     </PostBodyComponent>
   );

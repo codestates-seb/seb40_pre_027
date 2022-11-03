@@ -38,21 +38,20 @@ const PostPageComponent = styled.div`
 
 function PostPage() {
   const [post, setPost] = useState([]);
+  const [answersArray, setAnswersArray] = useState([]);
+  const [commentsArray, setCommentsArray] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`/question/${id}`).then((res) => setPost(res.data));
+    axios.get(`/question/${id}`).then((res) => {
+      setPost(res.data);
+      setAnswersArray(res.data.answers);
+      setCommentsArray(res.data.comments);
+    });
   }, []);
-  console.log(post);
-  const {
-    questionId,
-    title,
-    content,
-    viewCount,
-    createdAt,
-    modifiedAt,
-    tags,
-    answers,
-  } = post;
+  const { questionId, title, content, viewCount, createdAt, modifiedAt, tags } =
+    post;
+
+  console.log(commentsArray, 'comments');
   return (
     <PostPageComponent>
       <Header />
@@ -77,11 +76,21 @@ function PostPage() {
                   tags={tags}
                   createdAt={createdAt}
                   modifiedAt={modifiedAt}
+                  setCommentsArray={setCommentsArray}
+                  commentsArray={commentsArray}
                 />
-                <AnswerSorted answers={answers.length} />
-                {answers.length ? (
-                  answers.map((answer) => (
-                    <PostBody answer={answer} key={answer.answerId} />
+                <AnswerSorted answers={answersArray.length} />
+                {answersArray.length ? (
+                  answersArray.map((answer, i) => (
+                    <PostBody
+                      answer={answer}
+                      idx={i}
+                      key={answer.answerId}
+                      setAnswersArray={setAnswersArray}
+                      answersArray={answersArray}
+                      // setCommentsArray={setCommentsArray}
+                      // commentsArray={commentsArray}
+                    />
                   ))
                 ) : (
                   <></>
