@@ -180,7 +180,6 @@ function PostBody({
     profile,
   } = post;
   const navigate = useNavigate();
-  const [shareClicked, setShareClicked] = useState(false);
   const [newAnswer, setNewAnswer] = useState('');
   const [comment, setComment] = useState('');
   const [answerIsPatch, setAnswerIsPatch] = useState(false);
@@ -189,7 +188,6 @@ function PostBody({
   const userId = localStorage.getItem('memberId');
   const [viewMore, setViewMore] = useState(false);
 
-  const shareHandler = () => setShareClicked(!shareClicked);
   const contentRef = useRef();
   const editorRef = useRef();
 
@@ -369,14 +367,8 @@ function PostBody({
                 className="menu-item"
                 title="Short permalink to this question"
               >
-                <div role="button" onClick={shareHandler} className="share">
+                <div role="button" className="share">
                   Share
-                  {shareClicked && (
-                    <div className="share-dropdown">
-                      <label>Share a link to this question</label>
-                      <input type="text" value={'/post'} />
-                    </div>
-                  )}
                 </div>
               </div>
               {memberId === +userId ? (
