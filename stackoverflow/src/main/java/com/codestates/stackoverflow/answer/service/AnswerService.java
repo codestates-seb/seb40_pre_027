@@ -42,7 +42,6 @@ public class AnswerService {
         ActiveInfo activeInfo = new ActiveInfo(member.getMemberId(), answer.getAnswerCreatedAt(), ActiveType.ANSWERED);
         question.setActiveInfo(activeInfo);
 
-        memberRepository.save(member);
         questionRepository.save(question);
         return answerRepository.save(answer);
     }
