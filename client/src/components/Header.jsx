@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from './Button';
 import { GoSearch } from 'react-icons/go';
 import Logo from '../img/Logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserCard from './UserCard';
 
 //redux 관련 import
@@ -83,27 +83,49 @@ const Topbar = styled.div`
   margin-bottom: 3px;
 `;
 
-function Header({ onGetUserProfile }) {
+function Header({ getSearchInput }) {
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState('');
+
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.isLogin);
-  console.log(isLogin);
+  console.log(searchInput);
+
+  //로그아웃 axios 요청
+  // async function logoutRequest() {
+  //   try {
+  //     const res = await axios.get('/user/logout');
+  //     console.log(res);
+  //   } catch (error) {
+  //     alert(error);
+  //     console.log(error);
+  //   }
+  // }
 
   //logoutHandler
   const logoutHandler = () => {
     //dispatch로 로그아웃 상태 redux에 저장
+    //logoutRequest();
     dispatch(loginActions.logout());
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('memberId');
   };
 
-  // // usercard 누를 때 작동하는 함수
-  // const moveToUserProfile = (getUserProfile) => {
-  //   console.log(getUserProfile);
-  //   getUserProfile();
-  // };
+  //searchInput에서 현재 값 받아오기
+  const searchInputHandler = (e) => {
+    setSearchInput(e.target.value);
+  };
 
-  const searchHandler = () => {};
+  //검색 핸들러
+  const searchHandler = (e) => {
+    e.preventDefault();
+    console.log(getSearchInput);
+    getSearchInput(searchInput);
+    navigate(`/search/${searchInput}`);
+  };
+
   return (
     <>
       <Topbar />
@@ -123,13 +145,14 @@ function Header({ onGetUserProfile }) {
                   className="search-input"
                   type="text"
                   placeholder="Search..."
+                  onChange={searchInputHandler}
                 />
               </div>
             </form>
             {isLogin ? (
               <>
                 <Link to="/myProfile">
-                  <UserCard onGetUserProfile={onGetUserProfile} />
+                  <UserCard />
                 </Link>
                 <Button onClick={logoutHandler}>Log out</Button>
               </>

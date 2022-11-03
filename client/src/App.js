@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 //redux를 위한 import
 import { useSelector } from 'react-redux';
+import SearchResultPage from './pages/SearchResultPage';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -33,8 +34,10 @@ function App() {
         ></Route>
 
         <Route
-          path="/questions"
-          element={<Suspense fallback={<>...</>}>{<HomePage />}</Suspense>}
+          path="/search/:input"
+          element={
+            <Suspense fallback={<>...</>}>{<SearchResultPage />}</Suspense>
+          }
         ></Route>
 
         <Route
