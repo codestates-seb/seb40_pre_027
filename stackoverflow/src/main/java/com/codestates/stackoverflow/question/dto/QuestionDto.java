@@ -46,7 +46,8 @@ public class QuestionDto {
 
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class Response {
 
         private long questionId;
@@ -63,7 +64,7 @@ public class QuestionDto {
 
         private LocalDateTime modifiedAt;
 
-        private List<TagDto.Response> tags;
+        private List<TagDto.Response> tagDtos;
 
         private Long memberId;
 
@@ -77,7 +78,8 @@ public class QuestionDto {
 
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class ListedResponse {
 
         private String title;
