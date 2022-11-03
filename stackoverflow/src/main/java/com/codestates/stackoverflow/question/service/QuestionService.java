@@ -45,9 +45,11 @@ public class QuestionService {
         //question과 tag를 저장한다.
         Member member = memberServiceImpl.findAuthenticatedMember();
         member.setQuestions(question);
+
+        //add
+        question.setQuestionWriterId(member.getMemberId());
         question.setMember(member);
         memberRepository.save(member);
-
         return questionRepository.save(question);
     }
 

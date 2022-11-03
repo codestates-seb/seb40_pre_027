@@ -34,6 +34,9 @@ public class Reply {
     @CreatedDate
     private LocalDateTime replyModifiedAt=LocalDateTime.now();
 
+    @Column
+    private Long replyWriterId;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "answer_id")
     @JsonBackReference
@@ -41,6 +44,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name="MEMBER_ID")
+    @JsonBackReference
     private Member replyWriter;
 
 }

@@ -50,6 +50,8 @@ public class QuestionDto {
     public static class Response {
         private long questionId;
 
+        private long questionWriterId;
+
         private String title;
 
         private String content;

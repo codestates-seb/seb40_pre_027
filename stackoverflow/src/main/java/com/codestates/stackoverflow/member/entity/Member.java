@@ -6,6 +6,8 @@ import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -55,6 +57,7 @@ public class Member extends Auditable {
 
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
+    @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "member")
@@ -70,6 +73,7 @@ public class Member extends Auditable {
     }
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "replyWriter")
+    @JsonManagedReference
     private List<Reply> replies = new ArrayList<>();
 
     public void setReplies(Reply reply) {

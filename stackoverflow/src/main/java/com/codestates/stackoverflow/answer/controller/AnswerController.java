@@ -73,9 +73,9 @@ public class AnswerController {
         return answerLikesService.saveLike(answerId, -1);
     }
 
-    @PatchMapping("/bestAnswer/{answer-id}")
-    public void selectBest(@Positive long questionId,
-                           @PathVariable("answer-id") long answerId){
+    @PatchMapping("/bestAnswer/{question-id}/{answer-id}")
+    public void selectBest(@PathVariable("answer-id") long answerId,
+                           @PathVariable("question-id") long questionId){
         answerService.bestAnswer(questionId, answerId);
     }
 }

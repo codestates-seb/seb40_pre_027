@@ -23,6 +23,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Answer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
@@ -42,12 +43,14 @@ public class Answer {
     private LocalDateTime answerModifiedAt = LocalDateTime.now();
 
     @Column
-    private long bestAnswer;
+    private long bestAnswer=0;
 
-
+    @Column
+    private long answerWriterId;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
+    @JsonBackReference
     private Member answerWriter;
 
     @ManyToOne

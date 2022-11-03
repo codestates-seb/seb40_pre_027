@@ -37,6 +37,10 @@ public class Question {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    //questionWriterId add
+    @Column
+    private Long questionWriterId;
+
     public void setMember(Member member) {
         this.member = member;
     }

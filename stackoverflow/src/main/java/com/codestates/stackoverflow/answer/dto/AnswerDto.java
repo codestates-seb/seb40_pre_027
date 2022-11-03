@@ -1,9 +1,11 @@
 package com.codestates.stackoverflow.answer.dto;
 
+import com.codestates.stackoverflow.Reply.entity.Reply;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AnswerDto {
     @Getter @Setter
@@ -32,11 +34,22 @@ public class AnswerDto {
 
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
+    public static class pick{
+        private long answerId;
+
+        private long bestAnswer;
+        public void setAnswerId(Long answerId){
+            this.answerId = answerId;
+        }
+
+    }
+    @Getter
+    @AllArgsConstructor
     @Setter
     @NoArgsConstructor
     @Builder
     public static class Response{
-
 
         private long answerId;
 
@@ -47,5 +60,7 @@ public class AnswerDto {
         private LocalDateTime answerCreatedAt;
 
         private LocalDateTime answerModifiedAt;
+
+        private List<Reply> replies;
     }
 }

@@ -32,10 +32,10 @@ public class AnswerService {
 
     public Answer createAnswer(Answer answer, long questionId){
         Member member = memberServiceImpl.findAuthenticatedMember();
+        answer.setAnswerWriterId(member.getMemberId());
         member.setAnswers(answer);
         Question question = questionService.findValidQuestion(questionId);
         question.setAnswers(answer);
-        memberRepository.save(member);
         questionRepository.save(question);
         return answerRepository.save(answer);
     }
@@ -97,7 +97,7 @@ public class AnswerService {
         return answerRepository.save(findAnswer).getAnswerLikesCount();
     }
 
-    public void bestAnswer(long questionId, long answerId){
+    public void bestAnswer(Long questionId, Long answerId){
         Question question = questionService.findValidQuestion(questionId);
         Answer findAnswer = findVerifiedAnswer(answerId);
         if(answerRepository.findByQuestionAndBestAnswer(question,1) == null){
