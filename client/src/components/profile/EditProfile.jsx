@@ -1,7 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import styled from 'styled-components';
 import ProfilePicture from '../../img/ProfilePicture.png';
 import { Editor } from '@toast-ui/react-editor';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 const EditProfileComponent = styled.div`
   h1 {
@@ -71,6 +74,7 @@ const ButtonComponent = styled.div`
 `;
 
 function EditProfile() {
+  // data 한 객체로 만들기
   const [edit, setEdit] = useState({
     name: '',
     location: '',
@@ -78,18 +82,69 @@ function EditProfile() {
     introduction: '',
   });
 
-  const onChangeEdit = (e) => {
-    setEdit({
-      ...edit,
-      [e.target.name]: e.target.value,
-
-    });
-  console.log(edit);
+  const editRef = useRef();
+  
+  const onChangeEdit = (e, editor) => {
+    // console.log(e.target.name)
+    if (editor) {
+      setEdit({
+        ...edit,
+        introduction: editRef.current.getInstance().getHTML(),
+      });
+    } else {
+      setEdit({
+        ...edit,
+        [e.target.name]: e.target.value,
+      });
+    }
+    console.log(edit);
+    
   };
 
-  const editRef = useRef()
+  useEffect(() => {
+    const access = localStorage.getItem('accessToken')
+    axios.get('/user/profile/edit', {headers : {access}})
+      .then(() => {
+        setEdit({
+          name: {},
+          location: {},
+          tittle: {},
+          introduction: {editRef}
+        }) 
+      })
+  }, [])
 
+  async function putProfile() {
+    try {
+      await axios.put('/user/profile/edit')
+        .then(() => {
+          setEdit({
+            name: {},
+            location: {},
+            tittle: {},
+            introduction: {editRef}
+          }) 
+        })
+      } catch(error){
+        console.error(error)
+      }
+    }
 
+    // const onClickBtn = (e) => {
+    //   // putProfile()
+    //    const response = await axios.put('/user/profile/edit', {
+    //     name: edit.name,
+    //     location: edit.location,
+    //     tittle: edit.tittle,
+    //   })
+    // }
+  
+  
+
+  
+  
+
+    
   return (
     <EditProfileComponent>
       <h1>Edit your Profile</h1>
@@ -106,7 +161,7 @@ function EditProfile() {
             className="inputBox"
             name="name"
             onChange={onChangeEdit}
-            value={edit.email}
+            value={edit.name}
           ></input>
           <div className="margin-word">Location</div>
           <input
@@ -124,13 +179,13 @@ function EditProfile() {
           ></input>
           <div className="margin-word">About Me</div>
           <Editor
-            initialValue=" "
+            initialValue={edit.introduction}
             height="300px"
             initialEditType="markdown"
             useCommandShortcut={true}
             name="introduction"
-            // onChange={onChangeEdit}
-            onChange={(e) => console.log(editRef.current.getInstance().getHTML())}
+            onChange={(e) => onChangeEdit(e, true)}
+            // onChange={(e) => console.log}
             value={edit.introduction}
             ref={editRef}
           ></Editor>
@@ -138,8 +193,12 @@ function EditProfile() {
       </ProfileEditInfoComponent>
       <ButtonComponent>
         <span>
-          <button className="saveButton" onClick={onChangeEdit}>Save Profile</button>
-          <button className="cancelButton">Cancel</button>
+          <button className="saveButton" onClick={putProfile}>
+            Save Profile
+          </button>
+          <Link to= '/myProfile'>
+          <button className="cancelButton"> Cancel</button>
+          </Link>
         </span>
         <button className="deleteButton">Delete Account</button>
       </ButtonComponent>
