@@ -24,11 +24,10 @@ public class JwtController {
     // 만료된 토큰 재발급
     @GetMapping("/auth/reissue")
     public ResponseEntity reissue(HttpServletRequest request, HttpServletResponse response) {
-        log.info("reissue 동작");
+        log.info("reissue 접근 시작");
         String newToken = jwtService.reissueAccessToken(request, response);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("access", "Bearer " + newToken);
-
         return ResponseEntity.ok()
                 .headers(responseHeaders).build();
     }

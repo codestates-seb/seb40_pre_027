@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AnswerLikesRepository extends JpaRepository<AnswerLikes,Long> {
-    Optional<AnswerLikes> findByAnswerId(Long answerId);
+
+    Optional<AnswerLikes> findByAnswerIdAndMemberId(Long answerId, Long memberId);
 
     @Modifying
     @Query("DELETE from AnswerLikes l where l.answerId = :answerId")

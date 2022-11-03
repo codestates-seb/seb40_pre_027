@@ -11,6 +11,7 @@ import com.codestates.stackoverflow.question.entity.ActiveInfo;
 import com.codestates.stackoverflow.question.entity.ActiveType;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
+import com.codestates.stackoverflow.question.mapper.QuestionMapperImpl;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.tag.entity.Tag;
@@ -36,6 +37,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuestionMapperImpl mapper;
 //    private final QuestionTagRepository questionTagRepository;
 //    private final AnswerRepository answerRepository;
 //    private final CommentRepository commentRepository;
@@ -79,6 +81,7 @@ public class QuestionService {
 
     public Question findQuestion(Long questionId) {
         Question findQuestion = findValidQuestion(questionId);
+        mapper.questionToQuestionResponse(findQuestion);
         findQuestion.setViewCount(findQuestion.getViewCount() + 1);
 
         return questionRepository.save(findQuestion);

@@ -31,7 +31,7 @@ public class Answer {
     private String answerContent;
 
     @Column
-    private Long answerLikesCount = 0L;
+    private int answerLikesCount = 0;
 
     @Column
     @CreatedDate

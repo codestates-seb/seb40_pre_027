@@ -61,14 +61,10 @@ public class AnswerController {
         answerService.deleteAnswer(answerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PostMapping("/like/{answer-id}")
-    public @ResponseBody long like(@PathVariable("answer-id")Long answerId) {
-        return answerLikesService.saveLike(answerId, 1);
-    }
-
-    @PostMapping("/dislike/{answer-id}")
-    public @ResponseBody long disLike(@PathVariable("answer-id") Long answerId) {
-        return answerLikesService.saveLike(answerId, -1);
+    @PostMapping("/{answer-id}/vote")
+    public @ResponseBody int like(@PathVariable("answer-id") Long answerId,
+                                  @RequestParam int val) {
+        return answerLikesService.saveLike(answerId, val);
     }
 
     @PatchMapping("/bestAnswer/{answer-id}")

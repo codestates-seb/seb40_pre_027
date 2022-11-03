@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-11-02T20:02:49+0900",
+    date = "2022-11-03T12:54:03+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -54,9 +54,7 @@ public class AnswerMapperImpl implements AnswerMapper {
             response.answerId( answers.getAnswerId() );
         }
         response.answerContent( answers.getAnswerContent() );
-        if ( answers.getAnswerLikesCount() != null ) {
-            response.answerLikesCount( answers.getAnswerLikesCount() );
-        }
+        response.answerLikesCount( answers.getAnswerLikesCount() );
         response.answerCreatedAt( answers.getAnswerCreatedAt() );
         response.answerModifiedAt( answers.getAnswerModifiedAt() );
 

@@ -13,8 +13,4 @@ public interface QuestionLikeRepository extends JpaRepository<QuestionLikes, Lon
     Optional<QuestionLikes> findByQuestionIdAndMemberId(Long questionId, Long memberId);
 
     void deleteByQuestionIdAndMemberId(Long questionId, Long memberId);
-
-    @Modifying
-    @Query("UPDATE QuestionLikes l set l.val = :val where l.questionId = :questionId")
-    void changeLikeValue(@Param("questionId") Long questionId, @Param("val") int val);
 }

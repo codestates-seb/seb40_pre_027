@@ -85,10 +85,8 @@ public class SecurityConfiguration {
                     .addFilter(corsFilter())
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-
         }
     }
-
     @Bean
     public CorsFilter corsFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

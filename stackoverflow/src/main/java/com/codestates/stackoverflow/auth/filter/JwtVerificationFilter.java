@@ -3,6 +3,7 @@ package com.codestates.stackoverflow.auth.filter;
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
 import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,8 +20,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/* request의 토큰 검증 필터 */
+/* 토큰 검증 */
 @Slf4j
+@RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
 
     // JWT 검증 및 토큰의 정보
@@ -28,25 +30,26 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     // 사용자 권한 생성용
     private final CustomAuthorityUtils authorityUtils;
 
-    public JwtVerificationFilter(JwtProvider jwtProvider, CustomAuthorityUtils authorityUtils) {
-        this.jwtProvider = jwtProvider;
-        this.authorityUtils = authorityUtils;
-    }
-
-    // 처음에 해야 할 일
-    //
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("request URI : "+request.getRequestURI());
+        log.info("[doFilterInternal] 필터 접근");
 
-        if (request.getRequestURI().equals("user/auth/reissue")) {
-            // Access Token 재발급 URI 요청 시 아래 로직을 거치지 않고 바로 다음 Filter로 넘김.
+        String requestUri = request.getRequestURI();
+        log.info("[doFilterInternal] Request URI : " + request.getRequestURI());
+
+        if (requestUri.equals("/user/auth/reissue") || requestUri.equals("/user/login")) {
+            // 로그인 또는 토큰 재발행 요청일 경우 아래 로직을 실행하지 않고 다음 필터로 넘김.
+            log.info("[doFilterInternal] doFilter 실행");
             filterChain.doFilter(request, response);
         }
-        log.info("[JwtVerificationFilter - doFilterInternal] request 로 들어오는 Jwt 유효성 검증 시작");
+
+        log.info("[doFilterInternal] Jwt-Access 유효성 검증 시작");
         try {
             String base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(jwtProvider.getSecretKey());
-            String token = jwtProvider.getAccessTokenFromRequest(request); // 요청받은 request에서 token을 가져온다.
+
+            // 요청받은 request에서 token을 가져온다.
+            String token = jwtProvider.getAccessTokenFromRequest(request);
+
             boolean isValidated = jwtProvider.verifySignature(token, base64EncodedSecretKey); // 토큰이 유효한지 검증한다.
 
             if (token != null && isValidated) { // Headers에 token이 담겨있고 유효하다면 Security Context Holder에 저장함.

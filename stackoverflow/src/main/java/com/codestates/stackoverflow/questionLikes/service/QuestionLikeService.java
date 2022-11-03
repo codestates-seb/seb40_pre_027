@@ -23,9 +23,6 @@ public class QuestionLikeService {
     private final QuestionRepository questionRepository;
     private final MemberServiceImpl memberServiceImpl;
 
-    // like 개수를 늘리고 줄이는 로직
-    // like 중복해서 누르면 취소하는 로직
-
     public int saveLike(Long questionId, int val) {
         Member authMember = memberServiceImpl.findAuthenticatedMember();
         Long memberId = authMember.getMemberId();
@@ -33,7 +30,7 @@ public class QuestionLikeService {
         if (findQuestionLikes.isEmpty()) {
             return createLike(questionId, memberId, val);
         } else {
-            return updateLike(findQuestionLikes.get(), questionId, memberId, val);
+            return updateLike(findQuestionLikes.get(), questionId, val);
         }
     }
 
@@ -47,18 +44,24 @@ public class QuestionLikeService {
         return questionService.modifyLikeCount(questionId, val);
     }
 
-    public int updateLike(QuestionLikes questionLikes, Long questionId, Long memberId, int val) throws BusinessLogicException{
-        if(questionLikes.getVal() == val) {
-            likeRepository.deleteByQuestionIdAndMemberId(questionId, memberId);
+    public int updateLike(QuestionLikes questionLikes, Long questionId, int val) throws BusinessLogicException{
+        int originalVal = questionLikes.getVal();
+        if(originalVal == 0) {
+            questionLikes.setVal(val);
+            likeRepository.save(questionLikes);
+
+            return questionService.modifyLikeCount(questionId, val);
+
+        } else if (originalVal == val) {
 
             throw new BusinessLogicException(ExceptionCode.ALREADY_VOTED);
-        } else {
-            likeRepository.changeLikeValue(questionId, val);
 
-            if (val == 1)
-                return questionService.modifyLikeCount(questionId, 2);
-            else
-                return questionService.modifyLikeCount(questionId, -2);
+        } else {
+
+            questionLikes.setVal(0);
+            likeRepository.save(questionLikes);
+
+            return questionService.modifyLikeCount(questionId, val);
         }
     }
 }

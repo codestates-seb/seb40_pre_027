@@ -8,7 +8,6 @@ import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +25,7 @@ import java.util.List;
 @Slf4j
 public class QuestionController {
     private final QuestionService questionService;
-    private final QuestionLikeService questionLikeService;
+    private final QuestionLikeService questionLikesService;
     private final QuestionMapperImpl mapper;
 
     @PostMapping
@@ -116,6 +115,6 @@ public class QuestionController {
     @PostMapping("/{question-id}/vote")
     public @ResponseBody int like(@PathVariable("question-id") Long questionId,
                                   @RequestParam int val) {
-        return questionLikeService.saveLike(questionId, val);
+        return questionLikesService.saveLike(questionId, val);
     }
 }

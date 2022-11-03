@@ -27,9 +27,10 @@ public class AnswerLikes {
     private int val;
 
 
-    public static AnswerLikes of(Long answerId, int val) {
+    public static AnswerLikes of(Long answerId, Long memberId, int val) {
         AnswerLikes answerLikes = new AnswerLikes();
         answerLikes.setAnswerId(answerId);
+        answerLikes.setMemberId(memberId);
         answerLikes.setVal(val);
         return answerLikes;
     }
