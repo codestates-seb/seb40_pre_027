@@ -80,6 +80,11 @@ function Pagination({
     .fill()
     .map((v, i) => i + 1);
   const pers = [15, 30, 50];
+  const pageNextBtn = () => {
+    if (currentPage + 1 <= pagination.length) {
+      currentPageHandler(currentPage + 1);
+    }
+  };
   return (
     <PaginationComponent>
       <div className="pagination">
@@ -94,7 +99,7 @@ function Pagination({
             </div>
           ))}
           <div className="dot">...</div>
-          <button>next</button>
+          <button onClick={pageNextBtn}>next</button>
         </div>
         <div className="per">
           {pers.map((v, i) => (
