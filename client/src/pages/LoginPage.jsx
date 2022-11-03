@@ -122,12 +122,13 @@ function LoginPage() {
         })
         .then((data) => {
           //dispatch로 로그인 상태 redux에 저장, 로컬에 토큰 저장
+          console.log(data);
           dispatch(loginActions.login());
           localStorage.clear();
           localStorage.setItem('accessToken', data.headers.access);
           localStorage.setItem('refreshToken', data.headers.refresh);
+          localStorage.setItem('memberId', data.data.memberId);
           navigate('/');
-          console.log(data);
         });
     } catch (error) {
       if (error.response.status === 401) {

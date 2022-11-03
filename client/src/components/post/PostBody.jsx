@@ -160,7 +160,11 @@ function PostBody(props) {
 
   return (
     <PostBodyComponent>
-      <Recommend />
+      <Recommend
+        questionId={props.questionId}
+        questionLikeCount={props.questionLikeCount}
+        answerId={props.answer.answerId}
+      />
       <div className="post-body-container">
         <section
           className="main-content"
