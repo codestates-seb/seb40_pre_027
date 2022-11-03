@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import LinkStyle from '../LinkStyle';
 import Header from '../Header';
@@ -6,7 +7,7 @@ import Footer from '../Footer';
 import Nav from '../home/Nav';
 import MyProfile from './MyProfile';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
 const ProfilePages = styled.main`
   width: 100vw;
   section {
@@ -115,7 +116,19 @@ const RightBox = styled.div`
   }
 `;
 
-function profilewrite() {
+function Profilewrite() {
+  const accessToken = localStorage.getItem('accessToken');
+  const [write, setWrite] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`/user/profile/write`, {
+        headers: { access: accessToken },
+      })
+      .then((res) => setWrite(res.data));
+  }, [accessToken]);
+  console.log(write);
+
   return (
     <>
       <ProfilePages>
@@ -184,4 +197,4 @@ function profilewrite() {
   );
 }
 
-export default profilewrite;
+export default Profilewrite;
