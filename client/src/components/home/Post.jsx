@@ -72,11 +72,20 @@ const PostComponent = styled.div`
 
 function Post({ post, watchedTags, ignoredTags }) {
   const navigate = useNavigate();
-  const { questionId, title, content, tags, viewCount, likeCount, answers, profile, createdAt } =
-    post;
+  const {
+    questionId,
+    title,
+    content,
+    tags,
+    viewCount,
+    likeCount,
+    answers,
+    profile,
+    createdAt,
+  } = post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
-  const date = new Date(createdAt).toLocaleString();
+
   const deleteTagContent = content
     .replace(/<[^>]*>?/g, '')
     .replace(/&lt;/g, '')
@@ -96,7 +105,30 @@ function Post({ post, watchedTags, ignoredTags }) {
   };
   const watched = tagsEvaluate(watchedTags);
   const ignored = tagsEvaluate(ignoredTags);
+  function timeForToday(value) {
+    const today = new Date();
+    const timeValue = new Date(value);
 
+    const betweenTime = Math.floor(
+      (today.getTime() - timeValue.getTime()) / 1000 / 60
+    );
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) {
+      return `${betweenTime} min ago`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `${betweenTimeHour} hour ago`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+    if (betweenTimeDay < 365) {
+      return `${betweenTimeDay} day ago`;
+    }
+
+    return `${Math.floor(betweenTimeDay / 365)} year ago`;
+  }
   return (
     <PostComponent watched={watched} ignored={ignored}>
       <div className="info-post">
@@ -144,7 +176,7 @@ function Post({ post, watchedTags, ignoredTags }) {
             <img src={imgurl} alt="user-img" />
             <span className="user-name">{profile.name}</span>
             <span className="user-answers">{15}</span>
-            <span>{`asked at ${date}`}</span>
+            <span>{`asked at ${timeForToday(createdAt)}`}</span>
           </div>
         </div>
       </div>

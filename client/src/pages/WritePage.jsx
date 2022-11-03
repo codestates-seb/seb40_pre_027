@@ -99,7 +99,10 @@ function WritePage() {
           .then((res) => {
             navigate('/');
           })
-          .catch(() => alert('글 생성 실패'));
+          .catch((err) => {
+            console.log(err);
+            alert('글 생성 실패');
+          });
       }
     }
   };

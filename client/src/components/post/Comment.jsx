@@ -4,6 +4,7 @@ import { BiPencil, BiTrash } from 'react-icons/bi';
 import Button from '../Button';
 
 const CommentComponent = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   input {
@@ -17,15 +18,17 @@ const CommentComponent = styled.div`
   .comment-patch {
     display: flex;
     width: 100%;
-    margin-top: 0.5rem;
     button {
       margin: 0;
     }
   }
 
-  > div {
+  .hanlder-btn {
+    display: flex;
+    align-items: flex-end;
     span {
       cursor: pointer;
+      margin: 0 0.3rem;
     }
   }
 `;
@@ -53,7 +56,7 @@ function Comment({ children, onPatch, onDelete, id, idx }) {
       {commentIsPatch ? (
         <></>
       ) : (
-        <div>
+        <div className="hanlder-btn">
           <span>
             <BiPencil onClick={() => setCommentIsPatch(true)} />
           </span>

@@ -49,6 +49,26 @@ const SubTxt = styled.div`
 function Title({ post }) {
   const { title, viewCount, createdAt, modifiedAt } = post;
   const navigate = useNavigate();
+  function timeForToday(value) {
+    const today = new Date();
+    const timeValue = new Date(value);
+
+    const betweenTime = Math.floor(
+      (today.getTime() - timeValue.getTime()) / 1000 / 60
+    );
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `Today`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+    if (betweenTimeDay < 365) {
+      return `${betweenTimeDay} day ago`;
+    }
+
+    return `${Math.floor(betweenTimeDay / 365)} year ago`;
+  }
   return (
     <Titlemain>
       <TitleTxt>
@@ -58,9 +78,9 @@ function Title({ post }) {
         </MainTxt>
         <SubTxt>
           <h3>Asked</h3>
-          <h4>{new Date(createdAt).toLocaleString()}</h4>&nbsp;&nbsp;
+          <h4>{timeForToday(createdAt)}</h4>&nbsp;&nbsp;
           <h3>Modified</h3>
-          <h4>{new Date(modifiedAt).toLocaleString()}</h4>&nbsp;&nbsp;
+          <h4>{timeForToday(modifiedAt)}</h4>&nbsp;&nbsp;
           <h3>Viewed</h3>
           <h4>{`${viewCount} times`}</h4>
         </SubTxt>

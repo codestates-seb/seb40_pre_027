@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Editor } from '@toast-ui/react-editor';
+import { Editor, Viewer } from '@toast-ui/react-editor';
 import Button from '../Button';
 
 import Tag from '../Tag';
@@ -16,6 +16,7 @@ const PostBodyComponent = styled.div`
   line-height: 1.25rem;
   border-bottom: 1px solid #d9d9d9;
   margin-bottom: 0.5rem;
+  width: 926px;
   button {
     margin: 1rem 0 0 0;
   }
@@ -131,6 +132,8 @@ const PostBodyComponent = styled.div`
     }
   }
   .comments {
+    display: flex;
+    align-items: center;
     border-top: 1px solid #d9d9d9;
     margin: 1.25rem 0;
     padding: 0.8rem 0;
@@ -163,7 +166,6 @@ function PostBody({
   idx,
   setAnswersArray,
   answersArray,
-  profile,
 }) {
   const {
     title,
@@ -174,6 +176,7 @@ function PostBody({
     likeCount,
     content,
     memberId,
+    profile,
   } = post;
   const navigate = useNavigate();
   const [shareClicked, setShareClicked] = useState(false);
@@ -183,7 +186,6 @@ function PostBody({
   const [replyArray, setReplyArray] = useState([]);
   const [isComment, setIsComment] = useState(false);
   const userId = localStorage.getItem('memberId');
-  const [viewComment, setViewComment] = useState([]);
   const [viewMore, setViewMore] = useState(false);
 
   const shareHandler = () => setShareClicked(!shareClicked);
@@ -202,9 +204,6 @@ function PostBody({
     } else if (answer.answerId) {
       setReplyArray(answer.replies);
     }
-    if (!viewMore && commentsArray && commentsArray.length > 3) {
-      setViewComment(commentsArray.slice(0, 3));
-    } else setViewComment(commentsArray);
   }, [answerIsPatch, viewMore]);
   const patchHandler = () => {
     if (answer.answerId) {
@@ -345,11 +344,7 @@ function PostBody({
               <Button onClick={answerPatchHandler}>수정</Button>
             </div>
           ) : (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: answer ? answer.answerContent : content,
-              }}
-            ></div>
+            <Viewer initialValue={answer ? answer.answerContent : content} />
           )}
         </section>
         {!answer && (
@@ -404,14 +399,14 @@ function PostBody({
               )}
             </div>
             <div className="edited-date-wrapper">
-              <div className="edited-date" title="Show all edits to this post">
+              {/* <div className="edited-date" title="Show all edits to this post">
                 edited
                 {createdAtForDate.toLocaleString()}
-              </div>
+              </div> */}
             </div>
             <div className="post-owner-wrapper">
               <div className="created-date">
-                {createdAtForDate.toLocaleString()}
+                {new Date(profile.createdDate).toLocaleString()}
               </div>
               <div className="user-info">
                 <div className="user-avatar">
@@ -420,7 +415,7 @@ function PostBody({
                   </a>
                 </div>
                 <div className="user-details">
-                  <a href="/user">Happygoluck</a>
+                  <a href="/user">{profile.name}</a>
                   <div className="flair">
                     <span className="reputation-score">51</span>
                   </div>
@@ -429,43 +424,68 @@ function PostBody({
             </div>
           </div>
         </section>
+        {commentsArray && commentsArray.length && viewMore
+          ? commentsArray.map((comment, i) => (
+              <div className="comments" key={comment.commentId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={comment.commentId}
+                  idx={i}
+                >
+                  {comment.content}
+                </Comment>
+              </div>
+            ))
+          : commentsArray && commentsArray.length && !viewMore
+          ? commentsArray.slice(0, 3).map((comment, i) => (
+              <div className="comments" key={comment.commentId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={comment.commentId}
+                  idx={i}
+                >
+                  {comment.content}
+                </Comment>
+              </div>
+            ))
+          : replyArray.length && viewMore
+          ? replyArray.map((v, i) => (
+              <div className="comments" key={v.replyId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={v.replyId}
+                  idx={i}
+                >
+                  {v.replyContent}
+                </Comment>
+              </div>
+            ))
+          : replyArray.slice(0, 3).map((v, i) => (
+              <div className="comments" key={v.replyId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={v.replyId}
+                  idx={i}
+                >
+                  {v.replyContent}
+                </Comment>
+              </div>
+            ))}
+        {(replyArray && replyArray.length > 3) ||
+        (commentsArray && commentsArray.length > 3) ? (
+          !viewMore ? (
+            <div onClick={() => setViewMore(!viewMore)}>More view</div>
+          ) : (
+            <div onClick={() => setViewMore(!viewMore)}>less view</div>
+          )
+        ) : (
+          <></>
+        )}
 
-        {viewComment && viewComment.length ? (
-          viewComment.map((comment, i) => (
-            <div className="comments" key={comment.commentId}>
-              <Comment
-                onDelete={commentOnDeleteHandler}
-                onPatch={commentOnPatchHandler}
-                id={comment.commentId}
-                idx={i}
-              >
-                {comment.content}
-              </Comment>
-            </div>
-          ))
-        ) : replyArray.length ? (
-          replyArray.map((v, i) => (
-            <div className="comments" key={v.replyId}>
-              <Comment
-                onDelete={commentOnDeleteHandler}
-                onPatch={commentOnPatchHandler}
-                id={v.replyId}
-                idx={i}
-              >
-                {v.replyContent}
-              </Comment>
-            </div>
-          ))
-        ) : (
-          <></>
-        )}
-        {commentsArray && commentsArray.length > 3 ? (
-          <div onClick={() => setViewMore(!viewMore)}>
-            {viewMore ? 'view less' : 'view More'}
-          </div>
-        ) : (
-          <></>
-        )}
         <section
           className="add-comment"
           onClick={() => setIsComment(!isComment)}
