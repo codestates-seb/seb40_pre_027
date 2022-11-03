@@ -170,7 +170,6 @@ function PostBody({
 }) {
   const {
     title,
-    createdAt,
     modifiedAt,
     questionId,
     tags,

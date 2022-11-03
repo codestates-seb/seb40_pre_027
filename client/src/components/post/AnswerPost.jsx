@@ -7,7 +7,7 @@ import LinkStyle from '../LinkStyle';
 import SocialLogin from '../SocialLogin';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 const AnswerPostComponent = styled.div`
   padding-left: 2rem;
   h2 {
