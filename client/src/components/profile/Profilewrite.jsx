@@ -7,9 +7,9 @@ import Footer from '../Footer';
 import Nav from '../home/Nav';
 import MyProfile from './MyProfile';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import QuestionRender from './QuestionRender';
 import AnswerRender from './AnswerRender';
+import requestNewAccessToken from '../util/requestNewAccessToken';
 const ProfilePages = styled.main`
   width: 100%;
   section {
@@ -114,15 +114,11 @@ const RightBox = styled.div`
 `;
 
 function Profilewrite() {
-  const accessToken = localStorage.getItem('accessToken');
   const [write, setWrite] = useState([]);
+
   useEffect(() => {
-    axios
-      .get(`/user/profile/write`, {
-        headers: { access: accessToken },
-      })
-      .then((res) => setWrite(res.data));
-  }, [accessToken]);
+    requestNewAccessToken(setWrite, `/user/profile/write`, 'get');
+  }, []);
   const questions = write.questions;
   const answers = write.answers;
   console.log(questions);
@@ -156,7 +152,7 @@ function Profilewrite() {
                               content={el.content}
                               viewCount={el.viewCount}
                               questionId={el.questionId}
-                            />
+                            ></QuestionRender>
                           );
                         })}
 
