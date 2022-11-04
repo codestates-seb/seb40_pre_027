@@ -41,7 +41,6 @@ public class QuestionService {
     private final MemberRepository memberRepository;
 
     public Question createQuestion(Question question) {
-
         Member authMember = memberServiceImpl.findAuthenticatedMember();
         authMember.setQuestions(question);
         question.setMember(authMember);
