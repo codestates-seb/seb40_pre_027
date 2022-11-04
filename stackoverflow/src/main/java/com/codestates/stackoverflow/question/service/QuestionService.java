@@ -41,6 +41,8 @@ public class QuestionService {
     private final HibernateSearchService searchService;
 
     public Question createQuestion(Question question) {
+
+
         //tagContent(String 타입)의 배열을 Tag 객체의 리스트로 변경한다.
         log.info("[createQuestion] 매핑 전 태그 : " + Arrays.toString(question.getTags()));
         mapAndSaveTags(question);
