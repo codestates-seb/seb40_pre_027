@@ -1,10 +1,10 @@
 import React, { useState, useRef,useEffect } from 'react';
 import styled from 'styled-components';
-import ProfilePicture from '../../img/ProfilePicture.png';
+// import ProfilePicture from '../../img/ProfilePicture.png';
 import { Editor } from '@toast-ui/react-editor';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import ImageUpload from './ImageUpload';
 
 const EditProfileComponent = styled.div`
   h1 {
@@ -25,11 +25,6 @@ const EditProfileComponent = styled.div`
   margin: 30px;
 `;
 const ProfileEditInfoComponent = styled.div`
-  .profilePicture {
-    width: 160px;
-    height: 160px;
-    border-radius: 5px;
-  }
   .inputBox {
     width: 423px;
     height: 33px;
@@ -76,16 +71,17 @@ const ButtonComponent = styled.div`
 function EditProfile() {
   // data 한 객체로 만들기
   const [edit, setEdit] = useState({
+    // image: '',
     name: '',
     location: '',
-    tittle: '',
+    title: '',
     introduction: '',
-  });
+  });  
 
+  // toast ui
   const editRef = useRef();
   
   const onChangeEdit = (e, editor) => {
-    // console.log(e.target.name)
     if (editor) {
       setEdit({
         ...edit,
@@ -99,63 +95,48 @@ function EditProfile() {
     }
     console.log(edit);
     
-  };
-
+  }; 
+  // get요청
   useEffect(() => {
     const access = localStorage.getItem('accessToken')
-    axios.get('/user/profile/edit', {headers : {access}})
-      .then(() => {
+      if(access) {
+        axios.get('/user/profile/edit', {headers : {access}})
+      .then((res) => {
+        console.log(res)
         setEdit({
-          name: {},
-          location: {},
-          tittle: {},
-          introduction: {editRef}
+          // image: res.data.image
+          name: res.data.name,
+          location: res.data.location,
+          title: res.data.title,
+          introduction: "aaaa"
         }) 
       })
+      }
   }, [])
 
+  // put요청
   async function putProfile() {
+    const access = localStorage.getItem('accessToken')
     try {
-      await axios.put('/user/profile/edit')
-        .then(() => {
-          setEdit({
-            name: {},
-            location: {},
-            tittle: {},
-            introduction: {editRef}
-          }) 
-        })
+    await axios.put('/user/profile/edit', edit,{headers : {access}})
+      .then((res) => {
+        console.log(res)
+      })
       } catch(error){
         console.error(error)
       }
     }
 
-    // const onClickBtn = (e) => {
-    //   // putProfile()
-    //    const response = await axios.put('/user/profile/edit', {
-    //     name: edit.name,
-    //     location: edit.location,
-    //     tittle: edit.tittle,
-    //   })
-    // }
   
   
-
-  
-  
-
-    
+ 
   return (
     <EditProfileComponent>
       <h1>Edit your Profile</h1>
       <h2>Public information</h2>
       <ProfileEditInfoComponent>
         <EditComponent>
-          <img
-            className="profilePicture"
-            alt="ProfilePicture"
-            src={ProfilePicture}
-          ></img>
+          <ImageUpload />
           <div className="margin-word">Display name</div>
           <input
             className="inputBox"
@@ -168,14 +149,14 @@ function EditProfile() {
             className="inputBox"
             name="location"
             onChange={onChangeEdit}
-            value={edit.location}
+            value={edit.location || ''}
           ></input>
-          <div className="margin-word">Tittle</div>
+          <div className="margin-word">Title</div>
           <input
             className="inputBox"
-            name="tittle"
+            name="title"
             onChange={onChangeEdit}
-            value={edit.tittle}
+            value={edit.title || ''}
           ></input>
           <div className="margin-word">About Me</div>
           <Editor
@@ -186,7 +167,7 @@ function EditProfile() {
             name="introduction"
             onChange={(e) => onChangeEdit(e, true)}
             // onChange={(e) => console.log}
-            value={edit.introduction}
+            value={edit.introduction || ''}
             ref={editRef}
           ></Editor>
         </EditComponent>
