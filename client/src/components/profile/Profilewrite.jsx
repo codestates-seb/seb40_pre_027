@@ -8,6 +8,9 @@ import Nav from '../home/Nav';
 import MyProfile from './MyProfile';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import CommentsRender from './CommentsRender';
+import QuestionRender from './QuestionRender';
+import AnswerRender from './AnswerRender';
 const ProfilePages = styled.main`
   width: 100vw;
   section {
@@ -62,8 +65,6 @@ const LeftContent = styled.div`
     & div {
       border: 1px solid white;
       height: 15vh;
-      position: absolute;
-      top: 40%;
     }
     & h4 {
       font-size: 0.9rem;
@@ -90,17 +91,14 @@ const RightBox = styled.div`
   }
   & div {
     width: 100%;
-    height: 29.1vh;
+    height: 28vh;
     border: 1px solid #c6c6c6;
     border-radius: 10px;
     margin-top: 15px;
     position: relative;
-    & span {
-      border: 1px solid white;
-      height: 15vh;
-      position: absolute;
-      top: 40%;
-      left: 3%;
+    & div {
+      border: none;
+      height: auto;
     }
     & h4 {
       font-size: 0.9rem;
@@ -119,16 +117,14 @@ const RightBox = styled.div`
 function Profilewrite() {
   const accessToken = localStorage.getItem('accessToken');
   const [write, setWrite] = useState([]);
-
   useEffect(() => {
     axios
       .get(`/user/profile/write`, {
         headers: { access: accessToken },
       })
-      .then((res) => setWrite(res.data));
+      .then((res) => setWrite(res.data.questions));
   }, [accessToken]);
   console.log(write);
-
   return (
     <>
       <ProfilePages>
@@ -150,6 +146,10 @@ function Profilewrite() {
                 <h2>View Comments</h2>
                 <div>
                   <div>
+                    <CommentsRender
+                      className="writeList"
+                      WriteRen={write}
+                    ></CommentsRender>
                     <h3>
                       Your about me section is currently blank. Would you like
                       to add one?
@@ -162,7 +162,11 @@ function Profilewrite() {
                 <RightBox>
                   <h2>Questions</h2>
                   <div>
-                    <span>
+                    <div>
+                      <QuestionRender
+                        className="writeList"
+                        write={write}
+                      ></QuestionRender>
                       <h3>
                         Your about me section is currently blank. Would you like
                         to add one?
@@ -170,13 +174,17 @@ function Profilewrite() {
                       <Link to="/write" style={{ textDecoration: 'none' }}>
                         <h4>write question</h4>
                       </Link>
-                    </span>
+                    </div>
                   </div>
                 </RightBox>
                 <RightBox>
                   <h2>Answer</h2>
                   <div>
-                    <span>
+                    <div>
+                      <AnswerRender
+                        className="writeList"
+                        WriteRen={write}
+                      ></AnswerRender>
                       <h3>
                         Your about me section is currently blank. Would you like
                         to add one?
@@ -184,7 +192,7 @@ function Profilewrite() {
                       <Link to="/" style={{ textDecoration: 'none' }}>
                         <h4>write answer</h4>
                       </Link>
-                    </span>
+                    </div>
                   </div>
                 </RightBox>
               </RightContent>
