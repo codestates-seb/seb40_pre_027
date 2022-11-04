@@ -44,11 +44,9 @@ const ProfileInfoComponent = styled.div`
   .myProfile {
     display: flex;
     flex-direction: row;
-  }
-  ul {
     color: #6a737c;
   }
-  li {
+  .lists {
     margin-right: 10px;
     margin-left: 4px;
   }
@@ -65,55 +63,22 @@ function MyProfile() {
     loginDate: '',
   });
 
-//   const myprofileChange = (e) => {
-//     setProfileList({
-//         ...profileList,
-//         [e.target.name]: e.target.value
-//     })
-//   }
-  console.log(profileList)
-
   useEffect(() => {
     const access = localStorage.getItem('accessToken')
-    axios.get('/user/profile', {headers : {access}})
-    .then((e) => {
+      if(access) {
+        axios.get('/user/profile', {headers : {access}})
+      .then((res) => {
+        console.log(res)
         setProfileList({
-            ...profileList,
-            [e.target.name]: e.target.value
-            })
-        })
-  })
-    
+          name: res.data.name,
+          createdDate: res.data.createdDate,
+          loginDate: res.data.loginDate,
+        }) 
+      })
+      }
+  }, [])
 
 
-//   useEffect(() => {
-//     const access = localStorage.getItem('accessToken')
-//     axios.get('/user', {headers: {access}})
-//     .then(() => {
-//       setProfileList({
-//         name: {},
-//         createdDate: {},
-//         loginDate: {}
-//       })
-//     });
-//   }, []);
-
-
-//   axios.get('/user', {
-//     params: {
-//         name: '',
-//         createdDate: '',
-//         loginDate: ''
-//     }
-//   })
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.log(error);
-//   })
-//   console.log(axios.get)
-  
   return (
     <MyProfileComponent>
       <img
@@ -122,19 +87,16 @@ function MyProfile() {
         src={ProfilePicture}
       ></img>
       <ProfileInfoComponent>
-        <div className="myName">{ profileList.name }</div>
-        <ul className="myProfile">
+          <div className="myName">{profileList.name}</div>
+        <div className="myProfile">
           <MdCake />
-          <li 
-          name='name'
-          value={profileList.name}
-          >Create { setProfileList }
-          </li>
+          <div 
+            className='lists'>Create { profileList.createdDate }</div>
           <BiTimeFive />
-          <li>Login { profileList.loginDate }</li>
+          <div className='lists'>Login { profileList.loginDate }</div>
           <FaRegCalendarAlt />
-          <li>Visited 6 days, 2 consecutive</li>
-        </ul>
+          <div className='lists'>Visited 6 days, 2 consecutive</div>
+        </div>
       </ProfileInfoComponent>
       <Link to="/myProfile/edit">
         <button className="editButton">
