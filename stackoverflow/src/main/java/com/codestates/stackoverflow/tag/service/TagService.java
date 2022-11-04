@@ -29,30 +29,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TagService {
     private final TagRepository tagRepository;
-    private final QuestionRepository questionRepository;
     private final QuestionTagRepository questionTagRepository;
 
-    public List<Tag> saveTags(List<Tag> tags) {
-        for (Tag tag : tags) {
+    public List<Tag> saveTags(List<Tag> tagList, Long questionId) {
+        for (Tag tag : tagList) {
             Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
-            System.out.println("[sortTags] 작동");
             if (optionalTag.isEmpty()) {
-                createTag(tag);
+                tag = tagRepository.save(tag);
             } else {
-                updateTag(optionalTag.get(), tag.getQuestionTags());
+                tag = optionalTag.get();
             }
+            log.info("tag Id: " + tag.getTagId());
+            QuestionTag questionTag = new QuestionTag(questionId, tag.getTagId(), tag.getTagName());
+            questionTagRepository.save(questionTag);
         }
-        return tags;
-    }
-
-    public Tag createTag(Tag tag) {
-        return tagRepository.save(tag);
-    }
-
-    public Tag updateTag(Tag tag, List<QuestionTag> questionTags) {
-        questionTags.stream().forEach(tag::setQuestionTags);
-
-        return tagRepository.save(tag);
+        return tagList;
     }
 
     /**
@@ -74,29 +65,20 @@ public class TagService {
         return tagPage.getContent();
     }
 
-    public int findNumberOfQuestionsWithTag (String tagName) {
-        return questionTagRepository.findNumberOfQuestionsWithTag(tagName);
-    }
-
-    public int findNumberOfQuestionsWithTagAskedToday(String tagName) {
-        LocalDateTime since = LocalDate.now().atStartOfDay();
-        return questionTagRepository.findNumberOfQuestionsWithTagSince(tagName, since);
-    }
-
-    public int findNumberOfQuestionsWithTagAskedThisWeek(String tagName) {
-        TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
-        LocalDateTime since = LocalDate.now().atStartOfDay().with(fieldUS, 1);
-//        LocalDateTime since = LocalDate.now().atStartOfDay().with(DayOfWeek.MONDAY);
-        return questionTagRepository.findNumberOfQuestionsWithTagSince(tagName, since);
-    }
-
-    public List<Tag> tagNameArrayToTagList(String[] tagNames) {
-        List<Tag> tags = Arrays.stream(tagNames)
-                .map(tagName -> Tag.of(tagName))
-                .collect(Collectors.toList());
-
-        return tags;
-    }
+//    public int findNumberOfQuestionsWithTag (String tagName) {
+//        return questionTagRepository.findNumberOfQuestionsWithTag(tagName);
+//    }
+//
+//    public int findNumberOfQuestionsWithTagAskedToday(String tagName) {
+//        LocalDateTime since = LocalDate.now().atStartOfDay();
+//        return questionTagRepository.findNumberOfQuestionsWithTagSince(tagName, since);
+//    }
+//
+//    public int findNumberOfQuestionsWithTagAskedThisWeek(String tagName) {
+//        TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
+//        LocalDateTime since = LocalDate.now().atStartOfDay().with(fieldUS, 1);
+//        return questionTagRepository.findNumberOfQuestionsWithTagSince(tagName, since);
+//    }
 
     //30분마다 Tag 테이블에서 각 태그가 달린 게시글의 수를 최신화 (매 시각 0분 0초, 30분 0초에 실행)
 //    @Scheduled(cron = "0 0,30 * * * *")

@@ -22,8 +22,6 @@ public class TagDto {
 
         private String tagName = "";
 
-        private String tagContent;
-
         private LocalDateTime createdAt;
 
         private int askedTotal;
@@ -31,9 +29,5 @@ public class TagDto {
         private int questionsAskedToday;
 
         private int questionsAskedThisWeek;
-    }
-
-    public static class ResponseIcon {
-
     }
 }

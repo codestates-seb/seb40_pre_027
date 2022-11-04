@@ -44,9 +44,19 @@ public class QuestionDto {
         }
     }
 
+    public static class ResponseTest {
+        private long questionId;
+
+        private String title;
+
+        private String content;
+
+    }
+
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class Response {
 
         private long questionId;
@@ -72,5 +82,31 @@ public class QuestionDto {
         private List<Comment> comments;
 
         private List<Answer> answers;
+
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class ListedResponse {
+
+        private String title;
+
+        private String content;
+
+        private Long memberId;
+
+        private String name;
+
+        private int viewCount;
+
+        private int likeCount;
+
+        private int answerCount;
+
+        private List<TagDto.Response> tagDtos;
+
+        private int totalCount;
     }
 }

@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
+@Transactional
 public class JwtProvider {
 
     @Getter
@@ -47,6 +47,10 @@ public class JwtProvider {
 
     // refresh Token 저장용
     private final MemberRepository memberRepository;
+
+    public JwtProvider(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -83,7 +87,6 @@ public class JwtProvider {
     }
 
     // Refresh Token 생성 메서드
-    @Transactional
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         log.info("[createRefreshToken] 토큰 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -130,13 +133,29 @@ public class JwtProvider {
     public Jws<Claims> getClaims(String token, String base64EncodedSecretKey) {
         log.info("[getClaims] 토큰의 Claims 생성 시작");
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
 
-        Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
-        log.info("[getClaims] 토큰의 Claims 생성 시작");
-        return claims;
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 토큰입니다.");
+        }
+    }
+    // 위의 메소드랑 중복 리팩토링 해야 함.
+    public Map<String, Object> getClaimsFromExpiredJwt(String token, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 토큰입니다.");
+        }
     }
 
     // 토큰의 유효 및 만료 시간 확인 메서드

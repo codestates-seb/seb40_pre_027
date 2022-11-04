@@ -23,9 +23,6 @@ public class Tag {
     @Column(length = 35, nullable = false, unique = true)
     private String tagName;
 
-    @Column(columnDefinition = "TEXT")
-    private String tagContent;
-
     @Column
     private int askedTotal;
 
@@ -35,22 +32,13 @@ public class Tag {
     @Column
     private int questionsAskedThisWeek;
 
-    @OneToMany(mappedBy = "tag", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JsonManagedReference
-    private List<QuestionTag> questionTags = new ArrayList<>();
+//    @OneToMany(mappedBy = "tag", cascade = CascadeType.REMOVE)
+//    @JsonManagedReference
+//    private List<QuestionTag> questionTags = new ArrayList<>();
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public static Tag of(String string) {
-        Tag tag = new Tag();
-        tag.setTagName(string);
-        return tag;
-    }
-
-    //== 연관관계 편의 메서드==//
-    // 연관관계 한 번에 정리
-    public void setQuestionTags(QuestionTag questionTag) {
-        this.questionTags.add(questionTag);
-        questionTag.setTag(this);
+    public Tag(String tagName) {
+        this.tagName = tagName;
     }
 }

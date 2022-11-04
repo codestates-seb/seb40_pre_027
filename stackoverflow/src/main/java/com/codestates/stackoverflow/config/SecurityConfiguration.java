@@ -6,11 +6,14 @@ import com.codestates.stackoverflow.auth.handler.JwtAccessDeniedHandler;
 import com.codestates.stackoverflow.auth.handler.JwtAuthenticationEntryPoint;
 import com.codestates.stackoverflow.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.stackoverflow.auth.handler.MemberAuthenticationSuccessHandler;
-import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import com.codestates.stackoverflow.auth.provider.JwtProvider;
+import com.codestates.stackoverflow.auth.utils.CustomAuthorityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,19 +22,18 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
+@EnableJpaAuditing
 @Slf4j
 public class SecurityConfiguration {
 
     private final JwtProvider jwtProvider;
     private final CustomAuthorityUtils authorityUtils;
 
+    @Autowired
     public SecurityConfiguration(JwtProvider jwtProvider, CustomAuthorityUtils authorityUtils) {
         this.jwtProvider = jwtProvider;
         this.authorityUtils = authorityUtils;
@@ -61,9 +63,9 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/user/signup", "/user/login", "/").permitAll()
-                        .anyRequest().permitAll());
-//                        .anyRequest().hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/question/**").permitAll()
+                        .antMatchers("/user/signup", "/user/login", "/", "/user/auth/reissue").permitAll()
+                        .anyRequest().hasRole("USER"));
 
         return http.build();
     }
@@ -84,7 +86,7 @@ public class SecurityConfiguration {
             builder
                     .addFilter(corsFilter())
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    .addFilterBefore(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
     @Bean
@@ -93,7 +95,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); //내 서버 응답 할때 제이슨을 자바스크립트에서 처리할 수 있게 할지 결정
         config.addAllowedOriginPattern("*");// 모든 ip 응답 허용
-        config.addExposedHeader("Authorization");
+        config.addExposedHeader("access");
         config.addAllowedHeader("*");// 모든 헤더에 응답 허용
         config.addAllowedMethod("*");// 모든 http 메소드 응답 허용
         source.registerCorsConfiguration("/**",config);

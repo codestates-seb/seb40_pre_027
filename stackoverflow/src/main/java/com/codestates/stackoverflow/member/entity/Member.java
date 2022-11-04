@@ -5,6 +5,8 @@ import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.comment.entity.Comment;
+//import com.codestates.stackoverflow.image.entity.v2.Image;
+//import com.codestates.stackoverflow.image.entity.v2.Image;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -46,7 +48,7 @@ public class Member extends Auditable {
 
     // 질문 영역
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
     @ToString.Exclude
     @JsonManagedReference
     private List<Question> questions;
@@ -112,9 +114,9 @@ public class Member extends Auditable {
             this.status = status;
         }
     }
-
     public enum MemberRole {
         ROLE_USER,
         ROLE_ADMIN
+
     }
 }

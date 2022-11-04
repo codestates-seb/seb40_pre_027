@@ -9,8 +9,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-@EnableJpaAuditing
-@EnableScheduling
 public class StackoverflowApplication {
 
 	public static void main(String[] args) {

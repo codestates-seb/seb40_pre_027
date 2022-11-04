@@ -4,6 +4,7 @@ package com.codestates.stackoverflow.question.entity;
 import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.comment.entity.Comment;
 import com.codestates.stackoverflow.member.entity.Member;
+import com.codestates.stackoverflow.tag.entity.Tag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -19,6 +20,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -37,7 +40,7 @@ public class Question {
     @Field
     private String content;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "MEMBER_ID")
     @JsonBackReference
     private Member member;
@@ -46,18 +49,13 @@ public class Question {
     @JsonManagedReference
     private List<Answer> answers;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<QuestionTag> questionTags = new ArrayList<>();
-
-    private String[] tags;
-
-//    @OneToMany(mappedBy = "question")
-//    private List<QuestionLike> likes = new ArrayList<>();
+//    @OneToMany(mappedBy = "question", fetch = LAZY, cascade = CascadeType.REMOVE)
+//    @JsonManagedReference
+//    private List<QuestionTag> questionTags = new ArrayList<>();
 
     @Column(nullable = false)
     private int viewCount = 0;
@@ -95,10 +93,5 @@ public class Question {
     public void setAnswers(Answer answer) {
         this.answers.add(answer);
         answer.setQuestion(this);
-    }
-
-    public void setQuestionTags(QuestionTag questionTag) {
-        this.questionTags.add(questionTag);
-        questionTag.setQuestion(this);
     }
 }

@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActiveInfo {
-    @Column(name = "LAST_ACTIVE_MEMBER")
-    Long writerId;
+    @Column(name = "writerId")
+    Long memberId;
 
     @Column
     LocalDateTime lastActiveAt;

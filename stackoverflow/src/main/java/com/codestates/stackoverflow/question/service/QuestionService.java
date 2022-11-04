@@ -41,10 +41,8 @@ public class QuestionService {
     private final MemberRepository memberRepository;
 
     public Question createQuestion(Question question) {
-        question = mapAndSaveTags(question);
 
         Member authMember = memberServiceImpl.findAuthenticatedMember();
-        log.info("[createQuestion] 멤버 Id: " + authMember.getMemberId());
         authMember.setQuestions(question);
         question.setMember(authMember);
         Member writer = memberRepository.save(authMember);
@@ -61,8 +59,6 @@ public class QuestionService {
         Member authMember = memberServiceImpl.findAuthenticatedMember();
         Member writer = findQuestion.getMember();
 
-        log.info("[updateQuestion] findQuestion의 제목: " + findQuestion.getTitle() + " 작성자: " + writer.getName() + " 작성자Id: " + writer.getMemberId());
-
         if(!Objects.equals(authMember.getMemberId(), writer.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.NOT_WRITER);
         }
@@ -71,7 +67,6 @@ public class QuestionService {
                 .ifPresent(findQuestion::setTitle);
         Optional.ofNullable(question.getContent())
                 .ifPresent(findQuestion::setContent);
-        mapAndSaveTags(question);
         findQuestion.setModifiedAt(LocalDateTime.now());
 
         ActiveInfo activeInfo = new ActiveInfo(writer.getMemberId(), findQuestion.getModifiedAt(), ActiveType.MODIFIED);
@@ -123,24 +118,24 @@ public class QuestionService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND)).getContent();
     }
 
-    @Transactional(readOnly = true)
-    public Page<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
-        //tag의 tagName이 동일한 경우 페이지
-        log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
-        if (tab == null) tab = "Newest";
-        if (page == null) page = 0;
-        if(size == null) size = 30;
-
-        switch (tab) {
-            case "Newest":
-                return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
-                        Sort.by("questionId").descending()));
-            case "Active":
-                return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
-                        Sort.by("activeInfo.lastActiveAt").descending()));
-        }
-        return null;
-    }
+//    @Transactional(readOnly = true)
+//    public Page<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
+//        //tag의 tagName이 동일한 경우 페이지
+//        log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
+//        if (tab == null) tab = "Newest";
+//        if (page == null) page = 0;
+//        if(size == null) size = 30;
+//
+//        switch (tab) {
+//            case "Newest":
+//                return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
+//                        Sort.by("questionId").descending()));
+//            case "Active":
+//                return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
+//                        Sort.by("activeInfo.lastActiveAt").descending()));
+//        }
+//        return null;
+//    }
 
     public void deleteQuestion(long questionId) {
         Question findQuestion = findValidQuestion(questionId);
@@ -153,21 +148,6 @@ public class QuestionService {
         findQuestion.setLikeCount(newLikeCount);
 
         return questionRepository.save(findQuestion).getLikeCount();
-    }
-
-    public Question mapAndSaveTags(Question question) {
-        Optional.ofNullable(question.getTags())
-                .ifPresent(tagNames -> {
-                    List<Tag> tags = tagService.tagNameArrayToTagList(tagNames);
-//                    mapQuestionAndTags(question, tags);
-                    tags.stream().forEach(tag -> {
-                        QuestionTag questionTag = QuestionTag.of(question, tag);
-                        question.setQuestionTags(questionTag);
-                        tag.setQuestionTags(questionTag);
-                    });
-                    tagService.saveTags(tags);
-                });
-        return question;
     }
 
     @Transactional(readOnly = true)

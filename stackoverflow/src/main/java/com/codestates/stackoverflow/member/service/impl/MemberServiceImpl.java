@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +49,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member findMember = findAuthenticatedMember();
 
+
         return findMember;
     }
 
@@ -63,7 +65,6 @@ public class MemberServiceImpl implements MemberService {
 
         Member findMember = findAuthenticatedMember();
 
-        // 프로필 사진 수정 기능 구현 필요
         Optional.ofNullable(member.getName())
                 .ifPresent(name -> findMember.setName(name));
         Optional.ofNullable(member.getLocation())

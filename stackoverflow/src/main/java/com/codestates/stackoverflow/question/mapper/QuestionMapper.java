@@ -4,6 +4,8 @@ import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.member.mapper.MemberMapper;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
+import com.codestates.stackoverflow.question.entity.QuestionTag;
+import com.codestates.stackoverflow.tag.entity.Tag;
 import com.codestates.stackoverflow.tag.mapper.TagMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -25,13 +28,8 @@ public class QuestionMapper {
         }
 
         Question question = new Question();
-
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
-        String[] tags = requestBody.getTags();
-        if ( tags != null ) {
-            question.setTags( Arrays.copyOf( tags, tags.length ) );
-        }
 
         return question;
     }
@@ -47,9 +45,6 @@ public class QuestionMapper {
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
         String[] tags = requestBody.getTags();
-        if ( tags != null ) {
-            question.setTags( Arrays.copyOf( tags, tags.length ) );
-        }
 
         return question;
     }
@@ -61,15 +56,11 @@ public class QuestionMapper {
 
         QuestionDto.Response response = new QuestionDto.Response();
 
-        if (question.getQuestionTags() != null) {
-            response.setQuestionId(question.getQuestionId());
-        }
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
         response.setViewCount( question.getViewCount() );
         response.setLikeCount( question.getLikeCount() );
         response.setCreatedAt( question.getCreatedAt() );
-        response.setTags((question.getTags()));
         response.setModifiedAt( question.getModifiedAt() );
 
         Member member = question.getMember();
