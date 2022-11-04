@@ -58,13 +58,11 @@ public class Question {
 
     private String[] tags;
 
-<<<<<<< HEAD
-=======
+
 //    public void setTags(Tag tag) {
 //        this.tags.add(tag);
 //        tag.setQuestion(this);
 //    }
->>>>>>> server
 
 //    @OneToMany(mappedBy = "question")
 //    private List<QuestionLike> likes = new ArrayList<>();
