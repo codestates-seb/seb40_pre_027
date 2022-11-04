@@ -9,6 +9,8 @@ const ImageUploadComponent = styled.div`
         height: 160px;
         border-radius: 5px;
     }
+    display: flex;
+    flex-direction: column;
 `
 
 function ImageUpload() {
@@ -39,7 +41,6 @@ function ImageUpload() {
             src={Image}
             onClick={()=>{fileInput.current.click()}}
           ></img>
-        
         <input 
  	        type='file' 
     	    style={{display:'none'}}
