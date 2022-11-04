@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import Button from '../Button';
 import timeForToday from '../util/timeForToday';
+import requestDataWithToken from '../util/requestNewAccessToken';
 
 import Tag from '../Tag';
 import Recommend from './Recommend';
@@ -257,6 +258,7 @@ function PostBody({
   };
   const commentSubmitHandler = async () => {
     try {
+      await requestDataWithToken();
       const access = localStorage.getItem('accessToken');
       if (answer.answerId) {
         // answer - comment - post

@@ -93,14 +93,14 @@ function Post({ post, watchedTags, ignoredTags }) {
   const tagsEvaluate = (arr) => {
     // watchedtags, ignoredtags에 tag가 포함되어 있는지 검사하는 함수
     let result = false;
-    if (tags !== null) {
-      for (let i = 0; i < tags.length; i++) {
-        if (arr.includes(tags[i])) {
-          result = true;
-          break;
-        }
-      }
-    }
+    // if (tags !== null) {
+    //   for (let i = 0; i < tags.length; i++) {
+    //     if (arr.includes(tags[i])) {
+    //       result = true;
+    //       break;
+    //     }
+    //   }
+    // }
     return result;
   };
   const watched = tagsEvaluate(watchedTags);

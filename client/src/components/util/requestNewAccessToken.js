@@ -8,7 +8,7 @@ async function requestDataWithToken(setFunc) {
       headers: { access: accessToken },
     });
     console.log('첫요청 성공', res);
-    setFunc(res.data);
+    if (setFunc) setFunc(res.data);
   } catch (err) {
     if (err.response.status === 401) {
       try {
@@ -21,7 +21,7 @@ async function requestDataWithToken(setFunc) {
           headers: { access: accessToken },
         });
         console.log('재요청 성공', reRes);
-        setFunc(reRes.data);
+        if (setFunc) setFunc(reRes.data);
       } catch (err) {
         console.log('재요청 실패', err);
       }

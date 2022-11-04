@@ -8,6 +8,7 @@ import SocialLogin from '../SocialLogin';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import requestDataWithToken from '../util/requestNewAccessToken';
 const AnswerPostComponent = styled.div`
   padding-left: 2rem;
   h2 {
@@ -91,6 +92,7 @@ function AnswerPost({ setAnswersArray }) {
     // 답변 - post
     try {
       if (isLogin) {
+        await requestDataWithToken();
         const access = localStorage.getItem('accessToken');
         await axios.post(
           `/answer/${id}`,

@@ -45,6 +45,7 @@ function HomePage() {
     //searchInput값이 존재하지 않으면 모든 게시글 가져오기
     if (!searchInput && !tagSearch) {
       axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
+        console.log(res);
         setPosts(res.data.data);
         setPaginationLength(res.data.totalCount);
       });
