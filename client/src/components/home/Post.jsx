@@ -83,8 +83,6 @@ function Post({ post, watchedTags, ignoredTags }) {
     profile,
     createdAt,
   } = post;
-  const imgurl =
-    'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
 
   const deleteTagContent = content
     .replace(/<[^>]*>?/g, '')
@@ -93,14 +91,14 @@ function Post({ post, watchedTags, ignoredTags }) {
   const tagsEvaluate = (arr) => {
     // watchedtags, ignoredtags에 tag가 포함되어 있는지 검사하는 함수
     let result = false;
-    // if (tags !== null) {
-    //   for (let i = 0; i < tags.length; i++) {
-    //     if (arr.includes(tags[i])) {
-    //       result = true;
-    //       break;
-    //     }
-    //   }
-    // }
+    if (tags !== null) {
+      for (let i = 0; i < tags.length; i++) {
+        if (arr.includes(tags[i])) {
+          result = true;
+          break;
+        }
+      }
+    }
     return result;
   };
   const watched = tagsEvaluate(watchedTags);
@@ -151,7 +149,6 @@ function Post({ post, watchedTags, ignoredTags }) {
             )}
           </div>
           <div className="info-user">
-            <img src={imgurl} alt="user-img" />
             <span className="user-name">{profile.name}</span>
             {/* <span className="user-answers">{15}</span> */}
             <span>{`asked at ${timeForToday(createdAt)}`}</span>

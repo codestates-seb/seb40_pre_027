@@ -82,31 +82,33 @@ function WritePage() {
       content: `${inputData.introduce} <br calssName="boundary"/> ${inputData.expand}`,
       tags: inputData.tags,
     };
-    await requestDataWithToken();
-    const access = localStorage.getItem('accessToken');
+
     if (
       newPostData.title.length >= 5 &&
       newPostData.content.length >= 30 &&
       newPostData.tags.length >= 0
     ) {
       if (inputData.id) {
-        await axios
-          .patch(`/question/${inputData.id}`, newPostData, {
-            headers: { access },
-          })
-          .then((res) => navigate('/'))
-          .catch((err) => {
-            console.log(err);
-            alert('글 수정 실패');
-          });
+        try {
+          await requestDataWithToken(
+            '',
+            `/question/${inputData.id}`,
+            'patch',
+            newPostData
+          );
+          await navigate('/');
+        } catch (err) {
+          console.log(err);
+          alert('글 수정 실패');
+        }
       } else {
-        axios
-          .post('/question', newPostData, { headers: { access } })
-          .then((res) => navigate('/'))
-          .catch((err) => {
-            console.log(err);
-            alert('글 생성 실패');
-          });
+        try {
+          await requestDataWithToken('', `/question`, 'post', newPostData);
+          await navigate('/');
+        } catch (err) {
+          alert('글 생성 실패');
+          console.log(err);
+        }
       }
     }
   };

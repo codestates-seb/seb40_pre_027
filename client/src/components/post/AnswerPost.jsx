@@ -92,13 +92,9 @@ function AnswerPost({ setAnswersArray }) {
     // 답변 - post
     try {
       if (isLogin) {
-        await requestDataWithToken();
-        const access = localStorage.getItem('accessToken');
-        await axios.post(
-          `/answer/${id}`,
-          { answerContent: answer },
-          { headers: { access } }
-        );
+        await requestDataWithToken('', `/answer/${id}`, 'post', {
+          answerContent: answer,
+        });
         const newPostData = await axios.get(`/question/${id}`);
         await setAnswersArray(newPostData.data.answers);
         await editorRef.current.getInstance().setHTML(' ');

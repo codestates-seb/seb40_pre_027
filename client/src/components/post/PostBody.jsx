@@ -223,107 +223,121 @@ function PostBody({
     // editor - onChange
     setNewAnswer(editorRef.current.getInstance().getHTML());
   };
-  const deleteHandler = () => {
+  const deleteHandler = async () => {
     if (answer.answerId) {
       // answer - delete
-      axios
-        .delete(`/answer/${answer.answerId}`)
-        .then(() => {
-          const newAnswersArray = answersArray.filter(
-            (v) => v.answerId !== answer.answerId
-          );
-          setAnswersArray(newAnswersArray);
-        })
-        .catch(() => alert('답변 삭제 실패'));
+      try {
+        await requestDataWithToken('', `/answer/${answer.answerId}`, 'delete');
+        const newAnswersArray = answersArray.filter(
+          (v) => v.answerId !== answer.answerId
+        );
+        setAnswersArray(newAnswersArray);
+      } catch (err) {
+        alert('답변 삭제 실패');
+        console.log(err);
+      }
     } else {
-      // question - delete
-      axios
-        .delete(`/question/${questionId}`)
-        .then(() => navigate('/'))
-        .catch(() => alert('실패'));
+      try {
+        // question - delete
+        await requestDataWithToken('', `/question/${questionId}`, 'delete');
+        await navigate('/');
+      } catch (err) {
+        alert('질문 삭제 실패');
+        console.log(err);
+      }
     }
   };
-  const answerPatchHandler = () => {
+  const answerPatchHandler = async () => {
     // answer - patch
-    axios
-      .patch(`/answer/${answer.answerId}`, {
-        answerContent: newAnswer,
-      })
-      .then(() => {
-        setAnswerIsPatch(false);
-        const newAnswersArray = [...answersArray];
-        newAnswersArray[idx].answerContent = newAnswer;
-        setAnswersArray(newAnswersArray);
-      });
-  };
-  const commentSubmitHandler = async () => {
     try {
-      await requestDataWithToken();
-      const access = localStorage.getItem('accessToken');
-      if (answer.answerId) {
-        // answer - comment - post
-        await axios.post(
-          `/reply/${answer.answerId}`,
-          {
-            replyContent: comment,
-          },
-          { headers: { access } }
-        );
-        const newPostData = await axios.get(`/question/${questionId}`);
-        await setReplyArray(newPostData.data.answers[idx].replies);
-      } else {
-        // question - comment - post
-        await axios.post(
-          `/comment/${questionId}`,
-          { content: comment },
-          { headers: { access } }
-        );
-        const newPostData = await axios.get(`/question/${questionId}`);
-        await setCommentsArray(newPostData.data.comments);
-      }
-      setComment('');
+      await requestDataWithToken('', `/answer/${answer.answerId}`, 'patch', {
+        answerContent: newAnswer,
+      });
+      setAnswerIsPatch(false);
+      const newAnswersArray = [...answersArray];
+      newAnswersArray[idx].answerContent = newAnswer;
+      setAnswersArray(newAnswersArray);
     } catch (err) {
       console.log(err);
+      alert('답변 수정 실패');
     }
   };
+  const commentSubmitHandler = async () => {
+    if (answer.answerId) {
+      try {
+        // answer - comment - post
+        await requestDataWithToken('', `/reply/${answer.answerId}`, 'post', {
+          replyContent: comment,
+        });
+        const newPostData = await axios.get(`/question/${questionId}`);
+        await setReplyArray(newPostData.data.answers[idx].replies);
+      } catch (err) {
+        alert('답변 코멘트 작성 실패');
+      }
+    } else {
+      try {
+        // question - comment - post
+        await requestDataWithToken('', `/comment/${questionId}`, 'post', {
+          content: comment,
+        });
+        const newPostData = await axios.get(`/question/${questionId}`);
+        await setCommentsArray(newPostData.data.comments);
+      } catch (err) {
+        alert('질문 코멘트 작성 실패');
+      }
+    }
+    setComment('');
+  };
   const commentOnDeleteHandler = async (id) => {
-    try {
-      if (answer.answerId) {
-        // answer - comment - delete
-        await axios.delete(`/reply/${id}`);
+    if (answer.answerId) {
+      // answer - comment - delete
+      try {
+        await requestDataWithToken('', `/reply/${id}`, 'delete');
         const newReplysArray = [...replyArray].filter((v) => v.replyId !== id);
         setReplyArray(newReplysArray);
-      } else {
-        // question - comment - delete
-        await axios.delete(`/comment/${id}`);
+      } catch (err) {
+        console.log(err);
+        alert('답변 코멘트 삭제 실패');
+      }
+    } else {
+      // question - comment - delete
+      try {
+        await requestDataWithToken('', `/comment/${id}`, 'delete');
         const newCommentsArray = commentsArray.filter(
           (v) => v.commentId !== id
         );
         setCommentsArray(newCommentsArray);
+      } catch (err) {
+        console.log(err);
+        alert('질문 코멘트 삭제 실패');
       }
-    } catch (err) {
-      alert('삭제 실패');
-      console.log(err);
     }
   };
   const commentOnPatchHandler = async (id, content, idx) => {
-    try {
-      if (answer.answerId) {
-        // answer - comment - patch
-        await axios.patch(`/reply/${id}`, { replyContent: content });
+    if (answer.answerId) {
+      // answer - comment - patch
+      try {
+        await requestDataWithToken('', `/reply/${id}`, 'patch', {
+          replyContent: content,
+        });
         const newReplysArray = [...replyArray];
         newReplysArray[idx].replyContent = content;
         setReplyArray(newReplysArray);
-      } else {
-        // question - comment - patch
-        await axios.patch(`/comment/${id}`, { content });
+      } catch (err) {
+        alert('답변 코멘트 수정 실패');
+        console.log(err);
+      }
+    } else {
+      // question - comment - patch
+      try {
+        await requestDataWithToken('', `/comment/${id}`, 'patch', { content });
         const newCommentsArray = [...commentsArray];
         newCommentsArray[idx].content = content;
         setCommentsArray(newCommentsArray);
+      } catch (err) {
+        console.log('질문 코멘트 수정 실패');
+        console.log(err);
       }
-    } catch (err) {
-      alert('코멘트 수정 실패');
-      console.log(err);
     }
   };
   const userimg =
