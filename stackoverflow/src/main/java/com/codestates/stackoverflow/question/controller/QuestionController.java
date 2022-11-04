@@ -50,6 +50,7 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
+    // 질문 1개 겟
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
         Question question = questionService.findQuestion(questionId);
@@ -59,6 +60,7 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
+    // 홈
     @GetMapping
     public ResponseEntity getQuestionsSorted(@RequestParam(required = false) String tab,
                                        @RequestParam(required = false) Integer page,

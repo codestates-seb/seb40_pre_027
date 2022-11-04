@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Transactional
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
@@ -68,7 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     }
 
-    @Transactional
+
     private String delegateAccessToken(Member member) {
         log.info("[delegateAccessToken] 로그인 Request 정보로 JWT-Access 생성 시작");
         Map<String, Object> claims = new HashMap<>();

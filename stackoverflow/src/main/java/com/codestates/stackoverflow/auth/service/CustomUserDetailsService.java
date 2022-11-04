@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
+@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -31,7 +32,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("[loadUserByUsername] 회원 정보 탐색 시작");
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
@@ -55,7 +55,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 //        return userRepository.findById(Long.parseLong(userPk))
 //                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 //    }
-
+    @Transactional
     public class CustomUserDetails extends Member implements UserDetails {
 
         public CustomUserDetails(Member member) {

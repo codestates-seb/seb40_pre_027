@@ -1,7 +1,5 @@
 package com.codestates.stackoverflow.question.service;
 
-import com.codestates.stackoverflow.answer.repository.AnswerRepository;
-import com.codestates.stackoverflow.comment.repository.CommentRepository;
 import com.codestates.stackoverflow.exception.BusinessLogicException;
 import com.codestates.stackoverflow.exception.ExceptionCode;
 import com.codestates.stackoverflow.member.entity.Member;
@@ -13,7 +11,6 @@ import com.codestates.stackoverflow.question.entity.Question;
 import com.codestates.stackoverflow.question.entity.QuestionTag;
 import com.codestates.stackoverflow.question.mapper.QuestionMapperImpl;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
-import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.tag.entity.Tag;
 import com.codestates.stackoverflow.tag.service.TagService;
 import lombok.RequiredArgsConstructor;

@@ -54,7 +54,9 @@ public class Question {
     @JsonManagedReference
     private List<QuestionTag> questionTags = new ArrayList<>();
 
+
     private String[] tags;
+
 
 //    @OneToMany(mappedBy = "question")
 //    private List<QuestionLike> likes = new ArrayList<>();
