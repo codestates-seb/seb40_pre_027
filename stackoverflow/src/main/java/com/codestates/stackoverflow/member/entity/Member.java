@@ -21,7 +21,6 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-@ToString
 public class Member extends Auditable {
     // 이미지 기능 추가해야 함
     @Id
