@@ -146,7 +146,11 @@ function TagsBox({ setTags, tags, name }) {
               )}
             </div>
           ) : tags.length ? (
-            tags.map((v, i) => <Tag key={i}>{v}</Tag>)
+            tags.map((v, i) => (
+              <Tag key={i} searchEvent={true}>
+                {v}
+              </Tag>
+            ))
           ) : (
             <button onClick={() => setIsEdit(true)} className="watch-tag-btn">
               {name}

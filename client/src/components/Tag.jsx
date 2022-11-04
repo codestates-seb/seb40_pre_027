@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import { tagSearchActions } from '../store/tagSearch';
+import { useDispatch } from 'react-redux';
+
 const TagComponent = styled.div`
   cursor: pointer;
   padding: 9px;
@@ -21,9 +25,17 @@ const TagComponent = styled.div`
     font-size: 1rem;
   }
 `;
-function Tag({ children, onClick, onDelete, status }) {
+function Tag({ children, onDelete, status, searchEvent }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const tagSearchHandler = () => {
+    if (searchEvent) {
+      dispatch(tagSearchActions.searchPost(children));
+      navigate('/');
+    }
+  };
   return (
-    <TagComponent status={status}>
+    <TagComponent status={status} onClick={tagSearchHandler}>
       {status === 1 ? <BsEye /> : status === 2 ? <BsEyeSlash /> : <></>}
       {children}
       {onDelete && (

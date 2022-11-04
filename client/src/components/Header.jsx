@@ -10,6 +10,7 @@ import UserCard from './UserCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginActions } from '../store/login';
 import { searchActions } from '../store/search';
+import { tagSearchActions } from '../store/tagSearch';
 
 const HeaderComponent = styled.header`
   border-bottom: 2px solid #d9d9d9;
@@ -92,8 +93,6 @@ function Header() {
   //dispatch 변수 할당, isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.login.isLogin);
-  const searchInput = useSelector((state) => state.search.searchInput);
-  console.log(searchInput);
 
   //로그아웃 axios 요청
   // async function logoutRequest() {
@@ -133,6 +132,7 @@ function Header() {
   const logoClick = () => {
     setInputValue('');
     dispatch(searchActions.searchPost(inputValue));
+    dispatch(tagSearchActions.searchPost(''));
     navigate('/');
   };
 
