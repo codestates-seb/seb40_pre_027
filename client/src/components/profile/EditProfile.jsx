@@ -1,10 +1,9 @@
-import React, { useState, useRef,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// import ProfilePicture from '../../img/ProfilePicture.png';
-import { Editor } from '@toast-ui/react-editor';
-import axios from 'axios';
+// import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ImageUpload from './ImageUpload';
+import requestDataWithToken from '../util/requestNewAccessToken';
 
 const EditProfileComponent = styled.div`
   h1 {
@@ -28,6 +27,10 @@ const ProfileEditInfoComponent = styled.div`
   .inputBox {
     width: 423px;
     height: 33px;
+  }
+  #inputBoxSize {
+    width: 1000px;
+    height: 200px;
   }
   border: 1px solid #6a737c;
   border-radius: 5px;
@@ -76,60 +79,27 @@ function EditProfile() {
     location: '',
     title: '',
     introduction: '',
-  });  
+  });
 
-  // toast ui
-  const editRef = useRef();
-  
-  const onChangeEdit = (e, editor) => {
-    if (editor) {
-      setEdit({
-        ...edit,
-        introduction: editRef.current.getInstance().getHTML(),
-      });
-    } else {
-      setEdit({
-        ...edit,
-        [e.target.name]: e.target.value,
-      });
-    }
-    console.log(edit);
-    
-  }; 
+  const onChangeEdit = (e) => {
+    setEdit({
+      ...edit,
+      [e.target.name]: e.target.value,
+    });
+    // console.log(edit);
+  };
+
   // get요청
   useEffect(() => {
-    const access = localStorage.getItem('accessToken')
-      if(access) {
-        axios.get('/user/profile/edit', {headers : {access}})
-      .then((res) => {
-        console.log(res)
-        setEdit({
-          // image: res.data.image
-          name: res.data.name,
-          location: res.data.location,
-          title: res.data.title,
-          introduction: "aaaa"
-        }) 
-      })
-      }
-  }, [])
+    requestDataWithToken(setEdit, '/user/profile/edit', 'get');
+  }, []);
 
   // put요청
-  async function putProfile() {
-    const access = localStorage.getItem('accessToken')
-    try {
-    await axios.put('/user/profile/edit', edit,{headers : {access}})
-      .then((res) => {
-        console.log(res)
-      })
-      } catch(error){
-        console.error(error)
-      }
-    }
+  const putData = { name: '', location: '', title: '', introduction: '' };
+  function putProfile() {
+    requestDataWithToken(setEdit, '/user/profile/edit', 'put', putData);
+  }
 
-  
-  
- 
   return (
     <EditProfileComponent>
       <h1>Edit your Profile</h1>
@@ -159,29 +129,34 @@ function EditProfile() {
             value={edit.title || ''}
           ></input>
           <div className="margin-word">About Me</div>
-          <Editor
-            initialValue={edit.introduction}
-            height="300px"
-            initialEditType="markdown"
-            useCommandShortcut={true}
+          <input
+            className="inputBox"
+            id="inputBoxSize"
             name="introduction"
-            onChange={(e) => onChangeEdit(e, true)}
-            // onChange={(e) => console.log}
+            onChange={onChangeEdit}
             value={edit.introduction || ''}
-            ref={editRef}
-          ></Editor>
+          ></input>
         </EditComponent>
       </ProfileEditInfoComponent>
       <ButtonComponent>
         <span>
-          <button className="saveButton" onClick={putProfile}>
-            Save Profile
-          </button>
-          <Link to= '/myProfile'>
-          <button className="cancelButton"> Cancel</button>
+          <Link to="/myProfile">
+            <button className="saveButton" onClick={putProfile}>
+              Save Profile
+            </button>
+          </Link>
+          <Link to="/myProfile">
+            <button className="cancelButton"> Cancel</button>
           </Link>
         </span>
-        <button className="deleteButton">Delete Account</button>
+        <Link to="/">
+          <button
+            className="deleteButton"
+            onClick={() => alert('기능 추가 예정입니다.')}
+          >
+            Delete Account
+          </button>
+        </Link>
       </ButtonComponent>
     </EditProfileComponent>
   );
