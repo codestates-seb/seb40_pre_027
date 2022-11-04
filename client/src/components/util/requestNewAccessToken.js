@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-async function requestDataWithToken(setFunc) {
+async function requestDataWithToken(setFunc, url, method, data) {
   let accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
   try {
-    const res = await axios.get(`/user/profile`, {
-      headers: { access: accessToken },
-    });
+    const res = await axios(
+      { method , url , data, headers: { access: accessToken }}
+    );
     console.log('첫요청 성공', res);
     setFunc(res.data);
   } catch (err) {
@@ -17,9 +17,9 @@ async function requestDataWithToken(setFunc) {
         });
         localStorage.setItem('accessToken', resForToken.headers.access);
         accessToken = localStorage.getItem('accessToken');
-        const reRes = await axios.get(`/user/profile`, {
-          headers: { access: accessToken },
-        });
+        const reRes = await axios(
+          { method, url, data, headers: { access: accessToken } }
+        );
         console.log('재요청 성공', reRes);
         setFunc(reRes.data);
       } catch (err) {
