@@ -32,6 +32,7 @@ public class TagService {
     private final QuestionTagRepository questionTagRepository;
 
     public List<Tag> saveTags(List<Tag> tagList, Long questionId) {
+        log.info("[saveTags] 동작");
         for (Tag tag : tagList) {
             Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
             if (optionalTag.isEmpty()) {
@@ -39,9 +40,10 @@ public class TagService {
             } else {
                 tag = optionalTag.get();
             }
-            log.info("tag Id: " + tag.getTagId());
+            log.info("[saveTags] tag: " + tag);
             QuestionTag questionTag = new QuestionTag(questionId, tag.getTagId(), tag.getTagName());
             questionTagRepository.save(questionTag);
+            log.info("[saveTags] questionTag: " + questionTag);
         }
         return tagList;
     }

@@ -36,9 +36,15 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
+        log.info("[postQuestion] 동작");
+
         Question question = questionService.createQuestion(questionMapper.questionPostToQuestion(requestBody));
+        log.info("[postQuestion] question: " + question);
+
         List<Tag> tags = tagMapper.tagNamesToTags(requestBody.getTags());
         tags = tagService.saveTags(tags, question.getQuestionId());
+
+
         QuestionDto.Response response = questionMapper.questionToQuestionResponse(question);
         response.setTags(requestBody.getTags());
 
