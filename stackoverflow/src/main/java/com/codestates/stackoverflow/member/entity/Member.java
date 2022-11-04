@@ -19,6 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @ToString
 public class Member extends Auditable {

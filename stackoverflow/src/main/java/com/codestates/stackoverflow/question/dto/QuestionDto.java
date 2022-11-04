@@ -55,7 +55,8 @@ public class QuestionDto {
 
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class Response {
 
         private long questionId;
@@ -86,7 +87,8 @@ public class QuestionDto {
 
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class ListedResponse {
 
         private String title;

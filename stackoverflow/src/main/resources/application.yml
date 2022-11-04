@@ -28,8 +28,13 @@ logging:
 
 # Security ??
 jwt:
+<<<<<<< HEAD
   secret-key: ${jwt-secret}
   access-token-expiration-minutes: 1
+=======
+  secret-key: werewrwdfdsfsfdvvdjerthgmfghyjrgqwrjlkljklhjkghkhgjgh
+  access-token-expiration-minutes: 360
+>>>>>>> server
   refresh-token-expiration-minutes: 360
 
 # Test
