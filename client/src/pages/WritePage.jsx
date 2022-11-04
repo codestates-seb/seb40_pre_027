@@ -96,7 +96,7 @@ function WritePage() {
             'patch',
             newPostData
           );
-          await navigate('/');
+          await navigate(`/post/${inputData.id}`);
         } catch (err) {
           console.log(err);
           alert('글 수정 실패');

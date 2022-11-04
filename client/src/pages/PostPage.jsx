@@ -66,16 +66,18 @@ function PostPage() {
                 />
                 <AnswerSorted answers={answersArray.length} />
                 {answersArray.length ? (
-                  answersArray.map((answer, i) => (
-                    <PostBody
-                      post={post}
-                      answer={answer}
-                      idx={i}
-                      key={answer.answerId}
-                      setAnswersArray={setAnswersArray}
-                      answersArray={answersArray}
-                    />
-                  ))
+                  answersArray
+                    .sort((a, b) => b.answerLikesCount - a.answerLikesCount)
+                    .map((answer, i) => (
+                      <PostBody
+                        post={post}
+                        answer={answer}
+                        idx={i}
+                        key={answer.answerId}
+                        setAnswersArray={setAnswersArray}
+                        answersArray={answersArray}
+                      />
+                    ))
                 ) : (
                   <></>
                 )}
