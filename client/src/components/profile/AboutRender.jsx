@@ -16,7 +16,7 @@ const Prof = styled.article`
     & h2 {
       font-size: 1.2rem;
       font-weight: 300;
-      margin: 22px;
+      margin: 18px;
     }
   }
   & :nth-child(2) {
@@ -58,6 +58,11 @@ const Prof = styled.article`
     height: 140px;
     border: 1px solid black;
     margin: 50px;
+    & h2 {
+      font-size: 1.2rem;
+      font-weight: 300;
+      margin: 22px;
+    }
   }
 `;
 
@@ -74,9 +79,13 @@ function AboutRender({ profileRen }) {
         <h2>{location}</h2>
       </div>
       <div className="title">Title</div>
-      <div className="box">{title}</div>
+      <div className="box">
+        <h2>{title}</h2>
+      </div>
       <div className="introduction">Introduction</div>
-      <div className="intro-input">{introduction}</div>
+      <div className="intro-input">
+        <h2>{introduction}</h2>
+      </div>
     </Prof>
   );
 }
