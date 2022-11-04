@@ -199,6 +199,7 @@ function LoginPage() {
                 <div className="forgotPassword">Forgot Password?</div>
               </div>
               <input
+                type="password"
                 className="inputBox"
                 name="password"
                 onChange={onChangeAccount}

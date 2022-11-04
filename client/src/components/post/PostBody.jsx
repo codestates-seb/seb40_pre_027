@@ -356,7 +356,12 @@ function PostBody({
         </section>
         {!answer && (
           <section className="tags">
-            {tags !== null && tags.map((v, i) => <Tag key={v}>{v}</Tag>)}
+            {tags !== null &&
+              tags.map((v, i) => (
+                <Tag key={v} searchEvent={true}>
+                  {v}
+                </Tag>
+              ))}
           </section>
         )}
         <section className="body-footer">

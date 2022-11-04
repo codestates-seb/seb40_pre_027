@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const TopMenuComponent = styled.div`
   h1 {
@@ -50,10 +51,17 @@ function TopMenu() {
   const [sorted, setSorted] = useState('interesting');
   const sortedArr = ['interesting', 'Hot', 'Week', 'Month'];
   const sortBtnHandler = (t) => setSorted(t);
+  const searchInput = useSelector((state) => state.search.searchInput);
+  const tagSearch = useSelector((state) => state.tagSearch.tagSearch);
+  const topMenuTitle = searchInput
+    ? 'Search Results'
+    : tagSearch
+    ? `Questions tagged [${tagSearch}]`
+    : 'All Questions';
   return (
     <TopMenuComponent>
       <TopMenuBoxComponent>
-        <h1>{'All Questions'}</h1>
+        <h1>{topMenuTitle}</h1>
         <Link to="/write">
           <Button>Ask Question</Button>
         </Link>

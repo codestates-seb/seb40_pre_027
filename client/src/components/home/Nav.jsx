@@ -36,7 +36,6 @@ const NavBar = styled.div`
 
 function Nav() {
   const { pathname } = useLocation();
-  console.log('nav');
   return (
     <NavBar>
       <ul>

@@ -132,6 +132,7 @@ function Post({ post, watchedTags, ignoredTags }) {
               tags.map((v, i) => (
                 <Tag
                   key={i}
+                  searchEvent={true}
                   status={
                     watchedTags.includes(v) ? (
                       1

@@ -37,13 +37,13 @@ function HomePage() {
 
   //redux에서 searchInput 값 받아오기
   const searchInput = useSelector((state) => state.search.searchInput);
+  const tagSearch = useSelector((state) => state.tagSearch.tagSearch);
 
   const sizeHandler = (per) => setSize(per);
   const currentPageHandler = (p) => setCurrentPage(p);
-
   useEffect(() => {
     //searchInput값이 존재하지 않으면 모든 게시글 가져오기
-    if (!searchInput) {
+    if (!searchInput && !tagSearch) {
       axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
         setPosts(res.data.data);
         setPaginationLength(res.data.totalCount);
@@ -58,9 +58,17 @@ function HomePage() {
         .then((res) => {
           setPosts(res.data.data);
         });
+    } else if (tagSearch) {
+      axios
+        .get(
+          `/question/tagged/${tagSearch}?tab=Newest&page=${currentPage}&size=${size}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          setPosts(res.data);
+        });
     }
-    axios.get('/question').then((res) => console.log(res));
-  }, [size, currentPage, searchInput]);
+  }, [size, currentPage, searchInput, tagSearch]);
   return (
     <HomepageComponent>
       <Header />
