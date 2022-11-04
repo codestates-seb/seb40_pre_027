@@ -11,6 +11,4 @@ import java.util.Optional;
 public interface QuestionLikeRepository extends JpaRepository<QuestionLikes, Long> {
 
     Optional<QuestionLikes> findByQuestionIdAndMemberId(Long questionId, Long memberId);
-
-    void deleteByQuestionIdAndMemberId(Long questionId, Long memberId);
 }

@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Getter @Setter
 @Entity
 public class QuestionTag {
@@ -15,22 +17,26 @@ public class QuestionTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionTagId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "QUESTION_ID")
-    @JsonBackReference
-    private Question question;
+    @Column(nullable = false)
+    private Long questionId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "TAG_ID")
-    @JsonBackReference
-    private Tag tag;
+    @Column(nullable = false)
+    private Long tagId;
 
-    private LocalDateTime createdAt;
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "QUESTION_ID")
+//    Question question;
+//
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "TAG_ID")
+//    Tag tag;
 
-    public static QuestionTag of(Question question, Tag tag) {
-        QuestionTag questionTag = new QuestionTag();
-        questionTag.setQuestion(question);
-        questionTag.setTag(tag);
-        return questionTag;
+    @Column(nullable = false)
+    private String content;
+
+    public QuestionTag(Long questionId, Long tagId, String content) {
+        this.questionId = questionId;
+        this.tagId = tagId;
+        this.content = content;
     }
 }

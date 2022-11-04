@@ -73,7 +73,7 @@ public class QuestionDto {
 
         private LocalDateTime modifiedAt;
 
-        private List<TagDto.Response> tagDtos;
+        private String[] tags;
 
         private Long memberId;
 

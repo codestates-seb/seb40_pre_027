@@ -5,6 +5,8 @@ import com.codestates.stackoverflow.answer.entity.Answer;
 import com.codestates.stackoverflow.audit.Auditable;
 import com.codestates.stackoverflow.auth.RefreshToken;
 import com.codestates.stackoverflow.comment.entity.Comment;
+//import com.codestates.stackoverflow.image.entity.v2.Image;
+//import com.codestates.stackoverflow.image.entity.v2.Image;
 import com.codestates.stackoverflow.question.entity.Question;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -54,7 +56,6 @@ public class Member extends Auditable {
         this.questions.add(question);
         question.setMember(this);
     }
-
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     @ToString.Exclude

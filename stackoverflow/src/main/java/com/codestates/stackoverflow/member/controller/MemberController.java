@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/user")
@@ -54,7 +56,6 @@ public class MemberController {
         return ResponseEntity.ok(memberMapper.memberToProfile(member));
     }
 
-    // 프로필 edit - profile 정보 수정하기
     @PutMapping("/profile/edit")
     public ResponseEntity putMemberProfile(@RequestBody MemberDto.Profile request) {
         Member member = memberMapper.profileToMember(request);
@@ -67,15 +68,5 @@ public class MemberController {
         Member findMember = memberService.findAuthenticatedMember();
 
         return ResponseEntity.ok(memberMapper.memberToActivity(findMember));
-    }
-
-    // 회원 정보 삭제
-    @DeleteMapping("profile")
-    public ResponseEntity deleteMember() {
-        // 비밀번호를 전달받아야 하나..?
-
-        memberService.deleteMember();
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
