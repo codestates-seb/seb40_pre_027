@@ -15,7 +15,7 @@ public class QuestionTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionTagId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "QUESTION_ID")
     @JsonBackReference
     private Question question;

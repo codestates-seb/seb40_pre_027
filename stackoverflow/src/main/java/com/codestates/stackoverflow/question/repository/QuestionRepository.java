@@ -32,10 +32,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT q FROM Question q INNER JOIN QuestionLikes l ")
     Page<Question> findByOrderByQuestionLikes(Pageable pageable);
 
-//    Page<Question> findAllWithNoAnswerOrderByLikes(Pageable pageable);
-
-//    @Query("SELECT q FROM Question q LEFT JOIN Answer a where q.answers = null " +
-//            "WHERE " +
-//            "ORDER BY ")
-//    Page<Question> findAllWithNoAnswerOrderByLikes(Pageable pageable);
+    @Query("SELECT COUNT(*) FROM Question q")
+    int countAllQuestions();
 }

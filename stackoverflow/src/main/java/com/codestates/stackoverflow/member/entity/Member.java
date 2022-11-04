@@ -55,7 +55,6 @@ public class Member extends Auditable {
         question.setMember(this);
     }
 
-
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "answerWriter")
     @ToString.Exclude
     @JsonManagedReference

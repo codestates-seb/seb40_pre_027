@@ -13,18 +13,12 @@ spring:
   jpa:
 #    generate-ddl: true
     hibernate:
-      ddl-auto: update  # (1) ??? ?? ?? update였는데 이유가 있는지?
+      ddl-auto: update
     show-sql: true  # (2) SQL ?? ??
     properties:
       hibernate:
         format_sql: true  # (3) SQL pretty print
-        search:
-          default:
-            directory_provider: filesystem
-            indexBase: D:/Temporary
   sql:
-
-
 
 logging:
   level:

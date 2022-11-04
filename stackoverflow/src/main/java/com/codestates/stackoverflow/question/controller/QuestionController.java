@@ -1,7 +1,9 @@
 package com.codestates.stackoverflow.question.controller;
 
 //import com.codestates.stackoverflow.question.mapper.QuestionMapper;
-import com.codestates.stackoverflow.question.mapper.QuestionMapperImpl;
+import com.codestates.stackoverflow.question.dto.MultiResponseDto;
+import com.codestates.stackoverflow.question.mapper.QuestionMapper;
+import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.questionLikes.service.QuestionLikeService;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
@@ -25,8 +27,9 @@ import java.util.List;
 @Slf4j
 public class QuestionController {
     private final QuestionService questionService;
+    private final QuestionRepository questionRepository;
     private final QuestionLikeService questionLikesService;
-    private final QuestionMapperImpl mapper;
+    private final QuestionMapper mapper;
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
@@ -59,6 +62,9 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
+    /**
+     * 전체 질문 페이지를 정렬 기준에 따라 조회합니다.
+     */
     @GetMapping
     public ResponseEntity getQuestionsSorted(@RequestParam(required = false) String tab,
                                        @RequestParam(required = false) Integer page,
@@ -67,13 +73,18 @@ public class QuestionController {
         if(page == null) page = 1;
         if(size == null) size = 30;
         tab = tab.toLowerCase();
-
+        int count = questionRepository.countAllQuestions();
+        System.out.println("총 질문 개수: " + count);
         List<Question> questions = questionService.findQuestions(tab, page - 1, size).getContent();
+        List<QuestionDto.Response> responses = mapper.questionsToQuestionResponses(questions);
 
-        return new ResponseEntity(mapper.questionsToQuestionResponses(questions),
+        return new ResponseEntity(new MultiResponseDto(responses, questionRepository.countAllQuestions()),
                 HttpStatus.OK);
     }
 
+    /**
+     * 질문에 대한 검색 결과를 조회합니다.
+     */
     @GetMapping("/search")
     public ResponseEntity getQuestionsViaKeyword(@RequestParam(name = "q") String keyword,
                                                  @RequestParam(required = false) Integer page,
@@ -82,9 +93,9 @@ public class QuestionController {
         if(size == null) size = 30;
 
         List<Question> questions = questionService.searchQuestions(keyword, page - 1, size);
+        List<QuestionDto.Response> responses =  mapper.questionsToQuestionResponses(questions);
 
-        return new ResponseEntity<>(
-                mapper.questionsToQuestionResponses(questions),
+        return new ResponseEntity<>(new MultiResponseDto(responses, questionRepository.countAllQuestions()),
                 HttpStatus.OK
         );
     }

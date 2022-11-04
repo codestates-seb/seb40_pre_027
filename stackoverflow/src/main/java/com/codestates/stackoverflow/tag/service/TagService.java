@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -69,7 +70,7 @@ public class TagService {
     }
 
     public List<Tag> findTagsNew(int page) {
-        Page<Tag> tagPage = tagRepository.findByOrderByCreatedAtDesc(PageRequest.of(page, 36));
+        Page<Tag> tagPage = tagRepository.findByOrderByTagIdDesc(PageRequest.of(page, 36));
         return tagPage.getContent();
     }
 
@@ -97,33 +98,28 @@ public class TagService {
         return tags;
     }
 
-    public void updateTagQuestionsCount() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                List<Tag> tags = tagRepository.findAll();
-                tags.forEach(tag -> {
-                    String tagName = tag.getTagName();
-                    int currentAskedTotal = findNumberOfQuestionsWithTag(tagName);
-                    int currentAskedToday = findNumberOfQuestionsWithTagAskedToday(tagName);
-                    int currentAskedThisWeek = findNumberOfQuestionsWithTagAskedThisWeek(tagName);
-                    if (tag.getAskedTotal() != currentAskedTotal) {
-                        tag.setAskedTotal(currentAskedTotal);
-                        tagRepository.save(tag);
-                    }
-                    else if (tag.getQuestionsAskedToday() != currentAskedToday) {
-                        tag.setQuestionsAskedToday(currentAskedToday);
-                        tagRepository.save(tag);
-                    }
-                    else if (tag.getQuestionsAskedThisWeek() != currentAskedThisWeek) {
-                        tag.setQuestionsAskedThisWeek(currentAskedThisWeek);
-                        tagRepository.save(tag);
-                    }
-                    log.info("[모든 Tag의 QuestionCount Update]: ");
-                });
-            }
-        };
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(runnable, 0, 60, TimeUnit.SECONDS);
-    }
+    //30분마다 Tag 테이블에서 각 태그가 달린 게시글의 수를 최신화 (매 시각 0분 0초, 30분 0초에 실행)
+//    @Scheduled(cron = "0 0,30 * * * *")
+//    public void updateTagQuestionsCount() {
+//        List<Tag> tags = tagRepository.findAll();
+//        tags.forEach(tag -> {
+//            String tagName = tag.getTagName();
+//            int currentAskedTotal = findNumberOfQuestionsWithTag(tagName);
+//            int currentAskedToday = findNumberOfQuestionsWithTagAskedToday(tagName);
+//            int currentAskedThisWeek = findNumberOfQuestionsWithTagAskedThisWeek(tagName);
+//            if (tag.getAskedTotal() != currentAskedTotal) {
+//                tag.setAskedTotal(currentAskedTotal);
+//                tagRepository.save(tag);
+//            }
+//            else if (tag.getQuestionsAskedToday() != currentAskedToday) {
+//                tag.setQuestionsAskedToday(currentAskedToday);
+//                tagRepository.save(tag);
+//            }
+//            else if (tag.getQuestionsAskedThisWeek() != currentAskedThisWeek) {
+//                tag.setQuestionsAskedThisWeek(currentAskedThisWeek);
+//                tagRepository.save(tag);
+//            }
+//            log.info("[모든 Tag의 QuestionCount Update]: ");
+//        });
+//    }
 }

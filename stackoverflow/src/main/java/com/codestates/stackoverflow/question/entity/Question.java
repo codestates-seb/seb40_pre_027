@@ -37,7 +37,7 @@ public class Question {
     @Field
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "MEMBER_ID")
     @JsonBackReference
     private Member member;
@@ -46,11 +46,11 @@ public class Question {
     @JsonManagedReference
     private List<Answer> answers;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<QuestionTag> questionTags = new ArrayList<>();
 

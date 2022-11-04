@@ -49,7 +49,7 @@ public class CommentService {
         LocalDateTime modifiedAt = LocalDateTime.now();
 
         if (Duration.between(createdAt, modifiedAt).getSeconds() > 300) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_UPDATE_NOT_POSSIBLE);
+            throw new BusinessLogicException(ExceptionCode.COMMENT_UPDATE_NOT_AVAILABLE);
         } else {
             Optional.ofNullable(comment.getContent())
                     .ifPresent(findComment::setContent);

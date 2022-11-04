@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ActiveInfo {
     @Column(name = "LAST_ACTIVE_MEMBER")
-    Long memberId;
+    Long writerId;
 
     @Column
     LocalDateTime lastActiveAt;

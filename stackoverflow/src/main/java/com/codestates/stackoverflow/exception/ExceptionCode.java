@@ -11,12 +11,12 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     QUESTION_NOT_FOUND(404, "Question not found"),
     QUESTION_COMMENT_NOT_FOUND(404,"Question comment not found"),
+    ANSWER_NOT_FOUND(404,"Answer not found"),
+    ANSWER_COMMENT_NOT_FOUND(404,"Answer comment not found"),
     MEMBER_EXISTS(409, "Member exists"),
     EMAIL_EXISTS(409, "Email exists"),
     NAME_EXISTS(409, "Name exists"),
-    ANSWER_NOT_FOUND(404,"Answer not found"),
-    ANSWER_COMMENT_NOT_FOUND(404,"Answer comment not found"),
-    COMMENT_UPDATE_NOT_POSSIBLE(408, "Can't modify comments after 5 minutes"),
+    COMMENT_UPDATE_NOT_AVAILABLE(408, "Can't modify comments after 5 minutes"),
     ALREADY_VOTED(408, "Already voted up or down");
 
     @Getter
