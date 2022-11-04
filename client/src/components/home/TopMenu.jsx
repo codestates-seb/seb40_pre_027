@@ -68,7 +68,7 @@ function TopMenu() {
       </TopMenuBoxComponent>
 
       <ButtonListsComponent sort={sorted}>
-        {sortedArr.map((v, i) => (
+        {/* {sortedArr.map((v, i) => (
           <div
             key={i}
             className={sorted === v ? 'select' : ''}
@@ -76,7 +76,7 @@ function TopMenu() {
           >
             {v}
           </div>
-        ))}
+        ))} */}
       </ButtonListsComponent>
     </TopMenuComponent>
   );

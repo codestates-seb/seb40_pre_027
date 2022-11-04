@@ -83,8 +83,6 @@ function Post({ post, watchedTags, ignoredTags }) {
     profile,
     createdAt,
   } = post;
-  const imgurl =
-    'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
 
   const deleteTagContent = content
     .replace(/<[^>]*>?/g, '')
@@ -151,7 +149,6 @@ function Post({ post, watchedTags, ignoredTags }) {
             )}
           </div>
           <div className="info-user">
-            <img src={imgurl} alt="user-img" />
             <span className="user-name">{profile.name}</span>
             {/* <span className="user-answers">{15}</span> */}
             <span>{`asked at ${timeForToday(createdAt)}`}</span>
