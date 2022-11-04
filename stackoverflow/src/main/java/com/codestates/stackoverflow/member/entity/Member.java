@@ -48,7 +48,7 @@ public class Member extends Auditable {
 
     // 질문 영역
 
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "member")
     @ToString.Exclude
     @JsonManagedReference
     private List<Question> questions;
@@ -63,7 +63,7 @@ public class Member extends Auditable {
     private List<Answer> answers = new ArrayList<>();
 
 
-    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 

@@ -44,7 +44,6 @@ public class QuestionMapper {
         question.setQuestionId( requestBody.getQuestionId() );
         question.setTitle( requestBody.getTitle() );
         question.setContent( requestBody.getContent() );
-        String[] tags = requestBody.getTags();
 
         return question;
     }
@@ -55,7 +54,7 @@ public class QuestionMapper {
         }
 
         QuestionDto.Response response = new QuestionDto.Response();
-
+        response.setQuestionId(question.getQuestionId());
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
         response.setViewCount( question.getViewCount() );

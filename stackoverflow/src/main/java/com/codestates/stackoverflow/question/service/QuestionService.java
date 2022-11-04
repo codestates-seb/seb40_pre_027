@@ -54,13 +54,9 @@ public class QuestionService {
 
     public Question updateQuestion(Question question) {
         Question findQuestion = findValidQuestion(question.getQuestionId());
-
         Member authMember = memberServiceImpl.findAuthenticatedMember();
-        Member writer = findQuestion.getMember();
 
-        if(!Objects.equals(authMember.getMemberId(), writer.getMemberId())) {
-            throw new BusinessLogicException(ExceptionCode.NOT_WRITER);
-        }
+        verifyAuthor(findQuestion, authMember);
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(findQuestion::setTitle);
@@ -68,7 +64,7 @@ public class QuestionService {
                 .ifPresent(findQuestion::setContent);
         findQuestion.setModifiedAt(LocalDateTime.now());
 
-        ActiveInfo activeInfo = new ActiveInfo(writer.getMemberId(), findQuestion.getModifiedAt(), ActiveType.MODIFIED);
+        ActiveInfo activeInfo = new ActiveInfo(authMember.getMemberId(), findQuestion.getModifiedAt(), ActiveType.MODIFIED);
         question.setActiveInfo(activeInfo);
 
         return questionRepository.save(findQuestion);
@@ -115,6 +111,14 @@ public class QuestionService {
 
         return questionRepository.findByKeyword(keyword, PageRequest.of(page, size, Sort.by("questionId").descending()))
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND)).getContent();
+    }
+
+    private void verifyAuthor(Question question, Member authMember) {
+        Member writer = question.getMember();
+
+        if(!Objects.equals(authMember.getMemberId(), writer.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.NOT_WRITER);
+        }
     }
 
 //    @Transactional(readOnly = true)

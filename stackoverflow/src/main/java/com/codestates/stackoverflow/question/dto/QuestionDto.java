@@ -59,7 +59,7 @@ public class QuestionDto {
     @Setter
     public static class Response {
 
-        private long questionId;
+        private Long questionId;
 
         private String title;
 

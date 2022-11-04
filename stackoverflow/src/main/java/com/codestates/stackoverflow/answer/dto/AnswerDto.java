@@ -37,7 +37,6 @@ public class AnswerDto {
     @Builder
     public static class Response{
 
-
         private long answerId;
 
         private String answerContent;
