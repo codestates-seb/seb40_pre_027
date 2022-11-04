@@ -6,15 +6,14 @@ spring:
       path: /h2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/stackoverflow
-    url: jdbc:mysql://localhost:3306/stackpractice
+    url: jdbc:mysql://localhost:3306/stackoverflow
     username: root
     password: ${mysql-password}
 #    url: jdbc:h2:mem:test
   jpa:
 #    generate-ddl: true
-    database: mysql   # 추가 해준 부분
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
+#    database: mysql   # 추가 해준 부분
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
     hibernate:
       ddl-auto: create
     show-sql: true  # (2) SQL ?? ??
@@ -32,7 +31,7 @@ logging:
 # Security ??
 jwt:
   secret-key: werewrwdfdsfsfdvvdjerthgmfghyjrgqwrjlkljklhjkghkhgjgh
-  access-token-expiration-minutes: 360
+  access-token-expiration-minutes: 1
   refresh-token-expiration-minutes: 360
 
 # Test
