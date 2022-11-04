@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Tag from '../Tag';
-import LinkStyle from '../LinkStyle';
 import { useNavigate } from 'react-router-dom';
+import timeForToday from '../util/timeForToday';
 
 const PostComponent = styled.div`
   background: ${(props) => (props.watched ? 'rgb(253,247,226)' : '#fff')};
@@ -72,11 +72,20 @@ const PostComponent = styled.div`
 
 function Post({ post, watchedTags, ignoredTags }) {
   const navigate = useNavigate();
-  const { questionId, title, content, tags, viewCount, likeCount, answers, profile, createdAt } =
-    post;
+  const {
+    questionId,
+    title,
+    content,
+    tags,
+    viewCount,
+    likeCount,
+    answers,
+    profile,
+    createdAt,
+  } = post;
   const imgurl =
     'https://blog.kakaocdn.net/dn/tEMUl/btrDc6957nj/NwJoDw0EOapJNDSNRNZK8K/img.jpg';
-  const date = new Date(createdAt).toLocaleString();
+
   const deleteTagContent = content
     .replace(/<[^>]*>?/g, '')
     .replace(/&lt;/g, '')
@@ -143,8 +152,8 @@ function Post({ post, watchedTags, ignoredTags }) {
           <div className="info-user">
             <img src={imgurl} alt="user-img" />
             <span className="user-name">{profile.name}</span>
-            <span className="user-answers">{15}</span>
-            <span>{`asked at ${date}`}</span>
+            {/* <span className="user-answers">{15}</span> */}
+            <span>{`asked at ${timeForToday(createdAt)}`}</span>
           </div>
         </div>
       </div>

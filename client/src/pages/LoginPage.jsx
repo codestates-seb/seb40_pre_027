@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 //redux 관련 import
 import { useSelector, useDispatch } from 'react-redux';
-import { loginActions } from '../store/reduxIndex';
+import { loginActions } from '../store/login';
 
 const LoginPageComponent = styled.div`
   height: 100vh;
@@ -89,7 +89,7 @@ const LoginBox = styled.div`
 function LoginPage() {
   //useDispatch훅 dispatch 변수에 할당, useSelector를 통한 isLogin 상태 할당
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.isLogin);
+  const isLogin = useSelector((state) => state.login.isLogin);
   //useNavigate훅 navigate 변수에 할당
   const navigate = useNavigate();
 

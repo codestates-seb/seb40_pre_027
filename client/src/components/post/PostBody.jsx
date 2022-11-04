@@ -2,8 +2,9 @@ import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Editor } from '@toast-ui/react-editor';
+import { Editor, Viewer } from '@toast-ui/react-editor';
 import Button from '../Button';
+import timeForToday from '../util/timeForToday';
 
 import Tag from '../Tag';
 import Recommend from './Recommend';
@@ -16,6 +17,7 @@ const PostBodyComponent = styled.div`
   line-height: 1.25rem;
   border-bottom: 1px solid #d9d9d9;
   margin-bottom: 0.5rem;
+  width: 926px;
   button {
     margin: 1rem 0 0 0;
   }
@@ -131,6 +133,8 @@ const PostBodyComponent = styled.div`
     }
   }
   .comments {
+    display: flex;
+    align-items: center;
     border-top: 1px solid #d9d9d9;
     margin: 1.25rem 0;
     padding: 0.8rem 0;
@@ -163,53 +167,44 @@ function PostBody({
   idx,
   setAnswersArray,
   answersArray,
-  profile,
 }) {
   const {
     title,
-    createdAt,
     modifiedAt,
     questionId,
     tags,
     likeCount,
     content,
     memberId,
+    profile,
   } = post;
   const navigate = useNavigate();
-  const [shareClicked, setShareClicked] = useState(false);
   const [newAnswer, setNewAnswer] = useState('');
   const [comment, setComment] = useState('');
   const [answerIsPatch, setAnswerIsPatch] = useState(false);
   const [replyArray, setReplyArray] = useState([]);
   const [isComment, setIsComment] = useState(false);
   const userId = localStorage.getItem('memberId');
-  const [viewComment, setViewComment] = useState([]);
   const [viewMore, setViewMore] = useState(false);
 
-  const shareHandler = () => setShareClicked(!shareClicked);
   const contentRef = useRef();
   const editorRef = useRef();
 
-  const createdAtForDate = new Date(
-    answer ? answer.answerCreatedAt : createdAt
-  );
-  const modifiedAtForDate = new Date(
-    answer ? answer.answerModifiedAt : modifiedAt
-  );
   useEffect(() => {
     if (answerIsPatch) {
+      // 답변 edit 버튼을 눌렀을시 editor가 보여짐
       editorRef.current?.getInstance().setHTML(answer.answerContent);
     } else if (answer.answerId) {
+      // answer - comment
       setReplyArray(answer.replies);
     }
-    if (!viewMore && commentsArray && commentsArray.length > 3) {
-      setViewComment(commentsArray.slice(0, 3));
-    } else setViewComment(commentsArray);
   }, [answerIsPatch, viewMore]);
   const patchHandler = () => {
     if (answer.answerId) {
+      // answer - isPatch, editor on
       setAnswerIsPatch(true);
     } else {
+      // question - patch
       const contentArr = content.split(' <br calssName="boundary"/> ');
       const introduce = contentArr[0];
       const expand = contentArr[1];
@@ -224,10 +219,12 @@ function PostBody({
     }
   };
   const editorOnChange = () => {
+    // editor - onChange
     setNewAnswer(editorRef.current.getInstance().getHTML());
   };
   const deleteHandler = () => {
     if (answer.answerId) {
+      // answer - delete
       axios
         .delete(`/answer/${answer.answerId}`)
         .then(() => {
@@ -238,6 +235,7 @@ function PostBody({
         })
         .catch(() => alert('답변 삭제 실패'));
     } else {
+      // question - delete
       axios
         .delete(`/question/${questionId}`)
         .then(() => navigate('/'))
@@ -245,6 +243,7 @@ function PostBody({
     }
   };
   const answerPatchHandler = () => {
+    // answer - patch
     axios
       .patch(`/answer/${answer.answerId}`, {
         answerContent: newAnswer,
@@ -260,6 +259,7 @@ function PostBody({
     try {
       const access = localStorage.getItem('accessToken');
       if (answer.answerId) {
+        // answer - comment - post
         await axios.post(
           `/reply/${answer.answerId}`,
           {
@@ -270,6 +270,7 @@ function PostBody({
         const newPostData = await axios.get(`/question/${questionId}`);
         await setReplyArray(newPostData.data.answers[idx].replies);
       } else {
+        // question - comment - post
         await axios.post(
           `/comment/${questionId}`,
           { content: comment },
@@ -286,10 +287,12 @@ function PostBody({
   const commentOnDeleteHandler = async (id) => {
     try {
       if (answer.answerId) {
+        // answer - comment - delete
         await axios.delete(`/reply/${id}`);
         const newReplysArray = [...replyArray].filter((v) => v.replyId !== id);
         setReplyArray(newReplysArray);
       } else {
+        // question - comment - delete
         await axios.delete(`/comment/${id}`);
         const newCommentsArray = commentsArray.filter(
           (v) => v.commentId !== id
@@ -304,11 +307,13 @@ function PostBody({
   const commentOnPatchHandler = async (id, content, idx) => {
     try {
       if (answer.answerId) {
+        // answer - comment - patch
         await axios.patch(`/reply/${id}`, { replyContent: content });
         const newReplysArray = [...replyArray];
         newReplysArray[idx].replyContent = content;
         setReplyArray(newReplysArray);
       } else {
+        // question - comment - patch
         await axios.patch(`/comment/${id}`, { content });
         const newCommentsArray = [...commentsArray];
         newCommentsArray[idx].content = content;
@@ -328,6 +333,7 @@ function PostBody({
         questionId={questionId}
         questionLikeCount={likeCount}
         answerId={answer.answerId}
+        answerLikeCount={answer.answerLikesCount}
       />
       <div className="post-body-container">
         <section className="main-content" ref={contentRef}>
@@ -345,11 +351,7 @@ function PostBody({
               <Button onClick={answerPatchHandler}>수정</Button>
             </div>
           ) : (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: answer ? answer.answerContent : content,
-              }}
-            ></div>
+            <Viewer initialValue={answer ? answer.answerContent : content} />
           )}
         </section>
         {!answer && (
@@ -364,14 +366,8 @@ function PostBody({
                 className="menu-item"
                 title="Short permalink to this question"
               >
-                <div role="button" onClick={shareHandler} className="share">
+                <div role="button" className="share">
                   Share
-                  {shareClicked && (
-                    <div className="share-dropdown">
-                      <label>Share a link to this question</label>
-                      <input type="text" value={'/post'} />
-                    </div>
-                  )}
                 </div>
               </div>
               {memberId === +userId ? (
@@ -405,13 +401,12 @@ function PostBody({
             </div>
             <div className="edited-date-wrapper">
               <div className="edited-date" title="Show all edits to this post">
-                edited
-                {createdAtForDate.toLocaleString()}
+                {`edited ${timeForToday(modifiedAt)}`}
               </div>
             </div>
             <div className="post-owner-wrapper">
               <div className="created-date">
-                {createdAtForDate.toLocaleString()}
+                {new Date(profile.createdDate).toLocaleString()}
               </div>
               <div className="user-info">
                 <div className="user-avatar">
@@ -420,7 +415,7 @@ function PostBody({
                   </a>
                 </div>
                 <div className="user-details">
-                  <a href="/user">Happygoluck</a>
+                  <a href="/user">{profile.name}</a>
                   <div className="flair">
                     <span className="reputation-score">51</span>
                   </div>
@@ -429,43 +424,68 @@ function PostBody({
             </div>
           </div>
         </section>
+        {commentsArray && commentsArray.length && viewMore
+          ? commentsArray.map((comment, i) => (
+              <div className="comments" key={comment.commentId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={comment.commentId}
+                  idx={i}
+                >
+                  {comment.content}
+                </Comment>
+              </div>
+            ))
+          : commentsArray && commentsArray.length && !viewMore
+          ? commentsArray.slice(0, 3).map((comment, i) => (
+              <div className="comments" key={comment.commentId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={comment.commentId}
+                  idx={i}
+                >
+                  {comment.content}
+                </Comment>
+              </div>
+            ))
+          : replyArray.length && viewMore
+          ? replyArray.map((v, i) => (
+              <div className="comments" key={v.replyId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={v.replyId}
+                  idx={i}
+                >
+                  {v.replyContent}
+                </Comment>
+              </div>
+            ))
+          : replyArray.slice(0, 3).map((v, i) => (
+              <div className="comments" key={v.replyId}>
+                <Comment
+                  onDelete={commentOnDeleteHandler}
+                  onPatch={commentOnPatchHandler}
+                  id={v.replyId}
+                  idx={i}
+                >
+                  {v.replyContent}
+                </Comment>
+              </div>
+            ))}
+        {(replyArray && replyArray.length > 3) ||
+        (commentsArray && commentsArray.length > 3) ? (
+          !viewMore ? (
+            <div onClick={() => setViewMore(!viewMore)}>More view</div>
+          ) : (
+            <div onClick={() => setViewMore(!viewMore)}>less view</div>
+          )
+        ) : (
+          <></>
+        )}
 
-        {viewComment && viewComment.length ? (
-          viewComment.map((comment, i) => (
-            <div className="comments" key={comment.commentId}>
-              <Comment
-                onDelete={commentOnDeleteHandler}
-                onPatch={commentOnPatchHandler}
-                id={comment.commentId}
-                idx={i}
-              >
-                {comment.content}
-              </Comment>
-            </div>
-          ))
-        ) : replyArray.length ? (
-          replyArray.map((v, i) => (
-            <div className="comments" key={v.replyId}>
-              <Comment
-                onDelete={commentOnDeleteHandler}
-                onPatch={commentOnPatchHandler}
-                id={v.replyId}
-                idx={i}
-              >
-                {v.replyContent}
-              </Comment>
-            </div>
-          ))
-        ) : (
-          <></>
-        )}
-        {commentsArray && commentsArray.length > 3 ? (
-          <div onClick={() => setViewMore(!viewMore)}>
-            {viewMore ? 'view less' : 'view More'}
-          </div>
-        ) : (
-          <></>
-        )}
         <section
           className="add-comment"
           onClick={() => setIsComment(!isComment)}

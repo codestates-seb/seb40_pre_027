@@ -7,7 +7,7 @@ import LinkStyle from '../LinkStyle';
 import SocialLogin from '../SocialLogin';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 const AnswerPostComponent = styled.div`
   padding-left: 2rem;
   h2 {
@@ -65,26 +65,30 @@ const AnswerPostComponent = styled.div`
   }
 `;
 
-function AnswerPost({ answersArray, setAnswersArray }) {
+function AnswerPost({ setAnswersArray }) {
   const [guide, setGuide] = useState(false);
   const [answer, setAnswer] = useState('');
   const [guideview, setGuideview] = useState(false);
-  const navigate = useNavigate();
-  const isLogin = useSelector((state) => state.isLogin);
+  const isLogin = useSelector((state) => state.login.isLogin);
   const editorRef = useRef();
   const { id } = useParams();
   const guideHandler = () => {
+    // 처음 눌렀을 때 입력 가이드 출몰
     if (!guide && !guideview) {
       setGuide(true);
       setGuideview(true);
     }
   };
-  const guideCloseHandler = () => setGuideview(false);
+  const guideCloseHandler = () => {
+    // 입력 가이드 닫기
+    setGuideview(false);
+  };
   const onChange = () => {
     //toast ui editor
     setAnswer(editorRef.current.getInstance().getHTML());
   };
   const answerSubmitHandler = async () => {
+    // 답변 - post
     try {
       if (isLogin) {
         const access = localStorage.getItem('accessToken');

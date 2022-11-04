@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const TopMenuComponent = styled.div`
   h1 {
@@ -70,16 +70,6 @@ function TopMenu() {
           </div>
         ))}
       </ButtonListsComponent>
-      {/* <ButtonListsComponent>
-        <button>Month</button>
-        <button>Week</button>
-        <button>Hot</button>
-        <button>
-          <div>297</div>
-          &nbsp;bountied
-        </button>
-        <button>interesting</button>
-      </ButtonListsComponent> */}
     </TopMenuComponent>
   );
 }

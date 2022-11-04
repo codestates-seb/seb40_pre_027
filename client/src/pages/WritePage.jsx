@@ -9,7 +9,6 @@ import Modal from '../components/Modal';
 import InputArea from '../components/write/InputArea';
 import data from '../components/write/data';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 
 const WritePageComponent = styled.div`
   background: rgba(240, 240, 240, 0.6);
@@ -99,7 +98,10 @@ function WritePage() {
           .then((res) => {
             navigate('/');
           })
-          .catch(() => alert('글 생성 실패'));
+          .catch((err) => {
+            console.log(err);
+            alert('글 생성 실패');
+          });
       }
     }
   };
