@@ -70,10 +70,10 @@ const LeftBox = styled.div`
       width: 30px;
       height: 30px;
       margin-left: 75px;
-      margin-top: 15px;
+      margin-top: 20px;
     }
     & h3 {
-      width: 110px;
+      width: auto;
       height: 16px;
       margin-top: 27px;
       color: rgb(42, 116, 175);
@@ -87,7 +87,7 @@ const LeftBox = styled.div`
     font-size: 0.8rem;
     line-height: 2rem;
     margin-left: 80px;
-    margin-top: 15px;
+    margin-top: 19px;
   }
   & :nth-child(3) {
     height: 8vh;
@@ -141,15 +141,39 @@ const About = styled.div`
 
 function ProfilePage({ profiles }) {
   const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
   const [profile, setProfile] = useState([]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`/user/profile`, {
+  //       headers: { access: accessToken },
+  //     })
+  //     .then((res) => setProfile(res.data));
+  // }, [accessToken]);
+  // console.log(profile);
   useEffect(() => {
     axios
       .get(`/user/profile`, {
         headers: { access: accessToken },
       })
-      .then((res) => setProfile(res.data));
-  }, [accessToken]);
-  console.log(profile);
+      .then((res) => setProfile(res.data))
+      .catch((err) => {
+        if (err.response.status === 401) {
+          axios
+            .get('/user/auth/reissue', {
+              headers: { access: accessToken, refresh: refreshToken },
+            })
+            .then((res) => localStorage.getItem('accessToken', res.data.access))
+            .then(
+              axios.get(`/user/profile`, {
+                headers: { access: accessToken },
+              })
+            )
+
+            .catch((err) => console.log(err));
+        }
+      });
+  }, [accessToken, refreshToken]);
 
   return (
     <ProfilePages>

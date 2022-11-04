@@ -8,11 +8,10 @@ import Nav from '../home/Nav';
 import MyProfile from './MyProfile';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import CommentsRender from './CommentsRender';
 import QuestionRender from './QuestionRender';
 import AnswerRender from './AnswerRender';
 const ProfilePages = styled.main`
-  width: 100vw;
+  width: 100%;
   section {
     width: 100%;
     display: flex;
@@ -40,15 +39,16 @@ const ProfileTab = styled.div`
   }
 `;
 const WriteIn = styled.div`
-  width: 1000px;
+  width: 1100px;
   height: auto;
   margin-left: 40px;
-  margin-bottom: 40px;
+  margin: 45px;
 `;
 const LeftContent = styled.div`
   float: left;
   width: 50%;
-
+`;
+const LeftBox = styled.article`
   & h2 {
     font-size: 1.8rem;
     font-weight: 400;
@@ -56,15 +56,14 @@ const LeftContent = styled.div`
   }
   & div {
     width: 100%;
-    height: 65vh;
+    height: auto;
     border: 1px solid #c6c6c6;
     border-radius: 10px;
     margin-top: 15px;
     position: relative;
-
     & div {
-      border: 1px solid white;
-      height: 15vh;
+      border: none;
+      height: auto;
     }
     & h4 {
       font-size: 0.9rem;
@@ -91,7 +90,7 @@ const RightBox = styled.div`
   }
   & div {
     width: 100%;
-    height: 28vh;
+    height: auto;
     border: 1px solid #c6c6c6;
     border-radius: 10px;
     margin-top: 15px;
@@ -122,9 +121,11 @@ function Profilewrite() {
       .get(`/user/profile/write`, {
         headers: { access: accessToken },
       })
-      .then((res) => setWrite(res.data.questions));
+      .then((res) => setWrite(res.data));
   }, [accessToken]);
-  console.log(write);
+  const questions = write.questions;
+  const answers = write.answers;
+  console.log(questions);
   return (
     <>
       <ProfilePages>
@@ -143,26 +144,22 @@ function Profilewrite() {
             </ProfileTab>
             <WriteIn>
               <LeftContent>
-                <h2>View Comments</h2>
-                <div>
-                  <div>
-                    <CommentsRender
-                      className="writeList"
-                      WriteRen={write}
-                    ></CommentsRender>
-                    <h3>
-                      Your about me section is currently blank. Would you like
-                      to add one?
-                    </h3>
-                    <h4>Edit profile</h4>
-                  </div>
-                </div>
-              </LeftContent>
-              <RightContent>
-                <RightBox>
+                <LeftBox>
                   <h2>Questions</h2>
                   <div>
                     <div>
+                      {questions &&
+                        questions.map((el) => {
+                          return (
+                            <QuestionRender
+                              title={el.title}
+                              content={el.content}
+                              viewCount={el.viewCount}
+                              questionId={el.questionId}
+                            />
+                          );
+                        })}
+
                       <QuestionRender
                         className="writeList"
                         write={write}
@@ -176,11 +173,24 @@ function Profilewrite() {
                       </Link>
                     </div>
                   </div>
-                </RightBox>
+                </LeftBox>
+              </LeftContent>
+              <RightContent>
                 <RightBox>
                   <h2>Answer</h2>
                   <div>
                     <div>
+                      {answers &&
+                        answers.map((el) => {
+                          return (
+                            <AnswerRender
+                              answerContent={el.answerContent}
+                              answerCreatedAt={el.answerCreatedAt}
+                              answerId={el.answerId}
+                              answerLikesCount={el.answerLikesCount}
+                            />
+                          );
+                        })}
                       <AnswerRender
                         className="writeList"
                         WriteRen={write}
