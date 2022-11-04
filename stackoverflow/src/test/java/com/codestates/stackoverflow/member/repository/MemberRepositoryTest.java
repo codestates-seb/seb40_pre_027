@@ -19,11 +19,11 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-//    @BeforeEach
-//    public void clearRepository() {
-//        memberRepository.deleteAll();
-//
-//    }
+    @BeforeEach
+    public void clearRepository() {
+        memberRepository.deleteAll();
+
+    }
 
     @Test
     @DisplayName("이메일이 존재 유무 메서드 테스트")
