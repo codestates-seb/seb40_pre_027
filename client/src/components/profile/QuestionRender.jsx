@@ -32,7 +32,6 @@ const Question = styled.div`
 `;
 
 function QuestionRender({ title, content, questionId, viewCount }) {
-  console.log(title);
   return (
     <>
       <Question>

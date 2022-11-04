@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import AboutRender from '../components/profile/AboutRender';
-import requestDataWithToken from '../components/util/requestNewAccessToken'
+import requestDataWithToken from '../components/util/requestNewAccessToken';
 // import { useParams } from 'react-router-dom';
 const ProfilePages = styled.main`
   width: 100vw;
@@ -143,9 +143,9 @@ function ProfilePage({ profiles }) {
   const [profile, setProfile] = useState([]);
 
   useEffect(() => {
-    requestDataWithToken(setProfile)
+    requestDataWithToken(setProfile, `/user/profile`, 'get');
   }, []);
-   console.log(profile)
+  console.log(profile);
 
   return (
     <ProfilePages>
