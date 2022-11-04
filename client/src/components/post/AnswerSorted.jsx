@@ -40,16 +40,11 @@ const AnswerSortedComponent = styled.div`
   }
 `;
 
-function AnswerSorted({ answers }) {
-  const descArr = [
-    'Highest score(default)',
-    'Trending (recent votes count more)',
-    'Date modified (newest first)',
-    'Date created (oldest first)',
-  ];
+function AnswerSorted({ answers, desc, setDesc, descArr, arraySortHandler }) {
   const selectRef = useRef();
-  const [desc, setDesc] = useState(descArr[0]);
-  const selectHandler = (value) => setDesc(value);
+  const selectHandler = (value) => {
+    setDesc(value);
+  };
   const resetHandler = () => {
     // sorted select를 처음 상태로 돌림
     setDesc(descArr[0]);
