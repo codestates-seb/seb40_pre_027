@@ -89,15 +89,15 @@ function WritePage() {
     ) {
       if (inputData.id) {
         axios
-          .patch(`/question/${inputData.id}`, inputData)
-          .then(() => navigate('/'))
+          .patch(`/question/${inputData.id}`, newPostData, {
+            headers: { access },
+          })
+          .then((res) => navigate('/'))
           .catch(() => alert('글 수정 실패'));
       } else {
         axios
           .post('/question', newPostData, { headers: { access } })
-          .then((res) => {
-            navigate('/');
-          })
+          .then((res) => navigate('/'))
           .catch((err) => {
             console.log(err);
             alert('글 생성 실패');
