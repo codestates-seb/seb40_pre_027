@@ -58,6 +58,7 @@ public class Question {
 
     private String[] tags;
 
+
 //    public void setTags(Tag tag) {
 //        this.tags.add(tag);
 //        tag.setQuestion(this);

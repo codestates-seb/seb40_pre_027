@@ -44,6 +44,15 @@ public class QuestionDto {
         }
     }
 
+    public static class ResponseTest {
+        private long questionId;
+
+        private String title;
+
+        private String content;
+
+    }
+
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
@@ -96,7 +105,7 @@ public class QuestionDto {
 
         private int answerCount;
 
-        private List<TagDto.Response> tags;
+        private List<TagDto.Response> tagDtos;
 
         private int totalCount;
     }

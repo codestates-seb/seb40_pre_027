@@ -45,35 +45,36 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             // 로그인 또는 토큰 재발행 요청일 경우 아래 로직을 실행하지 않고 다음 필터로 넘김.
             log.info("[doFilterInternal] doFilter 실행");
             filterChain.doFilter(request, response);
-        }
+        } else {
+            log.info("[doFilterInternal] Jwt-Access 유효성 검증 시작");
+            try {
+                String base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(jwtProvider.getSecretKey());
 
-        log.info("[doFilterInternal] Jwt-Access 유효성 검증 시작");
-        try {
-            String base64EncodedSecretKey = jwtProvider.encodeBase64SecretKey(jwtProvider.getSecretKey());
+                // 요청받은 request에서 token을 가져온다.
+                String token = jwtProvider.getAccessTokenFromRequest(request);
 
-            // 요청받은 request에서 token을 가져온다.
-            String token = jwtProvider.getAccessTokenFromRequest(request);
+                boolean isValidated = jwtProvider.verifySignature(token, base64EncodedSecretKey); // 토큰이 유효한지 검증한다.
 
-            boolean isValidated = jwtProvider.verifySignature(token, base64EncodedSecretKey); // 토큰이 유효한지 검증한다.
+                if (token != null && isValidated) { // Headers에 token이 담겨있고 유효하다면 Security Context Holder에 저장함.
+                    Map<String, Object> claims = jwtProvider.getClaims(token, base64EncodedSecretKey).getBody();
+                    log.info(claims.get("username").toString() + "의 인증정보 저장");
+                    setAuthenticationToContext(claims);
+                } else {
+                    log.debug("유효한 JWT 토큰이 없습니다.");
+                }
+                filterChain.doFilter(request, response);
 
-            if (token != null && isValidated) { // Headers에 token이 담겨있고 유효하다면 Security Context Holder에 저장함.
-                Map<String, Object> claims = jwtProvider.getClaims(token, base64EncodedSecretKey).getBody();
-                log.info(claims.get("username").toString() + "의 인증정보 저장");
-                setAuthenticationToContext(claims);
-            } else {
-                log.debug("유효한 JWT 토큰이 없습니다.");
+            } catch (ExpiredJwtException e) {
+                log.error("ExpiredJwtException : " + e.getMessage());
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                request.setAttribute("ExpiredJwtException ", e);
+            } catch (Exception e) {
+                log.error("Exception : " + e.getMessage());
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                request.setAttribute("Exception ", e);
             }
-            filterChain.doFilter(request, response);
-
-        } catch (ExpiredJwtException e) {
-            log.error("ExpiredJwtException : " + e.getMessage());
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            request.setAttribute("ExpiredJwtException ", e);
-        } catch (Exception e) {
-            log.error("Exception : " + e.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            request.setAttribute("Exception ", e);
         }
+
     }
 
     @Override

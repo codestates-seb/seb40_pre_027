@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@Transactional
 public class JwtService {
 
     private final MemberRepository memberRepository;
@@ -33,11 +35,12 @@ public class JwtService {
 
         // 전달받은 refresh 검증
         if (!jwtProvider.verifySignature(rowRefreshToken, base64EncodeSecretKey)) {
+            log.info("Refresh Token 만료");
             response.setStatus(401); // 수정 필요
-            throw new RuntimeException();
+            throw new RuntimeException("Invalid Refresh Token");
         }
 
-        Map<String, Object> claims = jwtProvider.getClaims(accessToken, base64EncodeSecretKey).getBody();
+        Map<String, Object> claims = jwtProvider.getClaimsFromExpiredJwt(accessToken, base64EncodeSecretKey);
         String username = claims.get("username").toString();
         log.info("[JwtService - reissueAccessToken] username : " + username);
 
@@ -47,12 +50,14 @@ public class JwtService {
         log.info("refreshToken : " + refreshToken);
 
         if (!refreshToken.equals(rowRefreshToken)) {
-            throw new RuntimeException();
+            log.info("Refresh Token 일치하지 않음.");
+            throw new RuntimeException("Invalid Refresh Token");
         }
 
         String newToken = jwtProvider.generateAccessToken(claims,
                 username, jwtProvider.getTokenExpiration(jwtProvider.getAccessTokenExpirationMinutes()),
                 base64EncodeSecretKey);
+        log.info("new {}",SecurityContextHolder.getContext().toString());
         return newToken;
     }
 
