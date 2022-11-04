@@ -109,18 +109,14 @@ const About = styled.div`
   }
   & div {
     width: 100%;
-    height: 65vh;
+    height: auto;
     border: 1px solid #c6c6c6;
     border-radius: 10px;
     margin-top: 15px;
     position: relative;
     & div {
-      width: 100%;
-      height: 100%;
-      border: 1px solid white;
-      height: 4vh;
-      position: absolute;
-      top: 40%;
+      border: none;
+      height: auto;
     }
     & h4 {
       font-size: 0.9rem;
@@ -196,13 +192,13 @@ function ProfilePage({ profiles }) {
               <About>
                 <h2>ABOUT</h2>
                 <div>
-                  <AboutRender className="ProfileList" profiles={profiles}>
-                    {profiles &&
-                      profiles.map((user) => {
-                        return <div key={user.id}>{user.name}</div>;
-                      })}
-                  </AboutRender>
                   <div>
+                    <AboutRender className="ProfileList" profileRen={profile}>
+                      {profiles &&
+                        profiles.map((user) => {
+                          return <div key={user.id}>{user.name}</div>;
+                        })}
+                    </AboutRender>
                     <h3>
                       Your about me section is currently blank. Would you like
                       to add one?
