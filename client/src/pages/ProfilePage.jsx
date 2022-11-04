@@ -8,8 +8,8 @@ import SmallLogo from '../img/smallLogo.png';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import AboutRender from '../components/profile/AboutRender';
+import requestDataWithToken from '../components/util/requestNewAccessToken'
 // import { useParams } from 'react-router-dom';
 const ProfilePages = styled.main`
   width: 100vw;
@@ -140,40 +140,12 @@ const About = styled.div`
 `;
 
 function ProfilePage({ profiles }) {
-  const accessToken = localStorage.getItem('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
   const [profile, setProfile] = useState([]);
-  // useEffect(() => {
-  //   axios
-  //     .get(`/user/profile`, {
-  //       headers: { access: accessToken },
-  //     })
-  //     .then((res) => setProfile(res.data));
-  // }, [accessToken]);
-  // console.log(profile);
-  useEffect(() => {
-    axios
-      .get(`/user/profile`, {
-        headers: { access: accessToken },
-      })
-      .then((res) => setProfile(res.data))
-      .catch((err) => {
-        if (err.response.status === 401) {
-          axios
-            .get('/user/auth/reissue', {
-              headers: { access: accessToken, refresh: refreshToken },
-            })
-            .then((res) => localStorage.getItem('accessToken', res.data.access))
-            .then(
-              axios.get(`/user/profile`, {
-                headers: { access: accessToken },
-              })
-            )
 
-            .catch((err) => console.log(err));
-        }
-      });
-  }, [accessToken, refreshToken]);
+  useEffect(() => {
+    requestDataWithToken(setProfile)
+  }, []);
+   console.log(profile)
 
   return (
     <ProfilePages>
