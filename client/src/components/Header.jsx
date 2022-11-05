@@ -97,7 +97,6 @@ function Header() {
   //logoutHandler
   const logoutHandler = () => {
     //dispatch로 로그아웃 상태 redux에 저장
-    //logoutRequest();
     dispatch(loginActions.logout());
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
