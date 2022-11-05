@@ -1,11 +1,23 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/user/:path*",
       "destination": "http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/*"
     },
     {
-      "source": "/api/:path*/",
+      "source": "/question/:path*/",
+      "destination": "http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/:path*/"
+    },
+    {
+      "source": "/answer/:path*/",
+      "destination": "http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/:path*/"
+    },
+    {
+      "source": "/comment/:path*/",
+      "destination": "http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/:path*/"
+    },
+    {
+      "source": "/reply/:path*/",
       "destination": "http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/:path*/"
     }
   ]
