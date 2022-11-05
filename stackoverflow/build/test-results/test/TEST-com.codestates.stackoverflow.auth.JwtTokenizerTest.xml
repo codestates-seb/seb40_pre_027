@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.codestates.stackoverflow.auth.JwtTokenizerTest" tests="7" skipped="0" failures="1" errors="0" timestamp="2022-11-04T05:55:16" hostname="DESKTOP-IPR2CI1" time="1.737">
+<testsuite name="com.codestates.stackoverflow.auth.JwtTokenizerTest" tests="7" skipped="0" failures="1" errors="0" timestamp="2022-11-05T04:28:17" hostname="DESKTOP-IPR2CI1" time="2.61">
   <properties/>
   <testcase name="calendarToDateTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.013"/>
-  <testcase name="getClaimsTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.176"/>
+  <testcase name="getClaimsTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.978"/>
   <testcase name="encodeBase64SecretKeyTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.001"/>
-  <testcase name="generateAccessTokenTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.004"/>
-  <testcase name="does not throw any Exception when jws verify" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.016"/>
-  <testcase name="generateRefreshTokenTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.008">
+  <testcase name="generateAccessTokenTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.007"/>
+  <testcase name="does not throw any Exception when jws verify" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.029"/>
+  <testcase name="generateRefreshTokenTest()" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="0.01">
     <failure message="java.lang.NullPointerException" type="java.lang.NullPointerException">java.lang.NullPointerException
 	at com.codestates.stackoverflow.auth.provider.JwtProvider.generateRefreshToken(JwtProvider.java:102)
 	at com.codestates.stackoverflow.auth.JwtTokenizerTest.generateRefreshTokenTest(JwtTokenizerTest.java:70)
@@ -97,25 +97,25 @@
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 </failure>
   </testcase>
-  <testcase name="throw ExpiredJwtException when jws verify" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="1.515"/>
-  <system-out><![CDATA[2022-11-04 14:55:16.199  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
-2022-11-04 14:55:16.305  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
-2022-11-04 14:55:16.305  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [getClaims] 토큰의 Claims 생성 시작
+  <testcase name="throw ExpiredJwtException when jws verify" classname="com.codestates.stackoverflow.auth.JwtTokenizerTest" time="1.566"/>
+  <system-out><![CDATA[2022-11-05 13:28:17.134  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
+2022-11-05 13:28:17.866  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
+2022-11-05 13:28:17.867  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [getClaims] 토큰의 Claims 생성 시작
 a2V2aW4xMjM0MTIzNDEyMzQxMjM0MTIzNDEyMzQxMjM0
-2022-11-04 14:55:16.377  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
-2022-11-04 14:55:16.378  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
-eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJzdWIiOiJ0ZXN0IGFjY2VzcyB0b2tlbiIsImlhdCI6MTY2NzU0MTMxNiwiZXhwIjoxNjY3NTQxOTE2fQ.W7qt5ayD_Ik2U4zc17rJt2uIVeTFxWSgMXRKHRxCn1I
-2022-11-04 14:55:16.381  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
-2022-11-04 14:55:16.382  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
-2022-11-04 14:55:16.389  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] 토큰 검증 시작
-2022-11-04 14:55:16.395  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] claims : {roles=[USER], memberId=1, sub=test access token, iat=1667541316, exp=1667541916}
-2022-11-04 14:55:16.399  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createRefreshToken] 토큰 생성 시작
-2022-11-04 14:55:16.401  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : generateRefreshToken test refresh token
-2022-11-04 14:55:16.407  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
-2022-11-04 14:55:16.409  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
-2022-11-04 14:55:16.410  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] 토큰 검증 시작
-2022-11-04 14:55:16.413  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] claims : {roles=[USER], memberId=1, sub=test access token, iat=1667541316, exp=1667541317}
-2022-11-04 14:55:17.917  INFO 2884 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] 토큰 검증 시작
+2022-11-05 13:28:18.115  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
+2022-11-05 13:28:18.119  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
+eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJzdWIiOiJ0ZXN0IGFjY2VzcyB0b2tlbiIsImlhdCI6MTY2NzYyMjQ5OCwiZXhwIjoxNjY3NjIzMDk4fQ._cHoieaPQEzJ0tl19VJ_JfXVfXF9Fgt5FWmz2_uBKhk
+2022-11-05 13:28:18.122  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
+2022-11-05 13:28:18.128  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
+2022-11-05 13:28:18.138  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] 토큰 검증 시작
+2022-11-05 13:28:18.149  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] claims : {roles=[USER], memberId=1, sub=test access token, iat=1667622498, exp=1667623098}
+2022-11-05 13:28:18.153  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createRefreshToken] 토큰 생성 시작
+2022-11-05 13:28:18.155  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : generateRefreshToken test refresh token
+2022-11-05 13:28:18.164  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 시작
+2022-11-05 13:28:18.167  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [createAccessToken] 토큰 생성 완료
+2022-11-05 13:28:18.168  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] 토큰 검증 시작
+2022-11-05 13:28:18.175  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] claims : {roles=[USER], memberId=1, sub=test access token, iat=1667622498, exp=1667622499}
+2022-11-05 13:28:19.704  INFO 30792 --- [    Test worker] c.c.s.auth.provider.JwtProvider          : [verifySignature] 토큰 검증 시작
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

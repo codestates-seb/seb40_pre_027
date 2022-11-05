@@ -12,5 +12,8 @@
         <module name="stackoverflow.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="stackoverflow.querydsl" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,7 +1,6 @@
 package com.codestates.stackoverflow.tag.service;
 
 import com.codestates.stackoverflow.question.entity.QuestionTag;
-import com.codestates.stackoverflow.question.repository.QuestionRepository;
 import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.tag.entity.Tag;
 import com.codestates.stackoverflow.tag.repository.TagRepository;
@@ -9,19 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,21 +22,51 @@ public class TagService {
 
     public List<Tag> saveTags(List<Tag> tagList, Long questionId) {
         log.info("[saveTags] 동작");
+        List<QuestionTag> questionTags = questionTagRepository.findByQuestionId(questionId);
+        Set<Long> tagIdSet = new HashSet<>();
         for (Tag tag : tagList) {
             Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
-            if (optionalTag.isEmpty()) {
-                tag = tagRepository.save(tag);
-            } else {
+
+            // 저장된 태그가 있다면
+                // 물어본 횟수를 1 늘려준 뒤 저장한다.
+                // 게시글_태그 기록이 없다면 생성한다.
+            if(optionalTag.isPresent()) {
                 tag = optionalTag.get();
+                tag.setAskedTotal(tag.getAskedTotal() + 1);
+                tag = tagRepository.save(tag);
+                if (questionTagRepository.findByQuestionIdAndContent(questionId, tag.getTagName()).isEmpty()) {
+                    questionTagRepository.save(new QuestionTag(questionId, tag.getTagId(), tag.getTagName()));
+                }
             }
-            log.info("[saveTags] tag: " + tag);
-            QuestionTag questionTag = new QuestionTag(questionId, tag.getTagId(), tag.getTagName());
-            questionTagRepository.save(questionTag);
-            log.info("[saveTags] questionTag: " + questionTag);
+            //저장된 태그가 없다면, 태그와 게시글_태그를 저장한다.
+            else {
+                tag.setAskedTotal(1);
+                tag = tagRepository.save(tag);
+                questionTagRepository.save(new QuestionTag(questionId, tag.getTagId(), tag.getTagName()));
+            }
+            tagIdSet.add(tag.getTagId());
         }
+        deleteUnusedQuestionTags(questionTags, tagIdSet);
         return tagList;
     }
+    //현재 question의 questionTag의 목록
+    //검증하려는 tag
+        //questionTag를 순회하면서
+            //
+    public void deleteUnusedQuestionTags(List<QuestionTag> questionTags, Set<Long> tagIdSet) {
+        // questionTag가
+        List<Long> idCheckList = questionTags.stream()
+                .map(questionTag -> questionTag.getQuestionTagId())
+                .collect(Collectors.toList());
 
+        for (QuestionTag questionTag : questionTags) {
+            if (tagIdSet.contains(questionTag.getTagId())) {
+                idCheckList.remove(questionTag.getQuestionTagId());
+            }
+        }
+
+        idCheckList.stream().forEach(questionTagRepository::deleteByQuestionTagId);
+    }
     /**
      * Popular, Name, New 기준별 정렬된 태그 페이지 조회
      */

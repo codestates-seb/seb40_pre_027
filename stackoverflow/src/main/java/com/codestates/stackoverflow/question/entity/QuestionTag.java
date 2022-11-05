@@ -3,6 +3,7 @@ package com.codestates.stackoverflow.question.entity;
 import com.codestates.stackoverflow.tag.entity.Tag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter @Setter
 @Entity
+@NoArgsConstructor
 public class QuestionTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

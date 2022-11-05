@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0s</div>
+<div class="counter">0.001s</div>
 <p>duration</p>
 </div>
 </td>
@@ -379,7 +379,7 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 <tr>
 <td class="failures">이름 존재 유무 메서드 테스트</td>
 <td class="failures">existsByName()</td>
-<td class="failures">0s</td>
+<td class="failures">0.001s</td>
 <td class="failures">failed</td>
 </tr>
 </table>
@@ -387,12 +387,12 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 <div id="tab2" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2022-11-04 14:55:17.926  INFO 2884 --- [    Test worker] b.t.a.o.j.DataJpaTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.codestates.stackoverflow.member.repository.MemberRepositoryTest], using SpringBootContextLoader
-2022-11-04 14:55:17.928  INFO 2884 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.codestates.stackoverflow.member.repository.MemberRepositoryTest]: no resource found for suffixes {-context.xml, Context.groovy}.
-2022-11-04 14:55:17.928  INFO 2884 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.codestates.stackoverflow.member.repository.MemberRepositoryTest]: MemberRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2022-11-04 14:55:17.962  INFO 2884 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.codestates.stackoverflow.StackoverflowApplication for test class com.codestates.stackoverflow.member.repository.MemberRepositoryTest
-2022-11-04 14:55:17.965  INFO 2884 --- [    Test worker] b.t.a.o.j.DataJpaTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
-2022-11-04 14:55:17.966  INFO 2884 --- [    Test worker] b.t.a.o.j.DataJpaTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@1e7cfd49, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@3a8640f7, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@ca10069, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@45e69324, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@3c89b864, org.springframework.test.context.support.DirtiesContextTestExecutionListener@3400d6fa, org.springframework.test.context.transaction.TransactionalTestExecutionListener@30a62a5b, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@41a8f0d8, org.springframework.test.context.event.EventPublishingTestExecutionListener@30133a11, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@2168def, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@3639b04, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@5cb8580, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@2ca1e49a, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@1aee6d14, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@54a6ef6]
+<pre>2022-11-05 13:28:19.770  INFO 30792 --- [    Test worker] b.t.a.o.j.DataJpaTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.codestates.stackoverflow.member.repository.MemberRepositoryTest], using SpringBootContextLoader
+2022-11-05 13:28:19.779  INFO 30792 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.codestates.stackoverflow.member.repository.MemberRepositoryTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2022-11-05 13:28:19.780  INFO 30792 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.codestates.stackoverflow.member.repository.MemberRepositoryTest]: MemberRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2022-11-05 13:28:20.024  INFO 30792 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.codestates.stackoverflow.StackoverflowApplication for test class com.codestates.stackoverflow.member.repository.MemberRepositoryTest
+2022-11-05 13:28:20.037  INFO 30792 --- [    Test worker] b.t.a.o.j.DataJpaTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2022-11-05 13:28:20.038  INFO 30792 --- [    Test worker] b.t.a.o.j.DataJpaTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@2aa07d80, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@69c1ea07, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@5cbe72b9, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@27fc0217, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@e993715, org.springframework.test.context.support.DirtiesContextTestExecutionListener@686e7513, org.springframework.test.context.transaction.TransactionalTestExecutionListener@47eae91d, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@c1a74d, org.springframework.test.context.event.EventPublishingTestExecutionListener@472719df, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@5cfa2ac5, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@4cc89246, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@413eaf5d, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@3e28af44, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@33891646, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@3bdbf8d3]
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -402,14 +402,14 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.7.1)
 
-2022-11-04 14:55:18.029  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 2884 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
-2022-11-04 14:55:18.029  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2022-11-04 14:55:18.366  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-11-04 14:55:18.501  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 133 ms. Found 10 JPA repository interfaces.
-2022-11-04 14:55:18.688 DEBUG 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
-2022-11-04 14:55:18.689  INFO 2884 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-11-04 14:55:18.710  INFO 2884 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2022-11-04 14:55:19.756 ERROR 2884 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Exception during pool initialization.
+2022-11-05 13:28:20.466  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 30792 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
+2022-11-05 13:28:20.467  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2022-11-05 13:28:21.669  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-05 13:28:22.143  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 470 ms. Found 9 JPA repository interfaces.
+2022-11-05 13:28:23.816 DEBUG 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2022-11-05 13:28:23.816  INFO 30792 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-05 13:28:23.874  INFO 30792 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2022-11-05 13:28:25.061 ERROR 30792 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Exception during pool initialization.
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -552,7 +552,7 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:19.772  WARN 2884 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
+2022-11-05 13:28:25.073  WARN 30792 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -695,12 +695,12 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:19.774 ERROR 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:19.775  WARN 2884 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:19.776  INFO 2884 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
+2022-11-05 13:28:25.075 ERROR 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:25.075  WARN 30792 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:25.076  INFO 30792 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2022-11-04 14:55:19.791 ERROR 2884 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
+2022-11-05 13:28:25.093 ERROR 30792 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
 
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-5.3.21.jar:5.3.21]
@@ -845,14 +845,14 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.7.1)
 
-2022-11-04 14:55:19.836  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 2884 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
-2022-11-04 14:55:19.836  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2022-11-04 14:55:20.055  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-11-04 14:55:20.184  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 128 ms. Found 10 JPA repository interfaces.
-2022-11-04 14:55:20.422 DEBUG 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
-2022-11-04 14:55:20.422  INFO 2884 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-11-04 14:55:20.447  INFO 2884 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
-2022-11-04 14:55:21.496 ERROR 2884 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Exception during pool initialization.
+2022-11-05 13:28:25.139  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 30792 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
+2022-11-05 13:28:25.139  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2022-11-05 13:28:25.363  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-05 13:28:25.536  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 170 ms. Found 9 JPA repository interfaces.
+2022-11-05 13:28:25.829 DEBUG 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2022-11-05 13:28:25.829  INFO 30792 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-05 13:28:25.847  INFO 30792 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2022-11-05 13:28:26.929 ERROR 30792 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Exception during pool initialization.
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -994,7 +994,7 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:21.506  WARN 2884 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
+2022-11-05 13:28:26.939  WARN 30792 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -1136,12 +1136,12 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:21.508 ERROR 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:21.508  WARN 2884 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:21.509  INFO 2884 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
+2022-11-05 13:28:26.941 ERROR 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:26.941  WARN 30792 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:26.942  INFO 30792 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2022-11-04 14:55:21.517 ERROR 2884 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
+2022-11-05 13:28:26.957 ERROR 30792 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
 
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-5.3.21.jar:5.3.21]
@@ -1276,7 +1276,7 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) ~[hibernate-core-5.6.9.Final.jar:5.6.9.Final]
 	... 119 common frames omitted
 
-2022-11-04 14:55:21.528 ERROR 2884 --- [    Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@3c89b864] to prepare test instance [com.codestates.stackoverflow.member.repository.MemberRepositoryTest@20155dae]
+2022-11-05 13:28:26.970 ERROR 30792 --- [    Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@e993715] to prepare test instance [com.codestates.stackoverflow.member.repository.MemberRepositoryTest@7028b5cc]
 
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132) ~[spring-test-5.3.21.jar:5.3.21]
@@ -1424,14 +1424,14 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.7.1)
 
-2022-11-04 14:55:21.576  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 2884 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
-2022-11-04 14:55:21.577  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2022-11-04 14:55:21.783  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-11-04 14:55:21.912  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 128 ms. Found 10 JPA repository interfaces.
-2022-11-04 14:55:22.099 DEBUG 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
-2022-11-04 14:55:22.100  INFO 2884 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-11-04 14:55:22.115  INFO 2884 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
-2022-11-04 14:55:23.150 ERROR 2884 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Exception during pool initialization.
+2022-11-05 13:28:27.047  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 30792 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
+2022-11-05 13:28:27.047  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2022-11-05 13:28:27.349  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-05 13:28:27.526  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 174 ms. Found 9 JPA repository interfaces.
+2022-11-05 13:28:27.764 DEBUG 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2022-11-05 13:28:27.764  INFO 30792 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-05 13:28:27.775  INFO 30792 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2022-11-05 13:28:28.833 ERROR 30792 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Exception during pool initialization.
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -1574,7 +1574,7 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:23.162  WARN 2884 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
+2022-11-05 13:28:28.846  WARN 30792 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -1717,12 +1717,12 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:23.164 ERROR 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:23.164  WARN 2884 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:23.166  INFO 2884 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
+2022-11-05 13:28:28.847 ERROR 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:28.848  WARN 30792 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:28.850  INFO 30792 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2022-11-04 14:55:23.177 ERROR 2884 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
+2022-11-05 13:28:28.869 ERROR 30792 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
 
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-5.3.21.jar:5.3.21]
@@ -1867,14 +1867,14 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.7.1)
 
-2022-11-04 14:55:23.216  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 2884 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
-2022-11-04 14:55:23.216  INFO 2884 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2022-11-04 14:55:23.421  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-11-04 14:55:23.555  INFO 2884 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 133 ms. Found 10 JPA repository interfaces.
-2022-11-04 14:55:23.772 DEBUG 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
-2022-11-04 14:55:23.772  INFO 2884 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-11-04 14:55:23.793  INFO 2884 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
-2022-11-04 14:55:24.833 ERROR 2884 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Exception during pool initialization.
+2022-11-05 13:28:28.933  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : Starting MemberRepositoryTest using Java 11.0.15 on DESKTOP-IPR2CI1 with PID 30792 (started by jodic in C:\Users\jodic\IdeaProjects\seb40_pre_027\stackoverflow)
+2022-11-05 13:28:28.933  INFO 30792 --- [    Test worker] c.c.s.m.repository.MemberRepositoryTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2022-11-05 13:28:29.373  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-05 13:28:29.597  INFO 30792 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 223 ms. Found 9 JPA repository interfaces.
+2022-11-05 13:28:29.891 DEBUG 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2022-11-05 13:28:29.892  INFO 30792 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-05 13:28:29.908  INFO 30792 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2022-11-05 13:28:30.953 ERROR 30792 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Exception during pool initialization.
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -2016,7 +2016,7 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:24.841  WARN 2884 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
+2022-11-05 13:28:30.970  WARN 30792 --- [    Test worker] o.h.e.j.e.i.JdbcEnvironmentInitiator     : HHH000342: Could not obtain connection to query metadata
 
 java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129) ~[mysql-connector-java-8.0.29.jar:8.0.29]
@@ -2158,12 +2158,12 @@ java.sql.SQLException: Access denied for user 'root'@'localhost' (using password
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
 
-2022-11-04 14:55:24.842 ERROR 2884 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:24.843  WARN 2884 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
-2022-11-04 14:55:24.844  INFO 2884 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
+2022-11-05 13:28:30.971 ERROR 30792 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:30.972  WARN 30792 --- [    Test worker] s.c.a.AnnotationConfigApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
+2022-11-05 13:28:30.973  INFO 30792 --- [    Test worker] ConditionEvaluationReportLoggingListener : 
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2022-11-04 14:55:24.854 ERROR 2884 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
+2022-11-05 13:28:30.992 ERROR 30792 --- [    Test worker] o.s.boot.SpringApplication               : Application run failed
 
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.service.spi.ServiceException: Unable to create requested service [org.hibernate.engine.jdbc.env.spi.JdbcEnvironment]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-5.3.21.jar:5.3.21]
@@ -2298,7 +2298,7 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) ~[hibernate-core-5.6.9.Final.jar:5.6.9.Final]
 	... 119 common frames omitted
 
-2022-11-04 14:55:24.864 ERROR 2884 --- [    Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@3c89b864] to prepare test instance [com.codestates.stackoverflow.member.repository.MemberRepositoryTest@55c8fc60]
+2022-11-05 13:28:31.013 ERROR 30792 --- [    Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@e993715] to prepare test instance [com.codestates.stackoverflow.member.repository.MemberRepositoryTest@43de9fc9]
 
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132) ~[spring-test-5.3.21.jar:5.3.21]
@@ -2448,7 +2448,7 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.5.1</a> at 2022. 11. 4. 오후 2:55:25</p>
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at 2022. 11. 5. 오후 1:28:31</p>
 </div>
 </div>
 </body>

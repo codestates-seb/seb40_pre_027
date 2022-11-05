@@ -10,14 +10,13 @@ import com.codestates.stackoverflow.member.entity.Member;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-11-04T14:54:50+0900",
+    date = "2022-11-05T13:27:59+0900",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.5.1.jar, environment: Java 11.0.15 (Oracle Corporation)"
 )
 @Component
@@ -67,6 +66,7 @@ public class MemberMapperImpl implements MemberMapper {
 
         member.setCreatedDate( request.getCreatedDate() );
         member.setLoginDate( request.getLoginDate() );
+        member.setMemberId( request.getMemberId() );
         member.setName( request.getName() );
         member.setLocation( request.getLocation() );
         member.setTitle( request.getTitle() );
@@ -83,6 +83,7 @@ public class MemberMapperImpl implements MemberMapper {
 
         MemberDto.Profile profile = new MemberDto.Profile();
 
+        profile.setMemberId( member.getMemberId() );
         profile.setName( member.getName() );
         profile.setLoginDate( member.getLoginDate() );
         profile.setCreatedDate( member.getCreatedDate() );
@@ -118,19 +119,13 @@ public class MemberMapperImpl implements MemberMapper {
 
         QuestionDto.Response response = new QuestionDto.Response();
 
-        if ( question.getQuestionId() != null ) {
-            response.setQuestionId( question.getQuestionId() );
-        }
+        response.setQuestionId( question.getQuestionId() );
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
         response.setViewCount( question.getViewCount() );
         response.setLikeCount( question.getLikeCount() );
         response.setCreatedAt( question.getCreatedAt() );
         response.setModifiedAt( question.getModifiedAt() );
-        String[] tags = question.getTags();
-        if ( tags != null ) {
-            response.setTags( Arrays.copyOf( tags, tags.length ) );
-        }
         List<Comment> list = question.getComments();
         if ( list != null ) {
             response.setComments( new ArrayList<Comment>( list ) );

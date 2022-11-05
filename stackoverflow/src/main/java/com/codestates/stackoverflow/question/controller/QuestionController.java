@@ -3,6 +3,7 @@ package com.codestates.stackoverflow.question.controller;
 import com.codestates.stackoverflow.question.dto.MultiResponseDto;
 import com.codestates.stackoverflow.question.mapper.QuestionMapper;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
+import com.codestates.stackoverflow.question.repository.QuestionTagRepository;
 import com.codestates.stackoverflow.questionLikes.service.QuestionLikeService;
 import com.codestates.stackoverflow.question.dto.QuestionDto;
 import com.codestates.stackoverflow.question.entity.Question;
@@ -30,20 +31,17 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionLikeService questionLikesService;
     private final QuestionRepository questionRepository;
+    private final QuestionTagRepository questionTagRepository;
     private final QuestionMapper questionMapper;
     private final TagMapper tagMapper;
     private final TagService tagService;
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
-        log.info("[postQuestion] 동작");
-
         Question question = questionService.createQuestion(questionMapper.questionPostToQuestion(requestBody));
-        log.info("[postQuestion] question: " + question);
 
         List<Tag> tags = tagMapper.tagNamesToTags(requestBody.getTags());
         tags = tagService.saveTags(tags, question.getQuestionId());
-
 
         QuestionDto.Response response = questionMapper.questionToQuestionResponse(question);
         response.setTags(requestBody.getTags());
@@ -53,18 +51,26 @@ public class QuestionController {
                 HttpStatus.CREATED);
     }
 
+    @PostMapping("/{question-id}/vote")
+    public @ResponseBody int like(@PathVariable("question-id") @Positive Long questionId,
+                                  @RequestParam int val) {
+        return questionLikesService.saveLike(questionId, val);
+    }
+
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long questionId,
                                          @Valid @RequestBody QuestionDto.Patch requestBody) {
         requestBody.setQuestionId(questionId);
         Question question = questionService.updateQuestion(questionMapper.questionPatchToQuestion(requestBody));
+
         List<Tag> tags = tagMapper.tagNamesToTags(requestBody.getTags());
         tagService.saveTags(tags, question.getQuestionId());
+
         QuestionDto.Response response = questionMapper.questionToQuestionResponse(question);
         response.setTags(requestBody.getTags());
 
         return new ResponseEntity<>(
-                questionMapper.questionToQuestionResponse(question),
+                response,
                 HttpStatus.OK);
     }
 
@@ -113,17 +119,30 @@ public class QuestionController {
         );
     }
 
+    /**
+     * 요청의 tag 전달 방식에 따라 추후 변경 가능
+     */
+    @GetMapping("/tagged/{tag}")
+    public ResponseEntity getQuestionsViaTag(
+            @PathVariable(value = "tag") String tagName,
+            @RequestParam(required = false) String tab,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        if(page == null) page = 1;
+        if(size == null) size = 30;
+
+        List<Question> questions = questionService.findTaggedQuestions(tagName, tab, page - 1, size).getContent();
+        List<QuestionDto.Response> responses = questionMapper.questionsToQuestionResponses(questions);
+
+        return new ResponseEntity(new MultiResponseDto(responses, questionRepository.countAllQuestions()),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(
             @PathVariable("question-id") @Positive Long questionId) {
             questionService.deleteQuestion(questionId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/{question-id}/vote")
-    public @ResponseBody int like(@PathVariable("question-id") @Positive Long questionId,
-                                  @RequestParam int val) {
-        return questionLikesService.saveLike(questionId, val);
     }
 }

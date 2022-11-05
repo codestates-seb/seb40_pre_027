@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-11-04T21:47:55+0900",
+    date = "2022-11-05T13:35:49+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.3 (Azul Systems, Inc.)"
 )
 @Component
@@ -119,9 +119,7 @@ public class MemberMapperImpl implements MemberMapper {
 
         QuestionDto.Response response = new QuestionDto.Response();
 
-        if ( question.getQuestionId() != null ) {
-            response.setQuestionId( question.getQuestionId() );
-        }
+        response.setQuestionId( question.getQuestionId() );
         response.setTitle( question.getTitle() );
         response.setContent( question.getContent() );
         response.setViewCount( question.getViewCount() );
