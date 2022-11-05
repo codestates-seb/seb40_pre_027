@@ -37,7 +37,7 @@ function QuestionRender({ title, content, questionId, viewCount }) {
   if (content) {
     DeleteTags = content.replace(/<[^>]*>?/g, '');
   }
-  //vecel 회원가입후 수정
+  //vecel 회원가입후 수정 2차2차2차
   return (
     <>
       <Question>
