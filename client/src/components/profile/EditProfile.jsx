@@ -88,7 +88,8 @@ function EditProfile() {
     });
     // console.log(edit);
   };
-
+  // test
+  
   // get요청
   useEffect(() => {
     requestDataWithToken(setEdit, '/user/profile/edit', 'get');
