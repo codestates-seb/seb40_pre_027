@@ -7,6 +7,6 @@
     {
       "source": "/answer/:path*/",
       "destination": "http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/:path*/"
-    }
+     }
   ]
 }
