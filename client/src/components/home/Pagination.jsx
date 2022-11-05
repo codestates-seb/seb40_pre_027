@@ -76,7 +76,9 @@ function Pagination({
   currentPageHandler,
   paginationLength,
 }) {
-  const pagination = Array(Math.ceil(paginationLength / size))
+  const pagination = Array(
+    Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
+  )
     .fill()
     .map((v, i) => i + 1);
   const pers = [15, 30, 50];

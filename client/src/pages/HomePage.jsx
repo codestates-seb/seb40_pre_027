@@ -91,7 +91,7 @@ function HomePage() {
             sizeHandler={sizeHandler}
             currentPage={currentPage}
             currentPageHandler={currentPageHandler}
-            paginationLength={paginationLength}
+            paginationLength={paginationLength ? paginationLength : 1}
           />
         </article>
         <aside>
