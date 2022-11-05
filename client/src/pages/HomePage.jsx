@@ -77,7 +77,7 @@ function HomePage() {
         <Nav />
         <article>
           <TopMenu />
-          {posts.length ? (
+          {posts && posts.length ? (
             <PostList
               posts={posts}
               watchedTags={watchedTags}

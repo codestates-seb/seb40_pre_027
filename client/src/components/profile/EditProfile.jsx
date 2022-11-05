@@ -95,9 +95,8 @@ function EditProfile() {
   }, []);
 
   // put요청
-  const putData = { name: '', location: '', title: '', introduction: '' };
   function putProfile() {
-    requestDataWithToken(setEdit, '/user/profile/edit', 'put', putData);
+    requestDataWithToken(setEdit, '/user/profile/edit', 'put', edit);
   }
 
   return (

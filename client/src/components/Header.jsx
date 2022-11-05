@@ -94,17 +94,6 @@ function Header() {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.login.isLogin);
 
-  //로그아웃 axios 요청
-  // async function logoutRequest() {
-  //   try {
-  //     const res = await axios.get('/user/logout');
-  //     console.log(res);
-  //   } catch (error) {
-  //     alert(error);
-  //     console.log(error);
-  //   }
-  // }
-
   //logoutHandler
   const logoutHandler = () => {
     //dispatch로 로그아웃 상태 redux에 저장

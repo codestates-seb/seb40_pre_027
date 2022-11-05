@@ -41,13 +41,39 @@ function PostPage() {
   const [answersArray, setAnswersArray] = useState([]);
   const [commentsArray, setCommentsArray] = useState([]);
   const { id } = useParams();
+  const descArr = [
+    'Highest score(default)',
+    'Date modified (newest first)',
+    'Date created (oldest first)',
+  ];
+  const [desc, setDesc] = useState(descArr[0]);
+  const arraySortHandler = (a, b) => {
+    // 답변 정렬 함수
+    if (desc) {
+      if (desc === 'Highest score(default)') {
+        return b.answerLikesCount - a.answerLikesCount;
+      } else if (desc === 'Date modified (newest first)') {
+        const dateA = new Date(a.answerCreatedAt);
+        const dateB = new Date(b.answerCreatedAt);
+        return dateB - dateA;
+      } else if (desc === 'Date created (oldest first)') {
+        const dateA = new Date(a.answerModifiedAt);
+        const dateB = new Date(b.answerModifiedAt);
+        return dateA - dateB;
+      }
+    }
+  };
   useEffect(() => {
     axios.get(`/question/${id}`).then((res) => {
       setPost(res.data);
-      setAnswersArray(res.data.answers);
+      setAnswersArray(res.data.answers.sort(arraySortHandler));
       setCommentsArray(res.data.comments);
     });
   }, []);
+  useEffect(() => {
+    setAnswersArray([...answersArray].sort(arraySortHandler));
+  }, [desc]);
+
   return (
     <PostPageComponent>
       <Header />
@@ -64,7 +90,12 @@ function PostPage() {
                   setCommentsArray={setCommentsArray}
                   commentsArray={commentsArray}
                 />
-                <AnswerSorted answers={answersArray.length} />
+                <AnswerSorted
+                  answers={answersArray.length}
+                  desc={desc}
+                  setDesc={setDesc}
+                  descArr={descArr}
+                />
                 {answersArray.length ? (
                   answersArray.map((answer, i) => (
                     <PostBody
