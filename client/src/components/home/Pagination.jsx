@@ -76,11 +76,13 @@ function Pagination({
   currentPageHandler,
   paginationLength,
 }) {
+  console.log(paginationLength, size);
   const pagination = Array(
     Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
   )
     .fill()
     .map((v, i) => i + 1);
+  console.log(pagination);
   const pers = [15, 30, 50];
   const pageNextBtn = () => {
     if (currentPage + 1 <= pagination.length) {
