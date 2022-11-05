@@ -8,10 +8,8 @@ import com.codestates.stackoverflow.member.service.impl.MemberServiceImpl;
 import com.codestates.stackoverflow.question.entity.ActiveInfo;
 import com.codestates.stackoverflow.question.entity.ActiveType;
 import com.codestates.stackoverflow.question.entity.Question;
-import com.codestates.stackoverflow.question.entity.QuestionTag;
 import com.codestates.stackoverflow.question.mapper.QuestionMapper;
 import com.codestates.stackoverflow.question.repository.QuestionRepository;
-import com.codestates.stackoverflow.tag.entity.Tag;
 import com.codestates.stackoverflow.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,7 +33,6 @@ import java.util.Optional;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionMapper mapper;
-    private final TagService tagService;
     private final MemberServiceImpl memberServiceImpl;
     private final MemberRepository memberRepository;
 
@@ -54,9 +50,7 @@ public class QuestionService {
 
     public Question updateQuestion(Question question) {
         Question findQuestion = findValidQuestion(question.getQuestionId());
-        Member authMember = memberServiceImpl.findAuthenticatedMember();
-
-        verifyAuthor(findQuestion, authMember);
+        verifyAuthor(findQuestion);
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(findQuestion::setTitle);
@@ -64,7 +58,10 @@ public class QuestionService {
                 .ifPresent(findQuestion::setContent);
         findQuestion.setModifiedAt(LocalDateTime.now());
 
-        ActiveInfo activeInfo = new ActiveInfo(authMember.getMemberId(), findQuestion.getModifiedAt(), ActiveType.MODIFIED);
+        ActiveInfo activeInfo = new ActiveInfo(
+                question.getMember().getMemberId(),
+                findQuestion.getModifiedAt(),
+                ActiveType.MODIFIED);
         question.setActiveInfo(activeInfo);
 
         return questionRepository.save(findQuestion);
@@ -113,36 +110,39 @@ public class QuestionService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND)).getContent();
     }
 
-    private void verifyAuthor(Question question, Member authMember) {
+    @Transactional(readOnly = true)
+    public Page<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
+        //tag의 tagName이 동일한 경우 페이지
+        log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
+        if (tab == null) tab = "Newest";
+        if (page == null) page = 0;
+        if(size == null) size = 30;
+
+        switch (tab) {
+            case "Newest":
+                return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
+                        Sort.by("questionId").descending()));
+            case "Active":
+                return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
+                        Sort.by("activeInfo.lastActiveAt").descending()));
+        }
+        return null;
+    }
+
+    public void deleteQuestion(long questionId) {
+        Question findQuestion = findValidQuestion(questionId);
+
+        verifyAuthor(findQuestion);
+        questionRepository.delete(findQuestion);
+    }
+
+    private void verifyAuthor(Question question) {
+        Member authMember = memberServiceImpl.findAuthenticatedMember();
         Member writer = question.getMember();
 
         if(!Objects.equals(authMember.getMemberId(), writer.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.NOT_WRITER);
         }
-    }
-
-//    @Transactional(readOnly = true)
-//    public Page<Question> findTaggedQuestions(String tagName, String tab, Integer page, Integer size) {
-//        //tag의 tagName이 동일한 경우 페이지
-//        log.info("[findTaggedQuestions 작동]: Tag = " + tagName);
-//        if (tab == null) tab = "Newest";
-//        if (page == null) page = 0;
-//        if(size == null) size = 30;
-//
-//        switch (tab) {
-//            case "Newest":
-//                return questionRepository.findByTagName(tagName, PageRequest.of(page, 30,
-//                        Sort.by("questionId").descending()));
-//            case "Active":
-//                return questionRepository.findByTagName(tagName, PageRequest.of(page, size,
-//                        Sort.by("activeInfo.lastActiveAt").descending()));
-//        }
-//        return null;
-//    }
-
-    public void deleteQuestion(long questionId) {
-        Question findQuestion = findValidQuestion(questionId);
-        questionRepository.delete(findQuestion);
     }
 
     public int modifyLikeCount(Long questionId, int val) {

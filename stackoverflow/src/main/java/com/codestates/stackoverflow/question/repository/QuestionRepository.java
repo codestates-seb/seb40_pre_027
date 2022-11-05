@@ -16,21 +16,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findByOrderByCreatedAtDesc(Pageable pageable);
 
-//    @Query("SELECT q FROM Question q INNER JOIN q.questionTags qt INNER JOIN qt.tag t WHERE t.tagName = :tagName")
-//    Page<Question> findByTagName(@Param("tagName") String tagName, Pageable pageable);
-
-//    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
-//            "WHERE t.tagName = :tagName " +
-//            "ORDER BY qt.createdAt DESC")
-//    Page<Question> findAllWithTag(@Param(("tagName")) String tagName, Pageable pageable);
-//
-//    @Query("SELECT q FROM Question q INNER JOIN QuestionTag qt INNER JOIN Tag t " +
-//            "WHERE t.tagName = :tagName AND qt.createdAt >= :since " +
-//            "ORDER BY qt.createdAt DESC")
-//    Page<Question> findAllWithTagSince(@Param(("tagName")) String tagName, @Param("since") LocalDateTime since, Pageable pageable);
-//
-//    @Query("SELECT q FROM Question q INNER JOIN QuestionLikes l ")
-//    Page<Question> findByOrderByQuestionLikes(Pageable pageable);
+    //theta join을 활용해 연관관계가 없는 테이블을 join
+    @Query("SELECT q FROM Question q, QuestionTag qt WHERE q.questionId = qt.questionId AND qt.content = :tagName")
+    Page<Question> findByTagName(@Param("tagName") String tagName, Pageable pageable);
 
     @Query("SELECT COUNT(*) FROM Question q")
     int countAllQuestions();

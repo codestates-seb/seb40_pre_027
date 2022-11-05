@@ -10,10 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/user")
@@ -65,6 +63,7 @@ public class MemberController {
 
     @GetMapping("/profile/write")
     public ResponseEntity getMemberActivity() {
+        log.info("getMemberActivity 작동");
         Member findMember = memberService.findAuthenticatedMember();
 
         return ResponseEntity.ok(memberMapper.memberToActivity(findMember));

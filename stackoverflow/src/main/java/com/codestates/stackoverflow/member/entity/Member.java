@@ -62,7 +62,6 @@ public class Member extends Auditable {
     @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "member")
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();

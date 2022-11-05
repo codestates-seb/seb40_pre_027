@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-11-04T14:54:50+0900",
+    date = "2022-11-05T13:28:00+0900",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.5.1.jar, environment: Java 11.0.15 (Oracle Corporation)"
 )
 @Component
@@ -25,7 +25,6 @@ public class TagMapperImpl implements TagMapper {
 
         response.setTagId( Tag.getTagId() );
         response.setTagName( Tag.getTagName() );
-        response.setTagContent( Tag.getTagContent() );
         response.setCreatedAt( Tag.getCreatedAt() );
         response.setAskedTotal( Tag.getAskedTotal() );
         response.setQuestionsAskedToday( Tag.getQuestionsAskedToday() );

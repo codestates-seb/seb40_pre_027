@@ -11,11 +11,11 @@ spring:
     password: ${mysql-password}
 #    url: jdbc:h2:mem:test
   jpa:
-#    generate-ddl: true
+    generate-ddl: true
 #    database: mysql   # 추가 해준 부분
 #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true  # (2) SQL ?? ??
     properties:
       hibernate:
