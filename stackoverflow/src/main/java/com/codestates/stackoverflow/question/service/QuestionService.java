@@ -59,7 +59,7 @@ public class QuestionService {
         findQuestion.setModifiedAt(LocalDateTime.now());
 
         ActiveInfo activeInfo = new ActiveInfo(
-                question.getMember().getMemberId(),
+                findQuestion.getMember().getMemberId(),
                 findQuestion.getModifiedAt(),
                 ActiveType.MODIFIED);
         question.setActiveInfo(activeInfo);
