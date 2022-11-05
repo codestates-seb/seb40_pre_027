@@ -8,7 +8,6 @@ import backgroundsvg from '../img/background.svg';
 import Modal from '../components/Modal';
 import InputArea from '../components/write/InputArea';
 import data from '../components/write/data';
-import axios from 'axios';
 import requestDataWithToken from '../components/util/requestNewAccessToken';
 
 const WritePageComponent = styled.div`
@@ -86,7 +85,7 @@ function WritePage() {
     if (
       newPostData.title.length >= 5 &&
       newPostData.content.length >= 30 &&
-      newPostData.tags.length >= 0
+      newPostData.tags.length >= 1
     ) {
       if (inputData.id) {
         try {
@@ -96,7 +95,7 @@ function WritePage() {
             'patch',
             newPostData
           );
-          await navigate('/');
+          await navigate(`/post/${inputData.id}`);
         } catch (err) {
           console.log(err);
           alert('글 수정 실패');
