@@ -1,5 +1,5 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const url = 'https://3bb1-175-207-149-117.jp.ngrok.io/';
+const url = 'http://ec2-3-39-61-189.ap-northeast-2.compute.amazonaws.com:8080/';
 module.exports = (app) => {
   app.use(
     ['/user', '/question', '/answer', '/comment', '/reply'],
