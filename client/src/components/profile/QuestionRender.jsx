@@ -32,6 +32,11 @@ const Question = styled.div`
 `;
 
 function QuestionRender({ title, content, questionId, viewCount }) {
+  let DeleteTags = '';
+
+  if (content) {
+    DeleteTags = content.replace(/<[^>]*>?/g, '');
+  }
   return (
     <>
       <Question>
@@ -41,7 +46,7 @@ function QuestionRender({ title, content, questionId, viewCount }) {
         <article className="content-art">
           <h2>Content</h2>
           <h3>
-            <code>{content}</code>
+            <code>{DeleteTags}</code>
           </h3>
         </article>
         <article className="id-art">

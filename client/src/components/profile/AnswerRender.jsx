@@ -36,12 +36,15 @@ function AnswerRender({
   answerId,
   answerLikesCount,
 }) {
-  console.log(answerContent);
+  let DeleteTags = '';
+  if (answerContent) {
+    DeleteTags = answerContent.replace(/<[^>]*>?/g, '');
+  }
   return (
     <>
       <Answer>
         <article className="title-art">
-          <h2>Content : {answerContent}</h2>
+          <h2>Content : {DeleteTags}</h2>
         </article>
         <article>
           <h3>CreatedAt : {answerCreatedAt}</h3>
