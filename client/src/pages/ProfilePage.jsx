@@ -28,15 +28,32 @@ const ProfilePages = styled.main`
   }
 `;
 const ProfileTab = styled.div`
-  margin: 50px;
-  & ul {
-    width: 150px;
+  margin: 30px;
+  .button-lists {
+    width: 250px;
     display: flex;
     justify-content: space-between;
-
-    .submenu {
+  }
+  .clicked-button{
+    font-size: 15px;
+    width: 115px;
+    height: 45px;
+    border-radius: 20px;
+    outline: 0px;
+  }
+  #this-button{
+    color: #ffffff;
+    background-color: #f28234;
+    border: none;
+    cursor: auto;
+  }
+  #other-button{
+    color: #f28234;
+    background-color: #ffffff;
+    border: 1px solid #f28234
+  }
+  .submenu {
       border: 1px solid #f28234;
-    }
   }
 `;
 const ProfileIn = styled.div`
@@ -155,14 +172,12 @@ function ProfilePage({ profiles }) {
         <article>
           <MyProfile />
           <ProfileTab>
-            <ul>
-              <li>Profile</li>
-              <li>
-                <LinkStyle path="/myProfile/write" css={{ color: 'black' }}>
-                  Write
-                </LinkStyle>
-              </li>
-            </ul>
+            <div className='button-lists'>
+              <button className='clicked-button' id='this-button'>Profile</button>
+              <LinkStyle path="/myProfile/write">
+              <button className='clicked-button' id='other-button' >Write</button>
+              </LinkStyle>
+            </div>
           </ProfileTab>
           <ProfileIn>
             <LeftContent>
