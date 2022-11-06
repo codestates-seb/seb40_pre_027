@@ -46,6 +46,8 @@ function PostPage() {
     'Date modified (newest first)',
     'Date created (oldest first)',
   ];
+  const api = process.env.REACT_APP_API_URL;
+  axios.defaults.withCredentials = true;
   const [desc, setDesc] = useState(descArr[0]);
   const arraySortHandler = (a, b) => {
     // 답변 정렬 함수
@@ -64,7 +66,7 @@ function PostPage() {
     }
   };
   useEffect(() => {
-    axios.get(`/question/${id}`).then((res) => {
+    axios.get(`${api}/question/${id}`).then((res) => {
       setPost(res.data);
       setAnswersArray(res.data.answers.sort(arraySortHandler));
       setCommentsArray(res.data.comments);

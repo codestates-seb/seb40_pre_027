@@ -67,6 +67,8 @@ const AnswerPostComponent = styled.div`
 `;
 
 function AnswerPost({ setAnswersArray }) {
+  const api = process.env.REACT_APP_API_URL;
+  axios.defaults.withCredentials = true;
   const [guide, setGuide] = useState(false);
   const [answer, setAnswer] = useState('');
   const [guideview, setGuideview] = useState(false);
@@ -92,10 +94,10 @@ function AnswerPost({ setAnswersArray }) {
     // 답변 - post
     try {
       if (isLogin) {
-        await requestDataWithToken('', `/answer/${id}`, 'post', {
+        await requestDataWithToken('', `${api}/answer/${id}`, 'post', {
           answerContent: answer,
         });
-        const newPostData = await axios.get(`/question/${id}`);
+        const newPostData = await axios.get(`${api}/question/${id}`);
         await setAnswersArray(newPostData.data.answers);
         await editorRef.current.getInstance().setHTML(' ');
       } else alert('you need login');

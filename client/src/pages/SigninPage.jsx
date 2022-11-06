@@ -174,11 +174,12 @@ function SigninPage() {
       return { ...prevInputV, [name]: value };
     });
   };
-
+  const api = process.env.REACT_APP_API_URL;
+  axios.defaults.withCredentials = true;
   //axios 회원가입 요청
   async function postSingin() {
     try {
-      const response = await axios.post('/user/signup', {
+      const response = await axios.post(`${api}/user/signup`, {
         name: inputV.display,
         email: inputV.email,
         password: inputV.password,
