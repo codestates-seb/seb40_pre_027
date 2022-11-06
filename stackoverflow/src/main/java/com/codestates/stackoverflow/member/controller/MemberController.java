@@ -17,6 +17,7 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 @Slf4j
 @Validated
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MemberController {
 
     private final MemberServiceImpl memberService;

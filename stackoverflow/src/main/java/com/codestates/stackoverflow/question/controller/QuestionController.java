@@ -27,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class QuestionController {
     private final QuestionService questionService;
     private final QuestionLikeService questionLikesService;

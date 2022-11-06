@@ -89,8 +89,9 @@ public class SecurityConfiguration {
                     .addFilterBefore(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
+
     @Bean
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); //내 서버 응답 할때 제이슨을 자바스크립트에서 처리할 수 있게 할지 결정

@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/comment")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper mapper;
