@@ -23,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AnswerController {
 
     private final AnswerMapper mapper;

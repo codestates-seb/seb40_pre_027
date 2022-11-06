@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reply")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ReplyController {
     private final ReplyService replyService;
     private final ReplyMapper mapper;
