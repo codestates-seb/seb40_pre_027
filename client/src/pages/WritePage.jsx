@@ -81,7 +81,7 @@ function WritePage() {
       content: `${inputData.introduce} <br calssName="boundary"/> ${inputData.expand}`,
       tags: inputData.tags,
     };
-
+    const api = process.env.REACT_APP_API_URL;
     if (
       newPostData.title.length >= 5 &&
       newPostData.content.length >= 30 &&
@@ -91,7 +91,7 @@ function WritePage() {
         try {
           await requestDataWithToken(
             '',
-            `/question/${inputData.id}`,
+            `${api}/question/${inputData.id}`,
             'patch',
             newPostData
           );
@@ -102,7 +102,12 @@ function WritePage() {
         }
       } else {
         try {
-          await requestDataWithToken('', `/question`, 'post', newPostData);
+          await requestDataWithToken(
+            '',
+            `${api}/question`,
+            'post',
+            newPostData
+          );
           await navigate('/');
         } catch (err) {
           alert('글 생성 실패');

@@ -87,6 +87,8 @@ const LoginBox = styled.div`
 `;
 
 function LoginPage() {
+  const api = process.env.REACT_APP_API_URL;
+  axios.defaults.withCredentials = true;
   //useDispatch훅 dispatch 변수에 할당, useSelector를 통한 isLogin 상태 할당
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.login.isLogin);
@@ -110,24 +112,22 @@ function LoginPage() {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(account, isLogin);
 
   // 로그인 요청
   async function getLogin() {
     try {
       await axios
-        .post('/user/login', {
+        .post(`${api}/user/login`, {
           email: account.email,
           password: account.password,
         })
-        .then((data) => {
+        .then((res) => {
           //dispatch로 로그인 상태 redux에 저장, 로컬에 토큰 저장
-          console.log(data);
           dispatch(loginActions.login());
           localStorage.clear();
-          localStorage.setItem('accessToken', data.headers.access);
-          localStorage.setItem('refreshToken', data.headers.refresh);
-          localStorage.setItem('memberId', data.data.memberId);
+          localStorage.setItem('accessToken', res.headers.access);
+          localStorage.setItem('refreshToken', res.headers.refresh);
+          localStorage.setItem('memberId', res.data.memberId);
           navigate('/');
         });
     } catch (error) {

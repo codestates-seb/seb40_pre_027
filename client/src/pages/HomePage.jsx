@@ -43,18 +43,23 @@ function HomePage() {
   const currentPageHandler = (p) => setCurrentPage(p);
   useEffect(() => {
     //searchInput값이 존재하지 않으면 모든 게시글 가져오기
+    const api = process.env.REACT_APP_API_URL;
+    console.log(`${api}/question?&page=${currentPage}&size=${size}`);
+    axios.defaults.withCredentials = true;
     if (!searchInput && !tagSearch) {
-      axios.get(`/question?&page=${currentPage}&size=${size}`).then((res) => {
-        console.log(res);
-        setPosts(res.data.data);
-        setPaginationLength(res.data.totalCount);
-      });
+      axios
+        .get(`${api}/question?&page=${currentPage}&size=${size}`)
+        .then((res) => {
+          console.log(res);
+          setPosts(res.data.data);
+          setPaginationLength(res.data.totalCount);
+        });
     }
     //searchInput값이 존재하면 해당 값으로 검색
     if (searchInput) {
       axios
         .get(
-          `/question/search?q=${searchInput}&page=${currentPage}&size=${size}`
+          `${api}/question/search?q=${searchInput}&page=${currentPage}&size=${size}`
         )
         .then((res) => {
           setPosts(res.data.data);
@@ -62,11 +67,10 @@ function HomePage() {
     } else if (tagSearch) {
       axios
         .get(
-          `/question/tagged/${tagSearch}?tab=Newest&page=${currentPage}&size=${size}`
+          `${api}/question/tagged/${tagSearch}?tab=Newest&page=${currentPage}&size=${size}`
         )
         .then((res) => {
-          console.log(res.data);
-          setPosts(res.data);
+          setPosts(res.data.data);
         });
     }
   }, [size, currentPage, searchInput, tagSearch]);

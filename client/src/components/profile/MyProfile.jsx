@@ -6,9 +6,8 @@ import { BiTimeFive } from 'react-icons/bi';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { FaPen } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import requestDataWithToken from '../util/requestNewAccessToken'
+import requestDataWithToken from '../util/requestNewAccessToken';
 // import axios from 'axios';
-
 
 const MyProfileComponent = styled.div`
   .profilePicture {
@@ -59,6 +58,7 @@ const ProfileInfoComponent = styled.div`
 `;
 
 function MyProfile() {
+  const api = process.env.REACT_APP_API_URL;
   const [profileList, setProfileList] = useState({
     name: '',
     createdDate: '',
@@ -68,22 +68,22 @@ function MyProfile() {
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
-        return value;
+      return value;
     }
     return `0${value}`;
   }
-  
+
   function toStringByFormatting(source, delimiter = '-') {
     const year = source.getFullYear();
     const month = leftPad(source.getMonth() + 1);
     const day = leftPad(source.getDate());
 
     return [year, month, day].join(delimiter);
-}
+  }
 
   useEffect(() => {
-    requestDataWithToken(setProfileList, '/user/profile', 'get')
-  }, [])
+    requestDataWithToken(setProfileList, `${api}/user/profile`, 'get');
+  }, []);
 
   return (
     <MyProfileComponent>
@@ -93,15 +93,19 @@ function MyProfile() {
         src={ProfilePicture}
       ></img>
       <ProfileInfoComponent>
-          <div className="myName">{profileList.name}</div>
+        <div className="myName">{profileList.name}</div>
         <div className="myProfile">
           <MdCake />
-          <div 
-            className='lists'>Created Date {toStringByFormatting(new Date(profileList.createdDate))}</div>
+          <div className="lists">
+            Created Date{' '}
+            {toStringByFormatting(new Date(profileList.createdDate))}
+          </div>
           <BiTimeFive />
-          <div className='lists'>Login Date {toStringByFormatting(new Date(profileList.loginDate))}</div>
+          <div className="lists">
+            Login Date {toStringByFormatting(new Date(profileList.loginDate))}
+          </div>
           <FaRegCalendarAlt />
-          <div className='lists'>Visited 6 days, 2 consecutive</div>
+          <div className="lists">Visited 6 days, 2 consecutive</div>
         </div>
       </ProfileInfoComponent>
       <Link to="/myProfile/edit">
