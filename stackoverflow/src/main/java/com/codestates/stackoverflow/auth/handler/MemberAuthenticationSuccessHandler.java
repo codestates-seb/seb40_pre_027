@@ -31,6 +31,8 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setCharacterEncoding("utf-8");
         String result = objectMapper.writeValueAsString(responseBody);
 
+        log.info(response.getHeader("access"));
+        log.info(response.getHeader("refresh"));
         response.getWriter().write(result);
 
     }
