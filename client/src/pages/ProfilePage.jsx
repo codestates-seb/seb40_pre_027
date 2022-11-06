@@ -34,26 +34,26 @@ const ProfileTab = styled.div`
     display: flex;
     justify-content: space-between;
   }
-  .clicked-button{
+  .clicked-button {
     font-size: 15px;
     width: 115px;
     height: 45px;
     border-radius: 20px;
     outline: 0px;
   }
-  #this-button{
+  #this-button {
     color: #ffffff;
     background-color: #f28234;
     border: none;
     cursor: auto;
   }
-  #other-button{
+  #other-button {
     color: #f28234;
     background-color: #ffffff;
-    border: 1px solid #f28234
+    border: 1px solid #f28234;
   }
   .submenu {
-      border: 1px solid #f28234;
+    border: 1px solid #f28234;
   }
 `;
 const ProfileIn = styled.div`
@@ -158,9 +158,9 @@ const About = styled.div`
 
 function ProfilePage({ profiles }) {
   const [profile, setProfile] = useState([]);
-
+  const api = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    requestDataWithToken(setProfile, `/user/profile`, 'get');
+    requestDataWithToken(setProfile, `${api}/user/profile`, 'get');
   }, []);
   console.log(profile);
 
@@ -172,10 +172,14 @@ function ProfilePage({ profiles }) {
         <article>
           <MyProfile />
           <ProfileTab>
-            <div className='button-lists'>
-              <button className='clicked-button' id='this-button'>Profile</button>
+            <div className="button-lists">
+              <button className="clicked-button" id="this-button">
+                Profile
+              </button>
               <LinkStyle path="/myProfile/write">
-              <button className='clicked-button' id='other-button' >Write</button>
+                <button className="clicked-button" id="other-button">
+                  Write
+                </button>
               </LinkStyle>
             </div>
           </ProfileTab>

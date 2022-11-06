@@ -72,6 +72,7 @@ const ButtonComponent = styled.div`
 `;
 
 function EditProfile() {
+  const api = process.env.REACT_APP_API_URL;
   // data 한 객체로 만들기
   const [edit, setEdit] = useState({
     // image: '',
@@ -91,12 +92,12 @@ function EditProfile() {
 
   // get요청
   useEffect(() => {
-    requestDataWithToken(setEdit, '/user/profile/edit', 'get');
+    requestDataWithToken(setEdit, `${api}/user/profile/edit`, 'get');
   }, []);
 
   // put요청
   function putProfile() {
-    requestDataWithToken(setEdit, '/user/profile/edit', 'put', edit);
+    requestDataWithToken(setEdit, `${api}/user/profile/edit`, 'put', edit);
   }
 
   return (

@@ -115,9 +115,9 @@ const RightBox = styled.div`
 
 function Profilewrite() {
   const [write, setWrite] = useState([]);
-
+  const api = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    requestNewAccessToken(setWrite, `/user/profile/write`, 'get');
+    requestNewAccessToken(setWrite, `${api}/user/profile/write`, 'get');
   }, []);
   const questions = write.questions;
   const answers = write.answers;

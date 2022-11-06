@@ -31,6 +31,8 @@ function Recommend({
   answerId,
   answerLikeCount,
 }) {
+  const api = process.env.REACT_APP_API_URL;
+  axios.defaults.withCredentials = true;
   //질문의 추천 비추천 상태
   const [questionLike, setQuestionLike] = useState(questionLikeCount);
   //답변의 추천 비추천 상태
@@ -46,7 +48,7 @@ function Recommend({
     try {
       if (answerId) {
         const res = await axios.post(
-          `/answer/${answerId}/vote?val=${val}`,
+          `${api}/answer/${answerId}/vote?val=${val}`,
           {},
           {
             headers: { access: localStorage.getItem('accessToken') },
@@ -56,7 +58,7 @@ function Recommend({
         console.log('답글추천비추천', res);
       } else if (questionId) {
         const res = await axios.post(
-          `/question/${questionId}/vote?val=${val}`,
+          `${api}/question/${questionId}/vote?val=${val}`,
           {},
           {
             headers: { access: localStorage.getItem('accessToken') },

@@ -187,7 +187,8 @@ function PostBody({
   const [isComment, setIsComment] = useState(false);
   const userId = localStorage.getItem('memberId');
   const [viewMore, setViewMore] = useState(false);
-
+  const api = process.env.REACT_APP_API_URL;
+  axios.defaults.withCredentials = true;
   const contentRef = useRef();
   const editorRef = useRef();
 
@@ -227,7 +228,11 @@ function PostBody({
     if (answer.answerId) {
       // answer - delete
       try {
-        await requestDataWithToken('', `/answer/${answer.answerId}`, 'delete');
+        await requestDataWithToken(
+          '',
+          `${api}/answer/${answer.answerId}`,
+          'delete'
+        );
         const newAnswersArray = answersArray.filter(
           (v) => v.answerId !== answer.answerId
         );
@@ -239,7 +244,11 @@ function PostBody({
     } else {
       try {
         // question - delete
-        await requestDataWithToken('', `/question/${questionId}`, 'delete');
+        await requestDataWithToken(
+          '',
+          `${api}/question/${questionId}`,
+          'delete'
+        );
         await navigate('/');
       } catch (err) {
         alert('질문 삭제 실패');
@@ -250,9 +259,14 @@ function PostBody({
   const answerPatchHandler = async () => {
     // answer - patch
     try {
-      await requestDataWithToken('', `/answer/${answer.answerId}`, 'patch', {
-        answerContent: newAnswer,
-      });
+      await requestDataWithToken(
+        '',
+        `${api}/answer/${answer.answerId}`,
+        'patch',
+        {
+          answerContent: newAnswer,
+        }
+      );
       setAnswerIsPatch(false);
       const newAnswersArray = [...answersArray];
       newAnswersArray[idx].answerContent = newAnswer;
@@ -266,10 +280,15 @@ function PostBody({
     if (answer.answerId) {
       try {
         // answer - comment - post
-        await requestDataWithToken('', `/reply/${answer.answerId}`, 'post', {
-          replyContent: comment,
-        });
-        const newPostData = await axios.get(`/question/${questionId}`);
+        await requestDataWithToken(
+          '',
+          `${api}/reply/${answer.answerId}`,
+          'post',
+          {
+            replyContent: comment,
+          }
+        );
+        const newPostData = await axios.get(`${api}/question/${questionId}`);
         await setReplyArray(newPostData.data.answers[idx].replies);
       } catch (err) {
         alert('답변 코멘트 작성 실패');
@@ -277,10 +296,10 @@ function PostBody({
     } else {
       try {
         // question - comment - post
-        await requestDataWithToken('', `/comment/${questionId}`, 'post', {
+        await requestDataWithToken('', `${api}/comment/${questionId}`, 'post', {
           content: comment,
         });
-        const newPostData = await axios.get(`/question/${questionId}`);
+        const newPostData = await axios.get(`${api}/question/${questionId}`);
         await setCommentsArray(newPostData.data.comments);
       } catch (err) {
         alert('질문 코멘트 작성 실패');
@@ -292,7 +311,7 @@ function PostBody({
     if (answer.answerId) {
       // answer - comment - delete
       try {
-        await requestDataWithToken('', `/reply/${id}`, 'delete');
+        await requestDataWithToken('', `${api}/reply/${id}`, 'delete');
         const newReplysArray = [...replyArray].filter((v) => v.replyId !== id);
         setReplyArray(newReplysArray);
       } catch (err) {
@@ -302,7 +321,7 @@ function PostBody({
     } else {
       // question - comment - delete
       try {
-        await requestDataWithToken('', `/comment/${id}`, 'delete');
+        await requestDataWithToken('', `${api}/comment/${id}`, 'delete');
         const newCommentsArray = commentsArray.filter(
           (v) => v.commentId !== id
         );
@@ -317,7 +336,7 @@ function PostBody({
     if (answer.answerId) {
       // answer - comment - patch
       try {
-        await requestDataWithToken('', `/reply/${id}`, 'patch', {
+        await requestDataWithToken('', `${api}/reply/${id}`, 'patch', {
           replyContent: content,
         });
         const newReplysArray = [...replyArray];
@@ -330,7 +349,9 @@ function PostBody({
     } else {
       // question - comment - patch
       try {
-        await requestDataWithToken('', `/comment/${id}`, 'patch', { content });
+        await requestDataWithToken('', `${api}/comment/${id}`, 'patch', {
+          content,
+        });
         const newCommentsArray = [...commentsArray];
         newCommentsArray[idx].content = content;
         setCommentsArray(newCommentsArray);
