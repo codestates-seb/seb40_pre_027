@@ -78,7 +78,9 @@ function Pagination({
 }) {
   const pagArr = Array(
     Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
-  );
+  )
+    .fill()
+    .map((v, i) => i + 1);
   const [pagination, setPagination] = useState(pagArr);
 
   useEffect(() => {
