@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const PaginationComponent = styled.div`
@@ -76,27 +76,26 @@ function Pagination({
   currentPageHandler,
   paginationLength,
 }) {
-  const [pagination, setPagination] = useState(
-    Array(
-      Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
-    )
-      .fill()
-      .map((v, i) => i + 1)
+  const pagArr = Array(
+    Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
   );
+  const [pagination, setPagination] = useState(pagArr);
 
-  console.log(pagination);
+  useEffect(() => {
+    if (pagination.length > 5) setPagination(pagination.slice(0, 5));
+  }, []);
   const pers = [15, 30, 50];
   const pag = (page, pageArr) => {
     const pageNxt = page + 1 > pageArr.length ? null : page + 1;
     const pageNxtt = page + 2 > pageArr.length ? null : page + 2;
     if (page >= 3) {
       return [page - 2, page - 1, page, pageNxt, pageNxtt];
-    }
+    } else return pageArr.slice(0, 5);
   };
   const pageNextBtn = () => {
-    if (currentPage + 1 <= pagination.length) {
+    if (currentPage + 1 <= pagArr.length) {
       currentPageHandler(currentPage + 1);
-      setPagination(pag(currentPage + 1, pagination));
+      setPagination(pag(currentPage + 1, pagArr));
     }
   };
   return (
@@ -104,17 +103,24 @@ function Pagination({
       <div className="pagination">
         <div className="page">
           {pagination.length &&
-            pagination.map((v, i) => (
-              <div
-                className={
-                  currentPage === v ? 'page-items check' : 'page-items'
-                }
-                onClick={() => currentPageHandler(v)}
-                key={i}
-              >
-                {v}
-              </div>
-            ))}
+            pagination.map((v, i) => {
+              if (v !== null) {
+                return (
+                  <div
+                    className={
+                      currentPage === v ? 'page-items check' : 'page-items'
+                    }
+                    onClick={() => {
+                      currentPageHandler(v);
+                      setPagination(pag(v, pagArr));
+                    }}
+                    key={i}
+                  >
+                    {v}
+                  </div>
+                );
+              }
+            })}
           <div className="dot">...</div>
           <button onClick={pageNextBtn}>next</button>
         </div>
