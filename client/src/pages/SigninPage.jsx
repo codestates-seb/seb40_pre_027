@@ -167,7 +167,6 @@ function SigninPage() {
     email: '',
     password: '',
   });
-  console.log(inputV);
   const handle = (event) => {
     const { value, name } = event.target;
     setInputV((prevInputV) => {
