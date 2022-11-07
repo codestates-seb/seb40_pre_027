@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,11 +42,13 @@ public class QuestionController {
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
         Question question = questionService.createQuestion(questionMapper.questionPostToQuestion(requestBody));
 
-        List<Tag> tags = tagMapper.tagNamesToTags(requestBody.getTags());
-        tags = tagService.saveTags(tags, question.getQuestionId());
+        List<Tag> tags = new ArrayList<>();
+        if (requestBody.getTags() != null) {
+            tags = tagMapper.tagNamesToTags(requestBody.getTags());
+        }
+        tagService.saveTags(tags, question.getQuestionId());
 
         QuestionDto.Response response = questionMapper.questionToQuestionResponse(question);
-        response.setTags(requestBody.getTags());
 
         return new ResponseEntity<>(
                 response,
@@ -64,11 +67,13 @@ public class QuestionController {
         requestBody.setQuestionId(questionId);
         Question question = questionService.updateQuestion(questionMapper.questionPatchToQuestion(requestBody));
 
-        List<Tag> tags = tagMapper.tagNamesToTags(requestBody.getTags());
+        List<Tag> tags = new ArrayList<>();
+        if (requestBody.getTags() != null) {
+            tags = tagMapper.tagNamesToTags(requestBody.getTags());
+        }
         tagService.saveTags(tags, question.getQuestionId());
 
         QuestionDto.Response response = questionMapper.questionToQuestionResponse(question);
-        response.setTags(requestBody.getTags());
 
         return new ResponseEntity<>(
                 response,

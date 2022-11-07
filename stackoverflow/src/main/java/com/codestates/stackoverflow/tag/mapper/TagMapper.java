@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public interface TagMapper {
     TagDto.Response TagToTagResponse(Tag Tag);
     List<TagDto.Response> TagsToTagResponses(List<Tag> tags);
+
     default List<Tag> tagNamesToTags(String[] tagNames) {
         List<Tag> tags = Arrays.stream(tagNames)
                 .map(tagName -> new Tag(tagName))

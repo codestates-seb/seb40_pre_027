@@ -20,7 +20,7 @@ public class TagService {
     private final TagRepository tagRepository;
     private final QuestionTagRepository questionTagRepository;
 
-    public List<Tag> saveTags(List<Tag> tagList, Long questionId) {
+    public void saveTags(List<Tag> tagList, Long questionId) {
         log.info("[saveTags] 동작");
         List<QuestionTag> questionTags = questionTagRepository.findByQuestionId(questionId);
         Set<Long> tagIdSet = new HashSet<>();
@@ -47,7 +47,6 @@ public class TagService {
             tagIdSet.add(tag.getTagId());
         }
         deleteUnusedQuestionTags(questionTags, tagIdSet);
-        return tagList;
     }
     //현재 question의 questionTag의 목록
     //검증하려는 tag

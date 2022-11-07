@@ -27,7 +27,7 @@ public class QuestionDto {
         private String[] tags;
     }
 
-    @Getter
+    @Getter @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch {
