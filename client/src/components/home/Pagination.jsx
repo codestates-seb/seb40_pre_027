@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const PaginationComponent = styled.div`
@@ -76,30 +76,45 @@ function Pagination({
   currentPageHandler,
   paginationLength,
 }) {
-  const pagination = Array(
-    Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
-  )
-    .fill()
-    .map((v, i) => i + 1);
+  const [pagination, setPagination] = useState(
+    Array(
+      Math.ceil((paginationLength ? paginationLength : 1) / (size ? size : 15))
+    )
+      .fill()
+      .map((v, i) => i + 1)
+  );
+
+  console.log(pagination);
   const pers = [15, 30, 50];
+  const pag = (page, pageArr) => {
+    const pageNxt = page + 1 > pageArr.length ? null : page + 1;
+    const pageNxtt = page + 2 > pageArr.length ? null : page + 2;
+    if (page >= 3) {
+      return [page - 2, page - 1, page, pageNxt, pageNxtt];
+    }
+  };
   const pageNextBtn = () => {
     if (currentPage + 1 <= pagination.length) {
       currentPageHandler(currentPage + 1);
+      setPagination(pag(currentPage + 1, pagination));
     }
   };
   return (
     <PaginationComponent>
       <div className="pagination">
         <div className="page">
-          {pagination.map((v, i) => (
-            <div
-              className={currentPage === v ? 'page-items check' : 'page-items'}
-              onClick={() => currentPageHandler(v)}
-              key={i}
-            >
-              {v}
-            </div>
-          ))}
+          {pagination.length &&
+            pagination.map((v, i) => (
+              <div
+                className={
+                  currentPage === v ? 'page-items check' : 'page-items'
+                }
+                onClick={() => currentPageHandler(v)}
+                key={i}
+              >
+                {v}
+              </div>
+            ))}
           <div className="dot">...</div>
           <button onClick={pageNextBtn}>next</button>
         </div>
